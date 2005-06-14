@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<registration>
+    <tool id="sakai.profile" helpUrl="/sakai-profile-tool/helpReg/profile_help.xml" title="Profile" description="Profile Tool for sakai2."/>    
+</registration>

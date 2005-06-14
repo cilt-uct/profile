@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+    <bean id="org.sakaiproject.api.app.profile.ProfileManager" class="org.sakaiproject.component.app.profile.ProfileManagerImpl">
+        <property name="sakaiPersonManager">
+            <ref bean="org.sakaiproject.api.common.edu.person.SakaiPersonManager"/>
+        </property>
+        <property name="agentGroupManager">
+            <ref bean="org.sakaiproject.api.common.agent.AgentGroupManager"/>
+        </property>
+    </bean>
+</beans>

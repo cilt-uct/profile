@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="profile-app/src/java"/>
+	<classpathentry kind="src" path="profile-component-shared/src/java"/>
+	<classpathentry kind="src" path="profile-api/src/java"/>
+	<classpathentry kind="src" path="profile-app/src/webapp/WEB-INF"/>
+	<classpathentry kind="var" path="MAVEN_REPO/jsf/jars/jsf-api-1.1.01.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/jsf/jars/jsf-impl-1.1.01.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/jspapi/jars/jsp-api-2.0-20040521.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="/common"/>
+	<classpathentry kind="src" path="/legacy-service"/>
+	<classpathentry kind="src" path="/kernel"/>
+	<classpathentry kind="var" path="MAVEN_REPO/commons-logging/jars/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
