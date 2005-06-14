@@ -40,7 +40,7 @@ import org.sakaiproject.api.kernel.session.cover.SessionManager;
 
 /**
  * @author rshastri
- * @version $Id: ProfileManagerImpl.java,v 1.4 2005/05/17 20:42:58 rshastri.iupui.edu Exp $
+ * @version $Id$
  */
 public class ProfileManagerImpl implements ProfileManager
 {

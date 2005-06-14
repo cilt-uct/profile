@@ -28,7 +28,7 @@ import org.sakaiproject.api.common.edu.person.SakaiPerson;
 
 /**
  * @author rshastri <a href="mailto:rshastri@iupui.edu ">Rashmi Shastri</a>
- * @version $Id: Profile.java,v 1.1 2005/05/17 20:42:58 rshastri.iupui.edu Exp $
+ * @version $Id$
  *
  */
 public interface Profile {

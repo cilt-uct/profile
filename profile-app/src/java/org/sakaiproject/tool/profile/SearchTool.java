@@ -36,7 +36,7 @@ import javax.faces.event.ValueChangeEvent;
 
 /**
  * @author rshastri <a href="mailto:rshastri@iupui.edu ">Rashmi Shastri</a>
- * @version $Id: SearchTool.java,v 1.4 2005/05/17 20:42:58 rshastri.iupui.edu Exp $
+ * @version $Id$
  *  
  */
 public class SearchTool
