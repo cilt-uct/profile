@@ -48,6 +48,7 @@ public class ProfileTool
   private boolean showTool = false;
   private String title;
   private String pictureIdPreference = UNIVERSITY_ID;
+  private boolean displayNoProfileMsg = false;
 
   /**
    * Process data for save action on edit page.
@@ -155,6 +156,27 @@ public class ProfileTool
       profile = profileService.getProfile();
       loadingFirstTime = false;
     }
+    else
+    {
+      if(profile == null)
+      {
+        displayNoProfileMsg = true;
+      }
+      else
+      {
+        if((profile.getFirstName() == null) || (profile.getLastName() == null))
+        {
+          displayNoProfileMsg = true;
+        }
+        else
+        {
+          if(profile.getFirstName().equalsIgnoreCase("") || profile.getLastName().equalsIgnoreCase(""))
+            displayNoProfileMsg = true;
+          else
+            displayNoProfileMsg = false;
+        }
+      }
+    }
 
     this.displayPicture = profileService.getDisplayPictureUrl(profile);
 
@@ -199,6 +221,16 @@ public class ProfileTool
   public void setLogger(Logger logger)
   {
     this.logger = logger;
+  }
+  
+  public void setDisplayNoProfileMsg(boolean displayNoProfileMsg)
+  {
+    this.displayNoProfileMsg = displayNoProfileMsg;
+  }
+  
+  public boolean getDisplayNoProfileMsg()
+  {
+    return displayNoProfileMsg;
   }
 
   /**

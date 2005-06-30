@@ -8,6 +8,7 @@
 	<sakai:view_content>
 		<h:panelGrid rendered="#{ProfileTool.showTool}" > 
 	 		<jsp:include page="profileCommonToolBar.jsp"/>
+	 		<h:outputText value="#{msgs.no_profile_msg}" rendered="#{ProfileTool.displayNoProfileMsg}" style="color:red;"/>
 	 	 	<h:panelGrid  columns="2"  border ="1" style="valign:top;">
 		  		<h:outputText  value="Profile" style="font-weight: bold;"/> 
 		  		<h:outputText   value="Search for Profile" style="font-weight: bold;"/>  
