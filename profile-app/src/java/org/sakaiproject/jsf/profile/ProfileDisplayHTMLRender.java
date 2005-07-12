@@ -43,10 +43,10 @@ public class ProfileDisplayHTMLRender extends Renderer {
         String value = (String) component.getAttributes().get("value");
 
         if ((value != null) && (!value.equals(""))) {
-          int pos;
-          while ((pos = value.indexOf('?')) != -1){
-             value = value.substring(0,pos) + " " + value.substring(pos+1);
-          }
+//          int pos;
+//          while ((pos = value.indexOf('?')) != -1){
+//             value = value.substring(0,pos) + " " + value.substring(pos+1);
+//          }
             value = value.replaceAll("<strong>", "<b>");
             value = value.replaceAll("</strong>", "</b>");
             writer.write(value);
