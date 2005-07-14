@@ -1,7 +1,6 @@
 /**********************************************************************************
-*
-* $Header: /cvs/sakai2/profile/profile-api/src/java/org/sakaiproject/api/app/profile/ProfileManager.java,v 1.1 2005/05/17 20:42:58 rshastri.iupui.edu Exp $
-*
+* $URL$
+* $Id$
 ***********************************************************************************
 *
 * Copyright (c) 2005 The Regents of the University of Michigan, Trustees of Indiana University,
@@ -66,8 +65,4 @@ public interface ProfileManager {
     public String getDisplayPictureUrl(Profile profile);
 
 }
-/**********************************************************************************
-*
-* $Header: /cvs/sakai2/profile/profile-api/src/java/org/sakaiproject/api/app/profile/ProfileManager.java,v 1.1 2005/05/17 20:42:58 rshastri.iupui.edu Exp $
-*
-***********************************************************************************/
+

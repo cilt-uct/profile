@@ -1,7 +1,6 @@
 /**********************************************************************************
-*
-* $Header: /cvs/sakai2/profile/profile-app/src/java/org/sakaiproject/tool/profile/ProfileTool.java,v 1.3 2005/05/17 20:42:58 rshastri.iupui.edu Exp $
-*
+* $URL$
+* $Id$
 ***********************************************************************************
 *
 * Copyright (c) 2003, 2004, 2005 The Regents of the University of Michigan, Trustees of Indiana University,
@@ -323,8 +322,4 @@ public class ProfileTool
     return SiteService.findTool(PortalService.getCurrentToolId()).getTitle();
   }
 }
-/**********************************************************************************
-*
-* $Header: /cvs/sakai2/profile/profile-app/src/java/org/sakaiproject/tool/profile/ProfileTool.java,v 1.3 2005/05/17 20:42:58 rshastri.iupui.edu Exp $
-*
-***********************************************************************************/
+

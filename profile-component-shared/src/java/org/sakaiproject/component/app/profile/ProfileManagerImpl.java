@@ -1,8 +1,7 @@
 /**********************************************************************************
- *
- * $Header: /cvs/sakai2/profile/profile-component-shared/src/java/org/sakaiproject/component/app/profile/ProfileManagerImpl.java,v 1.4 2005/05/17 20:42:58 rshastri.iupui.edu Exp $
- *
- ***********************************************************************************
+ * $URL$
+ * $Id$
+ **********************************************************************************
  *
  * Copyright (c) 2003, 2004, 2005 The Regents of the University of Michigan, Trustees of Indiana University,
  *                  Board of Trustees of the Leland Stanford, Jr., University, and The MIT Corporation
@@ -259,6 +258,5 @@ public class ProfileManagerImpl implements ProfileManager
   }
 }
 
-/*******************************************************************************************************
- * $Header: /cvs/sakai2/profile/profile-component-shared/src/java/org/sakaiproject/component/app/profile/ProfileManagerImpl.java,v 1.4 2005/05/17 20:42:58 rshastri.iupui.edu Exp $
- ******************************************************************************************************/
+
+

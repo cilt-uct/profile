@@ -1,7 +1,6 @@
 /**********************************************************************************
-*
-* $Header: /cvs/sakai2/profile/profile-app/src/java/org/sakaiproject/jsf/profile/ProfileDisplayHTMLRender.java,v 1.4 2005/05/18 18:19:43 rshastri.iupui.edu Exp $
-*
+* $URL$
+* $Id$
 ***********************************************************************************
 *
 * Copyright (c) 2003, 2004, 2005 The Regents of the University of Michigan, Trustees of Indiana University,
@@ -60,8 +59,5 @@ public class ProfileDisplayHTMLRender extends Renderer {
         String value = (String) component.getAttributes().get("value");
     }
 }
-/**********************************************************************************
-*
-* $Header: /cvs/sakai2/profile/profile-app/src/java/org/sakaiproject/jsf/profile/ProfileDisplayHTMLRender.java,v 1.4 2005/05/18 18:19:43 rshastri.iupui.edu Exp $
-*
-***********************************************************************************/
+
+

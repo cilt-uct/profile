@@ -1,7 +1,6 @@
 /**********************************************************************************
-*
-* $Header: /cvs/sakai2/profile/profile-api/src/java/org/sakaiproject/api/app/profile/Profile.java,v 1.1 2005/05/17 20:42:58 rshastri.iupui.edu Exp $
-*
+* $URL$
+* $Id$
 ***********************************************************************************
 *
 * Copyright (c) 2005 The Regents of the University of Michigan, Trustees of Indiana University,
@@ -232,8 +231,5 @@ public interface Profile {
     public void setHidePublicInfo(Boolean hidePublicInfo);
 }
 
-/**********************************************************************************
-*
-* $Header: /cvs/sakai2/profile/profile-api/src/java/org/sakaiproject/api/app/profile/Profile.java,v 1.1 2005/05/17 20:42:58 rshastri.iupui.edu Exp $
-*
-***********************************************************************************/
+
+
