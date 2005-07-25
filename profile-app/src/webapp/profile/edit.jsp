@@ -7,17 +7,10 @@
 	<sakai:view_container>
   		<sakai:view_content>
   			<jsp:include page="profileCommonToolBar.jsp"/>
-  			<h:form> 	 	
+  			<h:form> 
+  			  <sakai:tool_bar_message value="#{msgs.profile_edit_title}" />	 	
   				<table width="100%">
-			 		<tr>
-			 			<td colspan="2">
-			 				<h:outputText style="font-weight: bold; font-size: 14;" value="#{msgs.profile_edit_title}" />
-			 			</td>
-			 		</tr>
-			 		<tr>
-			 			<td colspan="2"><br/>
-			 			</td>
-					</tr>
+			 
 			 		<tr>
 			 			<td colspan="2">
 					 		<h:selectBooleanCheckbox  title= "Hide my Profile" value="#{ProfileTool.profile.hidePublicInfo}" />
@@ -27,24 +20,44 @@
 			 		<tr>
 			 			<td colspan="2">
 			 				<h:outputText style="font-weight: bold; font-size: 12;" value="#{msgs.title_public_info}" />
+			 				<h:outputText value="("/> <h:outputText value="#{msgs.info_A}"/><h:outputText value="'"/> 
+							<h:outputText value="'#{msgs.info_required_sign}" style="color: red"/><h:outputText value="'"/> 
+							<h:outputText value="#{msgs.info_required}"/><h:outputText value=")"/> 				 
 			 			</td>
 			 		</tr>	
 			 		<tr>
-			 			<td>	
+			 			<td colspan="2"><br/>
+			 			</td>
+			 		<tr>
+			 			<td>
+			 				<h:outputText value="#{msgs.info_required_sign}" style="color: red"/>	
 			 				<h:outputText style="font-weight: bold; font-size: 10;" value="#{msgs.profile_first_name}"/>
 			 	 		</td>
 			 	 		<td>
 			 	 			<h:inputText id="first_name"  size="50"   value="#{ProfileTool.profile.firstName}"/> 
 			   	   		</td>
 			   	   	</tr>
+			   	   	<tr>
+			 			<td colspan="2">
+			   	   			  <h:outputText value="#{msgs.error_empty_first_name}" style="color: red" 
+								rendered="#{ProfileTool.displayEmptyFirstNameMsg}"/>
+						</td>
+			 		</tr>	
 			   	   	<tr>	
 			   	   		<td>
+			   	   			<h:outputText value="#{msgs.info_required_sign}" style="color: red"/>
 			   	   			<h:outputText style="font-weight: bold; font-size: 11;" value="#{msgs.profile_last_name}"/>
 				 		</td>
 				 		<td>	
 				 			<h:inputText size="50" value="#{ProfileTool.profile.lastName}"/> 
 				 		</td>
 				 	</tr>
+				 	<tr>
+			 			<td colspan="2">
+			   	   			<h:outputText value="#{msgs.error_empty_last_name}" style="color: red" 
+								rendered="#{ProfileTool.displayEmptyLastNameMsg}"/>
+						</td>
+			 		</tr>
 				 	<tr>	
 			   	   		<td>
 			   	   			<h:outputText style="font-weight: bold; font-size: 11;" value="#{msgs.profile_nick_name}"/>
@@ -144,13 +157,19 @@
 							<h:inputText size="50" value="#{ProfileTool.profile.homePhone}"/> 
 						</td>
 					</tr>	
-			 	      <tr>
+			 	    <tr>
 			 			<td colspan="2">
 			 				<h:outputText style="font-weight: bold; font-size: 11;" value="#{msgs.profile_other_information}"/> 
 			 			<br/>	
 			 				<sakai:rich_text_area value="#{ProfileTool.profile.otherInformation}" rows="10" columns="65" javascriptLibrary="/library/htmlarea"/> <br/>
 			 	 		</td>
-			 		</tr> 
+			 		</tr>
+			 		 <tr>
+			 			<td colspan="2">
+			 			<h:outputText value="" style="color: red"  rendered="#{ProfileTool.displayEvilTagMsg}"/>
+					    <h:outputText value="#{msgs.error_msg} #{ProfileTool.evilTagMsg}" style="color: red"  rendered="#{ProfileTool.displayEvilTagMsg}"/>
+				    	</td>
+			 		</tr>  
 				</table>	
   				<sakai:button_bar>
 					<sakai:button_bar_item	action="#{ProfileTool.processActionEditSave}" value="#{msgs.bar_save}" />

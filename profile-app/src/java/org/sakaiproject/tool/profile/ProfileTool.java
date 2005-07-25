@@ -28,6 +28,7 @@ import org.sakaiproject.api.app.profile.ProfileManager;
 import org.sakaiproject.service.framework.log.Logger;
 import org.sakaiproject.service.framework.portal.cover.PortalService;
 import org.sakaiproject.service.legacy.site.cover.SiteService;
+import org.sakaiproject.util.FormattedText;
 
 /**
  * @author rshastri TODO To change the template for this generated type comment go to Window -
@@ -48,6 +49,10 @@ public class ProfileTool
   private String title;
   private String pictureIdPreference = UNIVERSITY_ID;
   private boolean displayNoProfileMsg = false;
+  private boolean displayEvilTagMsg=false;
+  private String evilTagMsg=null;
+  private boolean displayEmptyFirstNameMsg=false;
+  private boolean displayEmptyLastNameMsg=false;
 
   /**
    * Process data for save action on edit page.
@@ -57,12 +62,43 @@ public class ProfileTool
   public String processActionEditSave()
   {
     logger.debug(this + "processActionEditSave()");
-
+    displayEvilTagMsg=false;
+    displayEmptyFirstNameMsg=false;
+    displayEmptyLastNameMsg=false;
     if ((profile != null) && (profile.getUserId() == null))
     {
       logger.error(this + "processActionEditSave :" + "No User Found");
 
       return "permissionException";
+    }
+    if(profile.getFirstName() == null || profile.getFirstName().trim().length()< 1)
+    {
+      displayEmptyFirstNameMsg = true;
+      return "edit";          
+    }
+    if(profile.getLastName() == null || profile.getLastName().trim().length()< 1)
+    {
+      displayEmptyLastNameMsg = true;
+      return "edit";          
+    }
+    if(profile.getOtherInformation()!=null)
+    {
+    	StringBuffer alertMsg = new StringBuffer();
+    	String errorMsg= null;
+    	try
+		{
+			errorMsg =  FormattedText.processFormattedText(profile.getOtherInformation(), alertMsg);
+			if (alertMsg.length() > 0)
+			{
+				evilTagMsg =alertMsg.toString();
+				displayEvilTagMsg=true;
+				return "edit";
+			}
+		 }
+		catch (Exception e)
+		{
+			logger.warn(this + " " + errorMsg,e);
+		}
     }
 
     if ((getPictureIdPreference() != null)
@@ -74,6 +110,7 @@ public class ProfileTool
     {
       profile.setInstitutionalPictureIdPreferred(new Boolean(false));
     }
+    
 
     try
     {
@@ -321,5 +358,47 @@ public class ProfileTool
   {
     return SiteService.findTool(PortalService.getCurrentToolId()).getTitle();
   }
+  
+  public String getEvilTagMsg() 
+  {
+	return evilTagMsg;
+  }
+
+  public void setEvilTagMsg(String evilTagMsg) 
+  {
+	this.evilTagMsg = evilTagMsg;
+  }
+  
+  public boolean getDisplayEvilTagMsg()
+  {
+	return displayEvilTagMsg;
+  }
+
+  public void setDisplayEvilTagMsg(boolean displayEvilTagMsg) 
+  {
+	this.displayEvilTagMsg = displayEvilTagMsg;
+  }
+
+  public boolean isDisplayEmptyFirstNameMsg()
+  {
+	return displayEmptyFirstNameMsg;
+  }
+
+  public void setDisplayEmptyFirstNameMsg(boolean displayEmptyFirstNameMsg) 
+  {
+	this.displayEmptyFirstNameMsg = displayEmptyFirstNameMsg;
+  }
+
+  public boolean isDisplayEmptyLastNameMsg() 
+  {
+	return displayEmptyLastNameMsg;
+  }
+
+  public void setDisplayEmptyLastNameMsg(boolean displayEmptyLastNameMsg) 
+  {
+	this.displayEmptyLastNameMsg = displayEmptyLastNameMsg;
+  }
+
+ 
 }
 
