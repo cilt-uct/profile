@@ -12,5 +12,6 @@
 	<classpathentry kind="src" path="/legacy-service"/>
 	<classpathentry kind="src" path="/kernel"/>
 	<classpathentry kind="var" path="MAVEN_REPO/commons-logging/jars/commons-logging-1.0.4.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/util"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -28,7 +28,7 @@ import org.sakaiproject.api.app.profile.ProfileManager;
 import org.sakaiproject.service.framework.log.Logger;
 import org.sakaiproject.service.framework.portal.cover.PortalService;
 import org.sakaiproject.service.legacy.site.cover.SiteService;
-import org.sakaiproject.util.FormattedText;
+import org.sakaiproject.util.text.FormattedText;
 
 /**
  * @author rshastri TODO To change the template for this generated type comment go to Window -
