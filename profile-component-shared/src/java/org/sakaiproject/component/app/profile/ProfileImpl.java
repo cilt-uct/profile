@@ -26,7 +26,8 @@ import org.sakaiproject.api.app.profile.Profile;
 import org.sakaiproject.api.common.edu.person.SakaiPerson;
 
 /**
- * Preferences - Java - Code Style - Code Templates
+ * @author rshastri
+ *
  */
 public class ProfileImpl implements Profile
 {
@@ -339,6 +340,14 @@ public class ProfileImpl implements Profile
   {
     sakaiPerson.setSystemPicturePreferred(institutionalPictureIdPreferred);
   }
+  /* (non-Javadoc)
+   * @see org.sakaiproject.api.app.profile.Profile#getInstitutionalPicture()
+   */
+  
+  public byte[] getInstitutionalPicture()
+  {
+    return sakaiPerson.getJpegPhoto();
+  }
 
   /*
    * (non-Javadoc)
@@ -400,49 +409,12 @@ public class ProfileImpl implements Profile
     this.sakaiPerson = sakaiPerson;
   }
  
-  public String toString()
-  {
-    StringBuffer sb = new StringBuffer();
-    sb.append("{id=");
+//  public String toString()
+//  {
+//        return sakaiPerson.toString();
+//  }
 
-    sb.append(",  First Name=");
-    sb.append(getFirstName());
-    sb.append(", Nick Name=");
-    sb.append(getNickName());
-    sb.append(", Last Name=");
-    sb.append(getLastName());
-    sb.append(", NetworkID=");
-    sb.append(getUserId());
-    sb.append(", Position=");
-    sb.append(getPosition());
-    sb.append(", Department=");
-    sb.append(getDepartment());
-    sb.append(", School=");
-    sb.append(getSchool());
-    sb.append(", Room=");
-    sb.append(getRoom());
-    sb.append(", Show Institutional PictureID =");
-    sb.append(isInstitutionalPictureIdPreferred());
-    sb.append(", Picture URL=");
-    sb.append(getPictureUrl());
-    sb.append(", Home Page=");
-    sb.append(getHomepage());
-    sb.append(", Email=");
-    sb.append(getEmail());
-    sb.append(", Work Phone=");
-    sb.append(getWorkPhone());
-    sb.append(", Home Phone=");
-    sb.append(getHomePhone());
-    sb.append(", Other Information=");
-    sb.append(getOtherInformation());
-    sb.append(", Show public information = ");
-    sb.append(getHidePublicInfo());
-    sb.append(",Show private information = , ");
-    sb.append(getHidePublicInfo());
 
-    return sb.toString();
-  }
- 
 }
 
 

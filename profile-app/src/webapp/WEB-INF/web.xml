@@ -65,6 +65,21 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.jsf</url-pattern>
     </servlet-mapping>
+    <!--Profile image rendering servlet -->
+  
+  <servlet>
+    <servlet-name>ProfileImageServlet</servlet-name>
+    <display-name>Profile Image Rendering Servlet</display-name>
+    <description>Profile Image Rendering Servlet</description>
+    <servlet-class>org.sakaiproject.tool.profile.ProfileImageServlet</servlet-class>
+      <load-on-startup> 2 </load-on-startup>
+  </servlet>
+ 
+  <servlet-mapping>
+    <servlet-name>ProfileImageServlet</servlet-name>
+      <url-pattern>*.prf</url-pattern>
+  </servlet-mapping>  
+  
     <listener>
         <listener-class>org.sakaiproject.util.ToolListener</listener-class>
     </listener>

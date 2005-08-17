@@ -20,15 +20,12 @@
 	 		</tr>
 	 		<tr>
 	 			<td valign="Top">	
-		 			<h:panelGrid columns="2" border="0" >
-						<h:panelGrid columns="1" border="0" width="150" rendered="#{SearchTool.profile.displayCompleteProfile}">
-				<%-- 			<h:graphicImage alt="Photo"  rendered="#{SearchTool.profile.pictureDisplayed}" value="/sakai-profile-tool/image/photo_not_available.gif" width="150"   style="margin-top: 0px;margin-right: 10px;margin-bottom: 0 px;margin-left: 0px;float: left;" /> --%>
-				 				 <h:outputText   rendered="#{SearchTool.profile.pictureDisplayed}" value="Photo" style="font-style: italic;align:center"/>
-					 	 <h:outputText   rendered="#{SearchTool.profile.pictureDisplayed}" value="Not Available" style="font-style: italic;align:center"/>  
-				
+		 			<h:panelGrid columns="2" border="0" style="valign:top;" >
+						<h:panelGrid columns="1" border="0" width="150" rendered="#{SearchTool.profile.displayPhoto}">
+							 <h:graphicImage value="ProfileImageServlet.prf?photo=#{SearchTool.profile.profile.userId}" height="75" width="75" rendered="#{SearchTool.profile.displayUniversityPhoto}"/>
+							 <h:graphicImage value="#{SearchTool.profile.profile.pictureUrl}" height="75" width="75"  rendered="#{SearchTool.profile.displayPictureURL}"/>
 						</h:panelGrid>	 
-						<h:panelGrid>			 
-							<h:panelGrid width="150">
+						<h:panelGrid width="150">
 								<h:outputText  value="#{SearchTool.profile.profile.firstName} #{SearchTool.profile.profile.lastName}" style="font-weight: bold;"/> 
 								<h:outputText value="#{SearchTool.profile.profile.position}"/> 
 								<h:outputText value="#{SearchTool.profile.profile.department}"/> 
@@ -40,8 +37,6 @@
 								<h:outputText value="#{SearchTool.profile.profile.homePhone}" rendered="#{SearchTool.profile.displayCompleteProfile}"/>
 								<profile:profile_display_HTML value="#{SearchTool.profile.profile.otherInformation}"  rendered="#{SearchTool.profile.displayCompleteProfile}"/>
 						 	</h:panelGrid>
-						 </h:panelGrid>
-						 <h:outputText  value=" "/> 
 					</h:panelGrid>	 
   				</td>
   				<td>

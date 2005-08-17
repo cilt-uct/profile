@@ -118,13 +118,22 @@
 				  	 	<td>
 			 				<h:outputText  value="#{msgs.profile_picture}" style="font-weight: bold; font-size: 11;"/>
 			 			</td>
-			 			<td> 
+			 			<td valign="bottom"> 
 			 				<h:selectOneRadio  style="font-size: 11;"  value="#{ProfileTool.pictureIdPreference}" layout="pageDirection">
-			 					<f:selectItem itemLabel="None" itemValue="none"/>
-			 					<f:selectItem itemLabel="Use University ID Picture" itemValue="universityId" />			 						
+			 					<f:selectItem itemLabel="None" itemValue="none"/>	
+			 					<f:selectItem itemLabel="Use University Id Picture" itemValue="universityId"/>	
+			 					<f:selectItem itemLabel="Use Picture URL :" itemValue="pictureUrl"/>			 					 	 						
 			  				</h:selectOneRadio>
-			  			</td>	
+		  					<h:inputText size="50" value="#{ProfileTool.profile.pictureUrl}"/> 
+		  				</td>	
 					</tr>
+					 <tr>
+			 			<td colspan="2">
+			 			<h:outputText value="" style="color: red"  rendered="#{ProfileTool.displayMalformedUrlError}"/>
+					    <h:outputText value="#{msgs.error_msg} #{ProfileTool.malformedUrlError}" style="color: red"  rendered="#{ProfileTool.displayMalformedUrlError}"/>
+				    	</td>
+			 		</tr>  
+					
 					<tr>
 						<td>
 							<h:outputText style="font-weight: bold; font-size: 11;" value="#{msgs.profile_email}"/>

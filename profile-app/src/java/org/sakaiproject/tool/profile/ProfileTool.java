@@ -1,30 +1,32 @@
 /**********************************************************************************
-* $URL$
-* $Id$
-***********************************************************************************
-*
-* Copyright (c) 2003, 2004, 2005 The Regents of the University of Michigan, Trustees of Indiana University,
-*                  Board of Trustees of the Leland Stanford, Jr., University, and The MIT Corporation
-* 
-* Licensed under the Educational Community License Version 1.0 (the "License");
-* By obtaining, using and/or copying this Original Work, you agree that you have read,
-* understand, and will comply with the terms and conditions of the Educational Community License.
-* You may obtain a copy of the License at:
-* 
-*      http://cvs.sakaiproject.org/licenses/license_1_0.html
-* 
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
-* AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-* DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
-* FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*
-**********************************************************************************/
+ * $URL$
+ * $Id$
+ ***********************************************************************************
+ *
+ * Copyright (c) 2003, 2004, 2005 The Regents of the University of Michigan, Trustees of Indiana University,
+ *                  Board of Trustees of the Leland Stanford, Jr., University, and The MIT Corporation
+ *
+ * Licensed under the Educational Community License Version 1.0 (the "License");
+ * By obtaining, using and/or copying this Original Work, you agree that you have read,
+ * understand, and will comply with the terms and conditions of the Educational Community License.
+ * You may obtain a copy of the License at:
+ *
+ *      http://cvs.sakaiproject.org/licenses/license_1_0.html
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ **********************************************************************************/
 package org.sakaiproject.tool.profile;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import org.sakaiproject.api.app.profile.Profile;
 import org.sakaiproject.api.app.profile.ProfileManager;
-
 import org.sakaiproject.service.framework.log.Logger;
 import org.sakaiproject.service.framework.portal.cover.PortalService;
 import org.sakaiproject.service.legacy.site.cover.SiteService;
@@ -34,84 +36,138 @@ import org.sakaiproject.util.text.FormattedText;
  * @author rshastri TODO To change the template for this generated type comment go to Window -
  *         Preferences - Java - Code Style - Code Templates
  */
-public class ProfileTool  
+public class ProfileTool
 {
   private static final String ANONYMOUS = "Anonymous";
   private static final String NONE = "none";
-  private static final String UNIVERSITY_ID = "universityId";
+  private static final String UNIVERSITY_PHOTO = "universityId";
+  private static final String PICTURE_URL = "pictureUrl";
+
   private Logger logger;
   private ProfileManager profileService;
   private Profile profile;
-  private boolean loadingFirstTime = true;
-  private String displayPicture = null;
-  private boolean pictureDisplayed = false;
+
   private boolean showTool = false;
   private String title;
-  private String pictureIdPreference = UNIVERSITY_ID;
+  private boolean loadingFirstTime = true;
+
+  private String pictureIdPreference = NONE;
+
+  private boolean displayPicture = false;
   private boolean displayNoProfileMsg = false;
-  private boolean displayEvilTagMsg=false;
-  private String evilTagMsg=null;
-  private boolean displayEmptyFirstNameMsg=false;
-  private boolean displayEmptyLastNameMsg=false;
+  private boolean displayEvilTagMsg = false;
+  private boolean displayEmptyFirstNameMsg = false;
+  private boolean displayEmptyLastNameMsg = false;
+  private boolean displayMalformedUrlError = false;
+
+  private String malformedUrlError = null;
+  private String evilTagMsg = null;
 
   /**
    * Process data for save action on edit page.
-   * 
+   *
    * @return navigation outcome: return to main page or if no user is present throw permission exception
    */
   public String processActionEditSave()
   {
     logger.debug(this + "processActionEditSave()");
-    displayEvilTagMsg=false;
-    displayEmptyFirstNameMsg=false;
-    displayEmptyLastNameMsg=false;
+    displayEvilTagMsg = false;
+    displayEmptyFirstNameMsg = false;
+    displayEmptyLastNameMsg = false;
+    displayMalformedUrlError = false;
     if ((profile != null) && (profile.getUserId() == null))
     {
       logger.error(this + "processActionEditSave :" + "No User Found");
 
       return "permissionException";
     }
-    if(profile.getFirstName() == null || profile.getFirstName().trim().length()< 1)
+    if (profile.getFirstName() == null
+        || profile.getFirstName().trim().length() < 1)
     {
       displayEmptyFirstNameMsg = true;
-      return "edit";          
+      return "edit";
     }
-    if(profile.getLastName() == null || profile.getLastName().trim().length()< 1)
+    if (profile.getLastName() == null
+        || profile.getLastName().trim().length() < 1)
     {
       displayEmptyLastNameMsg = true;
-      return "edit";          
+      return "edit";
     }
-    if(profile.getOtherInformation()!=null)
+    if (profile.getOtherInformation() != null)
     {
-    	StringBuffer alertMsg = new StringBuffer();
-    	String errorMsg= null;
-    	try
-		{
-			errorMsg =  FormattedText.processFormattedText(profile.getOtherInformation(), alertMsg);
-			if (alertMsg.length() > 0)
-			{
-				evilTagMsg =alertMsg.toString();
-				displayEvilTagMsg=true;
-				return "edit";
-			}
-		 }
-		catch (Exception e)
-		{
-			logger.warn(this + " " + errorMsg,e);
-		}
+      StringBuffer alertMsg = new StringBuffer();
+      String errorMsg = null;
+      try
+      {
+        errorMsg = FormattedText.processFormattedText(profile
+            .getOtherInformation(), alertMsg);
+        if (alertMsg.length() > 0)
+        {
+          evilTagMsg = alertMsg.toString();
+          displayEvilTagMsg = true;
+          return "edit";
+        }
+      }
+      catch (Exception e)
+      {
+        logger.warn(this + " " + errorMsg, e);
+      }
     }
 
     if ((getPictureIdPreference() != null)
-        && getPictureIdPreference().equals(UNIVERSITY_ID))
+        && getPictureIdPreference().equals(UNIVERSITY_PHOTO))
     {
       profile.setInstitutionalPictureIdPreferred(new Boolean(true));
+      profile.setPictureUrl(null);
+      this.displayPicture = true;
+      this.pictureIdPreference = UNIVERSITY_PHOTO;
     }
     else
-    {
-      profile.setInstitutionalPictureIdPreferred(new Boolean(false));
-    }
-    
+      if ((getPictureIdPreference() != null)
+          && (getPictureIdPreference().equals(PICTURE_URL)))
+      {
+        profile.setInstitutionalPictureIdPreferred(new Boolean(false));
+        this.displayPicture = true;
+        this.pictureIdPreference = PICTURE_URL;
+        if (profile.getPictureUrl() != null
+            && profile.getPictureUrl().trim().length() > 0)
+        {
+          try
+          {
+            URL pictureUrl = new URL(profile.getPictureUrl());
+          }
+          catch (MalformedURLException e)
+          {
+            this.displayMalformedUrlError = true;
+            this.malformedUrlError = "Please check picture URL again ("
+                + e.getMessage() + ")";
+            return "edit";
+          }
+        }
+      }
+      else
+      {
+        //    returns null or none
+        profile.setInstitutionalPictureIdPreferred(new Boolean(false));
+        profile.setPictureUrl(null);
+        this.displayPicture = false;
+        this.pictureIdPreference = NONE;
+      }
 
+    //   Catch a bad url passed in homepage.  
+    //    if(profile.getHomepage()!=null && profile.getHomepage().trim().length()>0)
+    //    {
+    //      try
+    //      {
+    //      URL pictureUrl = new URL(profile.getPictureUrl());
+    //      }
+    //      catch (MalformedURLException e)
+    //      {
+    //        this.displayMalformedHomePage = true;
+    //        this.malformedHomePageUrlError= "Please check HomePage URL again (" + e.getMessage()+")";
+    //        return "edit";
+    //      }
+    //    }
     try
     {
       profileService.save(profile);
@@ -120,6 +176,7 @@ public class ProfileTool
 
       return "main";
     }
+
     catch (Exception e)
     {
       logger.debug(e.getMessage(), e);
@@ -130,7 +187,7 @@ public class ProfileTool
 
   /**
    * Setup before navigating to edit page
-   * 
+   *
    * @return navigation outcome: return to edit page or if no user is present throw permission exception
    */
   public String processActionEdit()
@@ -146,16 +203,7 @@ public class ProfileTool
         return "PermissionException";
       }
 
-      if ((profile != null)
-          && (profile.isInstitutionalPictureIdPreferred() != null)
-          && profile.isInstitutionalPictureIdPreferred().booleanValue())
-      {
-        setPictureIdPreference(UNIVERSITY_ID);
-      }
-      else
-      {
-        setPictureIdPreference(NONE);
-      }
+      setPictureIdPreference(profile);
 
       return "edit";
     }
@@ -173,14 +221,12 @@ public class ProfileTool
   public String processCancel()
   {
     profile = profileService.getProfile();
-    this.displayPicture = profileService.getDisplayPictureUrl(profile);
-
     return "main";
   }
 
   /**
    * Setup to fetch a profile
-   * 
+   *
    * @return Profile for user logged in or empty profile
    */
   public Profile getProfile()
@@ -190,38 +236,38 @@ public class ProfileTool
     if (loadingFirstTime)
     {
       profile = profileService.getProfile();
+      setPictureIdPreference(profile);
       loadingFirstTime = false;
     }
     else
     {
-      if(profile == null)
+      if (profile == null)
       {
         displayNoProfileMsg = true;
       }
       else
       {
-        if((profile.getFirstName() == null) || (profile.getLastName() == null))
+        if ((profile.getFirstName() == null) || (profile.getLastName() == null))
         {
           displayNoProfileMsg = true;
         }
         else
         {
-          if(profile.getFirstName().equalsIgnoreCase("") || profile.getLastName().equalsIgnoreCase(""))
+          if (profile.getFirstName().equalsIgnoreCase("")
+              || profile.getLastName().equalsIgnoreCase(""))
             displayNoProfileMsg = true;
           else
             displayNoProfileMsg = false;
         }
       }
+
     }
-
-    this.displayPicture = profileService.getDisplayPictureUrl(profile);
-
     return profile;
   }
 
   /**
    * Getter for ProfileManager service
-   * 
+   *
    * @return instance of ProfileManager
    */
   public ProfileManager getProfileService()
@@ -231,7 +277,7 @@ public class ProfileTool
 
   /**
    * Setter for ProfileManager service
-   * 
+   *
    * @param profileService
    */
   public void setProfileService(ProfileManager profileService)
@@ -241,7 +287,7 @@ public class ProfileTool
 
   /**
    * Getter for Logger
-   * 
+   *
    * @return instance of Logger
    */
   public Logger getLogger()
@@ -251,27 +297,22 @@ public class ProfileTool
 
   /**
    * Setter for Logger Service
-   * 
+   *
    * @param logger
    */
   public void setLogger(Logger logger)
   {
     this.logger = logger;
   }
-  
-  public void setDisplayNoProfileMsg(boolean displayNoProfileMsg)
-  {
-    this.displayNoProfileMsg = displayNoProfileMsg;
-  }
-  
-  public boolean getDisplayNoProfileMsg()
+
+  public boolean isDisplayNoProfileMsg()
   {
     return displayNoProfileMsg;
   }
 
   /**
    * Getter for property if the tool bean is loaded for first time
-   * 
+   *
    * @return boolean value
    */
   public boolean isLoadingFirstTime()
@@ -282,31 +323,8 @@ public class ProfileTool
   }
 
   /**
-   * Setter for property
-   * 
-   * @param loadingFirstTime
-   */
-  public void setLoadingFirstTime(boolean loadingFirstTime)
-  {
-    logger.debug(this + "setLoadingFirstTime(" + loadingFirstTime + ")");
-    this.loadingFirstTime = loadingFirstTime;
-  }
-
-  /**
-   * Returns the url for display picture
-   * 
-   * @return String
-   */
-  public String getDisplayPicture()
-  {
-    logger.debug(this + "getProfileService()");
-
-    return profileService.getDisplayPictureUrl(profile);
-  }
-
-  /**
    * Returns display picture preference
-   * 
+   *
    * @return String
    */
   public String getPictureIdPreference()
@@ -318,25 +336,13 @@ public class ProfileTool
 
   /**
    * Set display picture preference
-   * 
+   *
    * @param pictureIDPreference
    */
   public void setPictureIdPreference(String pictureIdPreference)
   {
     logger.debug(this + "setPictureIDPreference(" + pictureIdPreference + ")");
     this.pictureIdPreference = pictureIdPreference;
-  }
-
-  /**
-   * Examine if the url to display picture is null or no length
-   * 
-   * @return boolean value
-   */
-  public boolean isPictureDisplayed()
-  {
-    logger.debug(this + "isPictureDisplayed()");
-
-    return (this.displayPicture != null);// && (this.displayPicture.trim().length() > 0));
   }
 
   public boolean isShowTool()
@@ -354,51 +360,135 @@ public class ProfileTool
     return showTool;
   }
 
+  /**
+   * @return
+   */
   public String getTitle()
   {
     return SiteService.findTool(PortalService.getCurrentToolId()).getTitle();
   }
-  
-  public String getEvilTagMsg() 
+
+  /**
+   * @return
+   */
+  public String getEvilTagMsg()
   {
-	return evilTagMsg;
+    return evilTagMsg;
   }
 
-  public void setEvilTagMsg(String evilTagMsg) 
+  /**
+   * @return
+   */
+  public boolean isDisplayEvilTagMsg()
   {
-	this.evilTagMsg = evilTagMsg;
-  }
-  
-  public boolean getDisplayEvilTagMsg()
-  {
-	return displayEvilTagMsg;
+    return displayEvilTagMsg;
   }
 
-  public void setDisplayEvilTagMsg(boolean displayEvilTagMsg) 
-  {
-	this.displayEvilTagMsg = displayEvilTagMsg;
-  }
-
+  /**
+   * @return
+   */
   public boolean isDisplayEmptyFirstNameMsg()
   {
-	return displayEmptyFirstNameMsg;
+    return displayEmptyFirstNameMsg;
   }
 
-  public void setDisplayEmptyFirstNameMsg(boolean displayEmptyFirstNameMsg) 
+  /**
+   * @return
+   */
+  public boolean isDisplayEmptyLastNameMsg()
   {
-	this.displayEmptyFirstNameMsg = displayEmptyFirstNameMsg;
+    return displayEmptyLastNameMsg;
   }
 
-  public boolean isDisplayEmptyLastNameMsg() 
+  /**
+   * @return
+   */
+  public boolean isDisplayPicture()
   {
-	return displayEmptyLastNameMsg;
+    return !(getPictureIdPreference() == NONE);
   }
 
-  public void setDisplayEmptyLastNameMsg(boolean displayEmptyLastNameMsg) 
+  /**
+   * @param profile
+   */
+  public void setProfile(Profile profile)
   {
-	this.displayEmptyLastNameMsg = displayEmptyLastNameMsg;
+    this.profile = profile;
   }
 
- 
+  /**
+   * @return
+   */
+  public boolean isDisplayPictureURL()
+  {
+    if (getPictureIdPreference() == PICTURE_URL
+        && profile.getPictureUrl() != null
+        && profile.getPictureUrl().trim().length() > 0)
+      return true;
+    else
+      return false;
+  }
+
+  /**
+   * @return
+   */
+  public boolean isDisplayUniversityPhoto()
+  {
+    if (getPictureIdPreference() == UNIVERSITY_PHOTO
+        && profile.isInstitutionalPictureIdPreferred() != null
+        && profile.isInstitutionalPictureIdPreferred().booleanValue()
+        && profileService.getInstitutionalPhotoByUserId(profile.getUserId()) != null)
+      return true;
+    else
+      return false;
+  }
+
+  public boolean isDisplayUniversityPhotoUnavailable()
+  {
+    if (getPictureIdPreference() == UNIVERSITY_PHOTO
+        && profile.isInstitutionalPictureIdPreferred() != null
+        && profile.isInstitutionalPictureIdPreferred().booleanValue()
+        && (profileService.getInstitutionalPhotoByUserId(profile.getUserId()) == null || profileService
+            .getInstitutionalPhotoByUserId(profile.getUserId()).length < 1))
+      return true;
+    else
+      return false;
+  }
+
+  /**
+   * @param profile
+   */
+  private void setPictureIdPreference(Profile profile)
+  {
+    if (profile.isInstitutionalPictureIdPreferred() != null
+        && profile.isInstitutionalPictureIdPreferred().booleanValue() == true)
+    {
+      this.pictureIdPreference = UNIVERSITY_PHOTO;
+      this.displayPicture = true;
+    }
+    else
+      if (profile.getPictureUrl() != null
+          && profile.getPictureUrl().length() > 0)
+      {
+        this.pictureIdPreference = PICTURE_URL;
+        this.displayPicture = true;
+      }
+      else
+      {
+        this.pictureIdPreference = NONE;
+        this.displayPicture = false;
+      }
+
+  }
+
+  public boolean isDisplayMalformedUrlError()
+  {
+    return displayMalformedUrlError;
+  }
+
+  public String getMalformedUrlError()
+  {
+    return malformedUrlError;
+  }
+
 }
-

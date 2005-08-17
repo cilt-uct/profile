@@ -36,6 +36,7 @@ import org.sakaiproject.api.common.agent.AgentGroupManager;
 import org.sakaiproject.api.common.edu.person.SakaiPerson;
 import org.sakaiproject.api.common.edu.person.SakaiPersonManager;
 import org.sakaiproject.api.kernel.session.cover.SessionManager;
+import org.sakaiproject.service.legacy.security.cover.SecurityService;
 
 /**
  * @author rshastri
@@ -209,54 +210,45 @@ public class ProfileManagerImpl implements ProfileManager
 
     return searchResults;
   }
-
-  /**
-   * @see org.sakaiproject.api.app.profile.ProfileManager#getDisplayPictureUrl(org.sakaiproject.api.app.profile.Profile)
+ 
+  /* (non-Javadoc)
+   * @see org.sakaiproject.api.app.profile.ProfileManager#getInstitutionalPhotoByUserId(java.lang.String)
    */
-  public String getDisplayPictureUrl(Profile profile)
+  public byte[] getInstitutionalPhotoByUserId(String uid)
   {
     if (LOG.isDebugEnabled())
     {
-      LOG.debug("getDisplayPictureUrl(" + profile + ")");
+      LOG.debug("getInstitutionalPhotoByUserId(" + uid + ")");
     }
-    if (profile == null)
-      throw new IllegalArgumentException("Illegal profile argument passed!");
+    if (uid == null || uid.length() < 1)
+      throw new IllegalArgumentException("Illegal userId argument passed!");
 
-    SakaiPerson sakaiPerson = null;
-
-    if (profile != null)
+    SakaiPerson sakaiSystemPerson = sakaiPersonManager.getSakaiPerson(uid,
+        sakaiPersonManager.getSystemMutableType());
+    SakaiPerson sakaiPerson = sakaiPersonManager.getSakaiPerson(uid,
+        sakaiPersonManager.getUserMutableType());
+    
+    if ((sakaiSystemPerson != null) && sakaiPerson!=null)
     {
-      if ((profile.isInstitutionalPictureIdPreferred() != null)
-          && (profile.isInstitutionalPictureIdPreferred().booleanValue() == true))
+      Profile systemProfile = new ProfileImpl(sakaiSystemPerson);
+      Profile profile = new ProfileImpl(sakaiPerson);
+      
+      // Fetch current users institutional photo for either the user or super user       
+      if (SessionManager.getCurrentSession().getUserEid().equals(uid)|| SecurityService.isSuperUser())
       {
-        List sakaiPersons = sakaiPersonManager
-            .findSakaiPersonByUid(SessionManager.getCurrentSession()
-                .getUserEid());
-
-        if ((sakaiPersons != null) && (sakaiPersons.size() > 0))
-        {
-          sakaiPerson = (SakaiPerson) sakaiPersons.get(0);
-        }
-
-        if ((sakaiPersons != null) && (sakaiPersons.size() > 1))
-        {
-          LOG
-              .info("Profile Tool is not designed to handle more than one record for uuid");
-        }
-        //TODO: implement this
-        return " ";
+        return systemProfile.getInstitutionalPicture();
       }
+      //    if the public information && private information is viewable and user uses to display institutional picture id.
       else
-      {
-        return profile.getPictureUrl();
-      }
+        if ((profile.getHidePublicInfo() != null)
+            && (profile.getHidePublicInfo().booleanValue() == false)
+            && profile.getHidePrivateInfo() != null
+            && profile.getHidePrivateInfo().booleanValue() == false
+            && profile.isInstitutionalPictureIdPreferred().booleanValue() == true)
+        {
+          return systemProfile.getInstitutionalPicture();
+        }
     }
-    else
-    {
-      return null;
-    }
+    return null;
   }
 }
-
-
-

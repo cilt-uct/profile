@@ -36,7 +36,25 @@
             <redirect/>
         </navigation-case>        
     </navigation-rule>
+    <!-- =================== Profile Image Servlet ============== -->
+    <managed-bean>
+		<description>Profile Image Servlet</description>
+		<managed-bean-name>ProfileImageServlet</managed-bean-name>
+		<managed-bean-class>
+			org.sakaiproject.tool.profile.ProfileImageServlet
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+
+		<managed-property>
+			<description>Bean Dependency: Profile Manager</description>
+			<property-name>profileService</property-name>
+			<value>
+				#{Components["org.sakaiproject.api.app.profile.ProfileManager"]}
+			</value>
+		</managed-property>			
+	</managed-bean>
     <!-- =================== Tool Beans ============== -->
+    
     <managed-bean>
         <description>Profile Tool</description>
         <managed-bean-name>ProfileTool</managed-bean-name>
@@ -77,11 +95,20 @@
         <component-type>ProfileDisplayHTML</component-type>
         <component-class>org.sakaiproject.jsf.profile.ProfileDisplayHTMLComponent</component-class>
     </component>
+     <component>
+        <component-type>ProfileImage</component-type>
+        <component-class>org.sakaiproject.jsf.profile.ProfileImageComponent</component-class>
+    </component>
     <render-kit>
         <renderer>
             <component-family>ProfileDisplayHTML</component-family>
             <renderer-type>ProfileDisplayHTMLRender</renderer-type>
             <renderer-class>org.sakaiproject.jsf.profile.ProfileDisplayHTMLRender</renderer-class>
+        </renderer>
+        <renderer>
+            <component-family>ProfileImage</component-family>
+            <renderer-type>ProfileImageRender</renderer-type>
+            <renderer-class>org.sakaiproject.jsf.profile.ProfileImageRender</renderer-class>
         </renderer>
     </render-kit>
 </faces-config>

@@ -1,31 +1,33 @@
 /**********************************************************************************
-* $URL$
-* $Id$
-***********************************************************************************
-*
-* Copyright (c) 2003, 2004, 2005 The Regents of the University of Michigan, Trustees of Indiana University,
-*                  Board of Trustees of the Leland Stanford, Jr., University, and The MIT Corporation
-* 
-* Licensed under the Educational Community License Version 1.0 (the "License");
-* By obtaining, using and/or copying this Original Work, you agree that you have read,
-* understand, and will comply with the terms and conditions of the Educational Community License.
-* You may obtain a copy of the License at:
-* 
-*      http://cvs.sakaiproject.org/licenses/license_1_0.html
-* 
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
-* AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-* DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
-* FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*
-**********************************************************************************/
+ * $URL$
+ * $Id$
+ ***********************************************************************************
+ *
+ * Copyright (c) 2003, 2004, 2005 The Regents of the University of Michigan, Trustees of Indiana University,
+ *                  Board of Trustees of the Leland Stanford, Jr., University, and The MIT Corporation
+ * 
+ * Licensed under the Educational Community License Version 1.0 (the "License");
+ * By obtaining, using and/or copying this Original Work, you agree that you have read,
+ * understand, and will comply with the terms and conditions of the Educational Community License.
+ * You may obtain a copy of the License at:
+ * 
+ *      http://cvs.sakaiproject.org/licenses/license_1_0.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ **********************************************************************************/
 package org.sakaiproject.tool.profile;
 
 import org.sakaiproject.api.app.profile.Profile;
 import org.sakaiproject.api.app.profile.ProfileManager;
+import org.sakaiproject.api.kernel.session.cover.SessionManager;
 
 import org.sakaiproject.service.framework.log.Logger;
+import org.sakaiproject.service.legacy.security.cover.SecurityService;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -489,19 +491,12 @@ public class SearchTool
     this.searchResults = searchResults;
   }
 
-  /**
-   * @return
-   */
-  public String getDisplayPicture()
-  {
-    return profile.getDisplayPicture();
-  }
-
   public class DecoratedProfile
   {
     protected Profile inProfile;
-    private String displayPicture = null;
     private boolean displayCompleteProfile = false;
+ 
+
 
     /**
      * @param newProfile
@@ -527,10 +522,8 @@ public class SearchTool
       try
       {
         profile = this;
-        displayPicture = profileService.getDisplayPictureUrl(profile
-            .getProfile());
 
-        if (displayPrivateInformation(profile.getProfile()))
+        if (displayCompleteProfile(profile.getProfile()))
         {
           displayCompleteProfile = true;
         }
@@ -546,16 +539,18 @@ public class SearchTool
       catch (Exception e)
       {
         logger.error(e.getMessage(), e);
-
         return null;
       }
     }
-
-    private boolean displayPrivateInformation(Profile profile)
+    private boolean displayCompleteProfile(Profile profile)
     {
-      if ((profile != null)
-          && ((profile.getHidePrivateInfo().booleanValue() == false) && (profile
-              .getHidePublicInfo().booleanValue() == false)))
+      // complete profile visble to Owner and superUser 
+      if ((profile != null) && ( isCurrentUserProfile(profile)|| SecurityService.isSuperUser()))
+      {
+        return true;
+      }
+      else if((profile != null)&&(profile.getHidePrivateInfo().booleanValue() != true) && (profile
+              .getHidePublicInfo().booleanValue() != true))
       {
         return true;
       }
@@ -565,28 +560,45 @@ public class SearchTool
       }
     }
 
-    /**
-     * @return
-     */
-    public String getDisplayPicture()
+    private boolean isCurrentUserProfile(Profile profile)
     {
-      return profileService.getDisplayPictureUrl(inProfile);
-    }
-
-    /**
-     * @return
-     */
-    public boolean isPictureDisplayed()
-    {
-      return ((this.displayPicture != null) && (this.displayPicture.trim()
-          .length() > 0));
+      return profile.getUserId().equals(SessionManager.getCurrentSession().getUserEid());
     }
 
     public boolean isDisplayCompleteProfile()
     {
       return displayCompleteProfile;
     }
+
+    public boolean isDisplayPictureURL()
+    {
+      if (inProfile != null && isDisplayCompleteProfile()
+          && inProfile.isInstitutionalPictureIdPreferred() != null
+          && inProfile.isInstitutionalPictureIdPreferred().booleanValue() != true
+          && inProfile.getPictureUrl() != null
+          && inProfile.getPictureUrl().trim().length() > 0)
+        return true;
+      else
+        return false;
+    }
+
+    public boolean isDisplayUniversityPhoto()
+    {
+      if (inProfile != null && isDisplayCompleteProfile()
+          && inProfile.isInstitutionalPictureIdPreferred() != null
+          && inProfile.isInstitutionalPictureIdPreferred().booleanValue() == true)
+        return true;
+      else
+        return false;
+    }
+    
+    public boolean isDisplayPhoto()
+    {
+      if (isDisplayCompleteProfile()  && (isDisplayUniversityPhoto() || isDisplayPictureURL() ))
+        return true;
+      else
+        return false;
+    }
+
   }
 }
-
-
