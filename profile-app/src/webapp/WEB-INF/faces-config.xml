@@ -95,20 +95,20 @@
         <component-type>ProfileDisplayHTML</component-type>
         <component-class>org.sakaiproject.jsf.profile.ProfileDisplayHTMLComponent</component-class>
     </component>
-     <component>
+    <!--  <component>
         <component-type>ProfileImage</component-type>
         <component-class>org.sakaiproject.jsf.profile.ProfileImageComponent</component-class>
-    </component>
+    </component>-->
     <render-kit>
         <renderer>
             <component-family>ProfileDisplayHTML</component-family>
             <renderer-type>ProfileDisplayHTMLRender</renderer-type>
             <renderer-class>org.sakaiproject.jsf.profile.ProfileDisplayHTMLRender</renderer-class>
         </renderer>
-        <renderer>
+       <!--  <renderer>
             <component-family>ProfileImage</component-family>
             <renderer-type>ProfileImageRender</renderer-type>
             <renderer-class>org.sakaiproject.jsf.profile.ProfileImageRender</renderer-class>
-        </renderer>
+        </renderer>-->
     </render-kit>
 </faces-config>
