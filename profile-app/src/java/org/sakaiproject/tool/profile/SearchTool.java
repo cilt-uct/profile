@@ -495,8 +495,6 @@ public class SearchTool
   {
     protected Profile inProfile;
     private boolean displayCompleteProfile = false;
- 
-
 
     /**
      * @param newProfile
@@ -523,14 +521,7 @@ public class SearchTool
       {
         profile = this;
 
-        if (displayCompleteProfile(profile.getProfile()))
-        {
-          displayCompleteProfile = true;
-        }
-        else
-        {
-          displayCompleteProfile = false;
-        }
+        displayCompleteProfile = displayCompleteProfile(profile.getProfile());
 
         redirectToSearchedProfile = true;
 
@@ -542,27 +533,32 @@ public class SearchTool
         return null;
       }
     }
+
     private boolean displayCompleteProfile(Profile profile)
     {
       // complete profile visble to Owner and superUser 
-      if ((profile != null) && ( isCurrentUserProfile(profile)|| SecurityService.isSuperUser()))
-      {
-        return true;
-      }
-      else if((profile != null)&&(profile.getHidePrivateInfo().booleanValue() != true) && (profile
-              .getHidePublicInfo().booleanValue() != true))
+      if ((profile != null)
+          && (isCurrentUserProfile(profile) || SecurityService.isSuperUser()))
       {
         return true;
       }
       else
-      {
-        return false;
-      }
+        if ((profile != null)
+            && (profile.getHidePrivateInfo().booleanValue() != true)
+            && (profile.getHidePublicInfo().booleanValue() != true))
+        {
+          return true;
+        }
+        else
+        {
+          return false;
+        }
     }
 
     private boolean isCurrentUserProfile(Profile profile)
     {
-      return profile.getUserId().equals(SessionManager.getCurrentSession().getUserEid());
+      return profile.getUserId().equals(
+          SessionManager.getCurrentSession().getUserEid());
     }
 
     public boolean isDisplayCompleteProfile()
@@ -572,7 +568,8 @@ public class SearchTool
 
     public boolean isDisplayPictureURL()
     {
-      if (inProfile != null && isDisplayCompleteProfile()
+      if (inProfile != null
+          && displayCompleteProfile(inProfile)
           && inProfile.isInstitutionalPictureIdPreferred() != null
           && inProfile.isInstitutionalPictureIdPreferred().booleanValue() != true
           && inProfile.getPictureUrl() != null
@@ -584,17 +581,39 @@ public class SearchTool
 
     public boolean isDisplayUniversityPhoto()
     {
-      if (inProfile != null && isDisplayCompleteProfile()
+      if (inProfile != null
+          && displayCompleteProfile(inProfile)
           && inProfile.isInstitutionalPictureIdPreferred() != null
-          && inProfile.isInstitutionalPictureIdPreferred().booleanValue() == true)
+          && inProfile.isInstitutionalPictureIdPreferred().booleanValue() == true
+          && profileService
+              .getInstitutionalPhotoByUserId(inProfile.getUserId()) != null
+          && profileService
+              .getInstitutionalPhotoByUserId(inProfile.getUserId()).length > 0)
         return true;
       else
         return false;
     }
-    
+
+    public boolean isDisplayUniversityPhotoUnavailable()
+    {
+      if (inProfile != null
+          && displayCompleteProfile(inProfile)
+          && inProfile.isInstitutionalPictureIdPreferred() != null
+          && inProfile.isInstitutionalPictureIdPreferred().booleanValue() == true
+          && (profileService.getInstitutionalPhotoByUserId(inProfile
+              .getUserId()) == null || profileService
+              .getInstitutionalPhotoByUserId(inProfile.getUserId()).length < 1))
+        return true;
+      else
+        return false;
+    }
+
     public boolean isDisplayPhoto()
     {
-      if (isDisplayCompleteProfile()  && (isDisplayUniversityPhoto() || isDisplayPictureURL() ))
+      if (displayCompleteProfile(inProfile)
+          && ((inProfile.isInstitutionalPictureIdPreferred() != null && inProfile
+              .isInstitutionalPictureIdPreferred().booleanValue() == true) || inProfile
+              .getPictureUrl() != null))
         return true;
       else
         return false;
