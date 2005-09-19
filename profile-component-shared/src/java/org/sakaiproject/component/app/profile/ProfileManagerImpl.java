@@ -127,7 +127,7 @@ public class ProfileManagerImpl implements ProfileManager
               && (profile.getHidePublicInfo().booleanValue() != true))
           {
             if (profile.getHidePrivateInfo() != null
-                && profile.getHidePrivateInfo() != true)
+                && profile.getHidePrivateInfo().booleanValue() != true)
             {
               searchResults.add(profile);
             }
