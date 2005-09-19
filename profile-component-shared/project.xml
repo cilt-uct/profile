@@ -30,6 +30,11 @@
         </dependency>
         <dependency>
             <groupId>sakaiproject</groupId>
+            <artifactId>sakai-tool</artifactId>
+            <version>${pom.currentVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>sakaiproject</groupId>
             <artifactId>sakai-common-edu-person-api</artifactId>
             <version>${pom.currentVersion}</version>
         </dependency>
@@ -53,29 +58,16 @@
             <artifactId>sakai-common-superstructure-api</artifactId>
             <version>${pom.currentVersion}</version>
         </dependency>
-      
         <dependency>
             <groupId>sakaiproject</groupId>
             <artifactId>sakai-session</artifactId>
             <version>${pom.currentVersion}</version>
         </dependency>
         <dependency>
-          <groupId>commons-logging</groupId>
-          <artifactId>commons-logging</artifactId>
-          <version>1.0.4</version>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.0.4</version>
         </dependency>
-        <!--     
-		<dependency>
-  			<groupId>hibernate</groupId>
-  			<artifactId>hibernate</artifactId>
-	  		<version>2.1.8</version>
-  		</dependency>
-  		
-	   	<dependency>
-  			<groupId>springframework</groupId>
-			<artifactId>spring</artifactId>
-			<version>1.1.5</version>			
-  		</dependency>    -->
     </dependencies>
     <build>
         <sourceDirectory>src/java</sourceDirectory>
@@ -96,33 +88,5 @@
                 </excludes>
             </resource>
         </resources>
-        <!--  <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
-        <unitTest>
-            <resources>
-                <resource>
-                    <directory>${basedir}/src/webapp/WEB-INF</directory>
-                    <includes>
-                        <include>**/*.xml</include>
-                        <include>**/*.properties</include>
-                    </includes>
-                    <excludes>
-                        <exclude>**/web.xml</exclude>
-                    </excludes>
-                </resource>
-                <resource>
-                    <directory>${maven.src.dir}/java</directory>
-                    <includes>
-                        <include>**/*.xml</include>
-                        <include>**/*.properties</include>
-                    </includes>
-                </resource>
-            </resources>
-            <includes>
-                <include>**/*Test.java</include>
-            </includes>
-                 <excludes>
-                <exclude>**/ApplicationContextBaseTest.java</exclude>
-            </excludes>  
-        </unitTest> -->
     </build>
 </project>

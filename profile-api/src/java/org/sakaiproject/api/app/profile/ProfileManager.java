@@ -48,7 +48,7 @@ public interface ProfileManager
   public Profile getProfile();
 
   /**
-   * Searches the list of profiles matching given search criteria
+   * Searches the list of user profiles matching given search criteria
    *
    * @param searchString
    * @return
@@ -63,5 +63,62 @@ public interface ProfileManager
    */
   public byte[] getInstitutionalPhotoByUserId(String uid);
 
+  /**
+   * Allow user with update access to site view id photo of member users 
+   * 
+   * @param uid
+   * @param siteMaintainer
+   * @return
+   */
+  public byte[] getInstitutionalPhotoByUserId(String uid, boolean siteMaintainer);
 
+  // Helper  methods
+  /**
+   *  
+   * @param profile
+   * @return
+   */
+  public boolean displayCompleteProfile(Profile profile);
+
+  /**
+   * @param profile
+   * @return
+   */
+  public boolean isCurrentUserProfile(Profile profile);
+
+  /**
+   * @param profile
+   * @return
+   */
+  public boolean isDisplayPictureURL(Profile profile);
+
+  /**
+   * @param profile
+   * @return
+   */
+  public boolean isDisplayUniversityPhoto(Profile profile);
+
+  /**
+   * @param profile
+   * @return
+   */
+  public boolean isDisplayUniversityPhotoUnavailable(Profile profile);
+
+  /**
+   * @param profile
+   * @return
+   */
+  public boolean isDisplayAnyPhoto(Profile profile);
+
+  /**
+   * @param profile
+   * @return
+   */
+  public boolean isShowTool();
+
+  /**
+   * @param id
+   * @return
+   */
+  public Profile getUserProfileById(String id);
 }

@@ -23,8 +23,7 @@
 		 			<h:panelGrid columns="2" border="0" style="valign:top;" >
 						<h:panelGrid columns="1" border="0" width="150" rendered="#{SearchTool.profile.displayPhoto}">
 							 <h:graphicImage value="ProfileImageServlet.prf?photo=#{SearchTool.profile.profile.userId}" height="75" width="75" rendered="#{SearchTool.profile.displayUniversityPhoto}"/>
-							  <h:outputText   rendered="#{SearchTool.profile.displayUniversityPhotoUnavailable}" value="University ID Photo" style="font-style: italic;align:center"/>
-					 		  <h:outputText   rendered="#{SearchTool.profile.displayUniversityPhotoUnavailable}" value="Not Available" style="font-style: italic;align:center"/> 					
+ 					 		 <h:graphicImage id="image"  alt="No Official ID photo is Available" url="/images/officialPhotoUnavailable.jpg" width="75"  rendered="#{SearchTool.profile.displayUniversityPhotoUnavailable}" />	
 							 <h:graphicImage value="#{SearchTool.profile.profile.pictureUrl}" height="75" width="75"  rendered="#{SearchTool.profile.displayPictureURL}"/>
 						</h:panelGrid>	 
 						<h:panelGrid width="150">

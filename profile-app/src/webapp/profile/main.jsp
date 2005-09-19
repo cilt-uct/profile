@@ -18,8 +18,7 @@
 					<h:panelGrid columns="1" border="0" style="valign:top;" rendered="#{ProfileTool.displayPicture}">
 					 <h:graphicImage value="ProfileImageServlet.prf?photo=#{ProfileTool.profile.userId}" height="75" width="75"  rendered="#{ProfileTool.displayUniversityPhoto}"/> 
 					 <h:graphicImage value="#{ProfileTool.profile.pictureUrl}" height="75" width="75"  rendered="#{ProfileTool.displayPictureURL}"/>
-					 <h:outputText   rendered="#{ProfileTool.displayUniversityPhotoUnavailable}" value="University ID Photo" style="font-style: italic;align:center"/>
-					 <h:outputText   rendered="#{ProfileTool.displayUniversityPhotoUnavailable}" value="Not Available" style="font-style: italic;align:center"/>  
+					 <h:graphicImage id="image"  alt="No Official ID photo is Available" url="/images/officialPhotoUnavailable.jpg" width="75"  rendered="#{ProfileTool.displayUniversityPhotoUnavailable}" />	
 					</h:panelGrid>	 
 						<h:panelGrid  width="150"  style="valign:top;">
 							<h:outputText  value="#{ProfileTool.profile.firstName} #{ProfileTool.profile.lastName}" style="font-weight: bold; text-align: right"/>

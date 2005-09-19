@@ -22,18 +22,16 @@
  **********************************************************************************/
 package org.sakaiproject.tool.profile;
 
-import org.sakaiproject.api.app.profile.Profile;
-import org.sakaiproject.api.app.profile.ProfileManager;
-import org.sakaiproject.api.kernel.session.cover.SessionManager;
-
-import org.sakaiproject.service.framework.log.Logger;
-import org.sakaiproject.service.legacy.security.cover.SecurityService;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.event.ValueChangeEvent;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.sakaiproject.api.app.profile.Profile;
+import org.sakaiproject.api.app.profile.ProfileManager;
 
 /**
  * @author rshastri <a href="mailto:rshastri@iupui.edu ">Rashmi Shastri</a>
@@ -42,6 +40,7 @@ import javax.faces.event.ValueChangeEvent;
  */
 public class SearchTool
 {
+  private static final Log LOG = LogFactory.getLog(SearchTool.class);
   private static final String SEARCH_KEYWORD = "Search Keyword";
   private DecoratedProfile profile;
   private String searchKeyword;
@@ -56,16 +55,16 @@ public class SearchTool
   private boolean showSearchResults = false;
   private boolean showNoMatchFound = false;
   private boolean redirectToSearchedProfile = false;
-  protected Logger logger;
   protected ProfileManager profileService;
 
   public SearchTool()
   {
-    this.reset("Search Keyword");
+    this.reset(SEARCH_KEYWORD);
   }
 
   public String getDisplayPage()
   {
+    LOG.debug("getDisplayPage()");
     if (redirectToSearchedProfile)
     {
       return "displaySearchedProfile";
@@ -78,13 +77,17 @@ public class SearchTool
 
   public void processValueChangeForDisplayNSearchResult(ValueChangeEvent vce)
   {
+    if (LOG.isDebugEnabled())
+      LOG.debug("processValueChangeForDisplayNSearchResult(ValueChangeEvent "
+          + vce + ")");
     setDisplayNoOfRec(((String) vce.getNewValue()));
-    logger.debug("Show these many rec :" + (String) vce.getNewValue());
+    LOG.debug("Show these many rec :" + (String) vce.getNewValue());
     processActionDisplayFirst();
   }
 
   public String processActionDisplayFirst()
   {
+    LOG.debug("processActionDisplayFirst()");
     try
     {
       if ((searchResults != null) && (searchResults.size() > 1)
@@ -120,7 +123,7 @@ public class SearchTool
     }
     catch (Exception e)
     {
-      logger.error(e.getMessage(), e);
+      LOG.error(e.getMessage(), e);
 
       return null;
     }
@@ -128,6 +131,7 @@ public class SearchTool
 
   public String processActionDisplayNext()
   {
+    LOG.debug("processActionDisplayNext()");
     try
     {
       if ((searchResults != null)
@@ -177,7 +181,7 @@ public class SearchTool
     }
     catch (Exception e)
     {
-      logger.error(e.getMessage(), e);
+      LOG.error(e.getMessage(), e);
 
       return null;
     }
@@ -185,6 +189,7 @@ public class SearchTool
 
   public String processActionDisplayPrevious()
   {
+    LOG.debug("processActionDisplayPrevious()");
     try
     {
       if ((searchResults != null) && ((noOfRecDisplayedFrom) > 1)
@@ -222,7 +227,7 @@ public class SearchTool
     }
     catch (Exception e)
     {
-      logger.error(e.getMessage(), e);
+      LOG.error(e.getMessage(), e);
 
       return null;
     }
@@ -230,6 +235,7 @@ public class SearchTool
 
   public String processActionDisplayLast()
   {
+    LOG.debug("processActionDisplayLast()");
     try
     {
       //Single page display
@@ -282,7 +288,7 @@ public class SearchTool
     }
     catch (Exception e)
     {
-      logger.error(e.getMessage(), e);
+      LOG.error(e.getMessage(), e);
 
       return null;
     }
@@ -290,10 +296,11 @@ public class SearchTool
 
   public String processActionSearch()
   {
+    LOG.debug("processActionSearch()");
     try
     {
       this.reset(searchKeyword);
-
+      // Find User mutable profiles only
       List profiles = profileService.findProfiles(searchKeyword);
       searchResults = new ArrayList();
 
@@ -318,7 +325,7 @@ public class SearchTool
     }
     catch (Exception e)
     {
-      logger.error(e.getMessage(), e);
+      LOG.error(e.getMessage(), e);
 
       return null;
     }
@@ -326,36 +333,44 @@ public class SearchTool
 
   public boolean isShowNext()
   {
+    LOG.debug("isShowNext()");
     return showNext;
   }
 
   public boolean isShowPrevious()
   {
+    LOG.debug("isShowPrevious()");
     return showPrevious;
   }
 
   public List getCurrentSearchResults()
   {
+    LOG.debug("getCurrentSearchResults()");
     return currentSearchResults;
   }
 
   public void setCurrentSearchResults(List currentSearchResults)
   {
+    if (LOG.isDebugEnabled())
+      LOG.debug("setCurrentSearchResults(List" + currentSearchResults + ")");
     this.currentSearchResults = currentSearchResults;
   }
 
   public boolean isShowNoMatchFound()
   {
+    LOG.debug("isShowNoMatchFound()");
     return showNoMatchFound;
   }
 
   public boolean isShowSearchResults()
   {
+    LOG.debug("isShowSearchResults()");
     return (showSearchResults);
   }
 
   public void reset(String searchKeyword)
   {
+    if (LOG.isDebugEnabled()) LOG.debug("reset(String" + searchKeyword + ")");
     this.searchKeyword = searchKeyword;
     this.profile = null;
     this.searchResults = null;
@@ -371,13 +386,14 @@ public class SearchTool
 
   public String processCancel()
   {
+    LOG.debug("processCancel()");
     this.reset("Search Keyword");
-
     return "main";
   }
 
   public String getDisplayNoOfRec()
   {
+    LOG.debug("getDisplayNoOfRec()");
     try
     {
       if ((this.displayNoOfRec != null)
@@ -389,7 +405,7 @@ public class SearchTool
     }
     catch (NumberFormatException e)
     {
-      logger.error(e.getMessage(), e);
+      LOG.error(e.getMessage(), e);
     }
 
     return displayNoOfRec;
@@ -397,6 +413,10 @@ public class SearchTool
 
   public void setDisplayNoOfRec(String no_of_searched_rec_per_page)
   {
+    if (LOG.isDebugEnabled())
+      LOG
+          .debug("setDisplayNoOfRec(String " + no_of_searched_rec_per_page
+              + ")");
     displayNoOfRec = no_of_searched_rec_per_page;
 
     try
@@ -410,29 +430,14 @@ public class SearchTool
     }
     catch (NumberFormatException e)
     {
-      logger.error(e.getMessage(), e);
+      LOG.error(e.getMessage(), e);
     }
   }
 
   public DecoratedProfile getProfile()
   {
+    LOG.debug("getProfile()");
     return profile;
-  }
-
-  /**
-   * @return
-   */
-  public Logger getLogger()
-  {
-    return logger;
-  }
-
-  /**
-   * @param logger
-   */
-  public void setLogger(Logger logger)
-  {
-    this.logger = logger;
   }
 
   /**
@@ -440,6 +445,7 @@ public class SearchTool
    */
   public ProfileManager getProfileService()
   {
+    LOG.debug("getProfileService()");
     return profileService;
   }
 
@@ -448,6 +454,7 @@ public class SearchTool
    */
   public String getSearchKeyword()
   {
+    LOG.debug("getSearchKeyword()");
     return searchKeyword;
   }
 
@@ -456,6 +463,7 @@ public class SearchTool
    */
   public List getSearchResults()
   {
+    LOG.debug("getSearchResults()");
     return searchResults;
   }
 
@@ -464,6 +472,8 @@ public class SearchTool
    */
   public void setProfileService(ProfileManager profileService)
   {
+    if (LOG.isDebugEnabled())
+      LOG.debug("setProfileService(ProfileManager " + profileService + ")");
     this.profileService = profileService;
   }
 
@@ -472,6 +482,8 @@ public class SearchTool
    */
   public void setProfile(DecoratedProfile profile)
   {
+    if (LOG.isDebugEnabled())
+      LOG.debug("setProfile(DecoratedProfile " + profile + ")");
     this.profile = profile;
   }
 
@@ -480,6 +492,9 @@ public class SearchTool
    */
   public void setSearchKeyword(String searchKeyword)
   {
+    if (LOG.isDebugEnabled())
+      LOG.debug("setSearchResults(String " + searchKeyword + ")");
+
     this.searchKeyword = searchKeyword;
   }
 
@@ -488,19 +503,22 @@ public class SearchTool
    */
   public void setSearchResults(List searchResults)
   {
+    if (LOG.isDebugEnabled())
+      LOG.debug("setSearchResults(List " + searchResults + ")");
     this.searchResults = searchResults;
   }
 
   public class DecoratedProfile
   {
     protected Profile inProfile;
-    private boolean displayCompleteProfile = false;
-
+   
     /**
      * @param newProfile
      */
     public DecoratedProfile(Profile newProfile)
     {
+      if (LOG.isDebugEnabled())
+        LOG.debug("DecoratedProfile(Profile" + newProfile + ")");
       inProfile = newProfile;
     }
 
@@ -509,6 +527,7 @@ public class SearchTool
      */
     public Profile getProfile()
     {
+      LOG.debug("getProfile()");
       return inProfile;
     }
 
@@ -517,106 +536,48 @@ public class SearchTool
      */
     public String processActionDisplayProfile()
     {
+      LOG.debug("processActionDisplayProfile()");
       try
       {
         profile = this;
-
-        displayCompleteProfile = displayCompleteProfile(profile.getProfile());
-
         redirectToSearchedProfile = true;
-
         return "displaySearchedProfile";
       }
       catch (Exception e)
       {
-        logger.error(e.getMessage(), e);
+        LOG.error(e.getMessage(), e);
         return null;
       }
     }
 
-    private boolean displayCompleteProfile(Profile profile)
-    {
-      // complete profile visble to Owner and superUser 
-      if ((profile != null)
-          && (isCurrentUserProfile(profile) || SecurityService.isSuperUser()))
-      {
-        return true;
-      }
-      else
-        if ((profile != null)
-            && (profile.getHidePrivateInfo().booleanValue() != true)
-            && (profile.getHidePublicInfo().booleanValue() != true))
-        {
-          return true;
-        }
-        else
-        {
-          return false;
-        }
-    }
-
-    private boolean isCurrentUserProfile(Profile profile)
-    {
-      return profile.getUserId().equals(
-          SessionManager.getCurrentSession().getUserEid());
-    }
-
     public boolean isDisplayCompleteProfile()
     {
-      return displayCompleteProfile;
+      LOG.debug("isDisplayCompleteProfile()");
+      return profileService.displayCompleteProfile(inProfile);
     }
 
     public boolean isDisplayPictureURL()
     {
-      if (inProfile != null
-          && displayCompleteProfile(inProfile)
-          && inProfile.isInstitutionalPictureIdPreferred() != null
-          && inProfile.isInstitutionalPictureIdPreferred().booleanValue() != true
-          && inProfile.getPictureUrl() != null
-          && inProfile.getPictureUrl().trim().length() > 0)
-        return true;
-      else
-        return false;
+      LOG.debug("isDisplayPictureURL()");
+      return profileService.isDisplayPictureURL(inProfile);
     }
 
     public boolean isDisplayUniversityPhoto()
     {
-      if (inProfile != null
-          && displayCompleteProfile(inProfile)
-          && inProfile.isInstitutionalPictureIdPreferred() != null
-          && inProfile.isInstitutionalPictureIdPreferred().booleanValue() == true
-          && profileService
-              .getInstitutionalPhotoByUserId(inProfile.getUserId()) != null
-          && profileService
-              .getInstitutionalPhotoByUserId(inProfile.getUserId()).length > 0)
-        return true;
-      else
-        return false;
+      LOG.debug("isDisplayUniversityPhoto()");
+      return profileService.isDisplayUniversityPhoto(inProfile);
     }
 
     public boolean isDisplayUniversityPhotoUnavailable()
     {
-      if (inProfile != null
-          && displayCompleteProfile(inProfile)
-          && inProfile.isInstitutionalPictureIdPreferred() != null
-          && inProfile.isInstitutionalPictureIdPreferred().booleanValue() == true
-          && (profileService.getInstitutionalPhotoByUserId(inProfile
-              .getUserId()) == null || profileService
-              .getInstitutionalPhotoByUserId(inProfile.getUserId()).length < 1))
-        return true;
-      else
-        return false;
+      LOG.debug("isDisplayUniversityPhotoUnavailable()");
+      return profileService.isDisplayUniversityPhotoUnavailable(inProfile);
     }
 
     public boolean isDisplayPhoto()
     {
-      if (displayCompleteProfile(inProfile)
-          && ((inProfile.isInstitutionalPictureIdPreferred() != null && inProfile
-              .isInstitutionalPictureIdPreferred().booleanValue() == true) || inProfile
-              .getPictureUrl() != null))
-        return true;
-      else
-        return false;
+      LOG.debug("isDisplayPhoto()");
+      return profileService.isDisplayAnyPhoto(inProfile);
     }
 
   }

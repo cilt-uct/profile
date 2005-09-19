@@ -25,34 +25,31 @@ package org.sakaiproject.tool.profile;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.sakaiproject.api.app.profile.Profile;
 import org.sakaiproject.api.app.profile.ProfileManager;
-import org.sakaiproject.service.framework.log.Logger;
 import org.sakaiproject.service.framework.portal.cover.PortalService;
 import org.sakaiproject.service.legacy.site.cover.SiteService;
 import org.sakaiproject.util.text.FormattedText;
 
 /**
- * @author rshastri TODO To change the template for this generated type comment go to Window -
- *         Preferences - Java - Code Style - Code Templates
- */
+ * @author rshastri 
+ * 
+ * */
 public class ProfileTool
 {
-  private static final String ANONYMOUS = "Anonymous";
+  private static final Log LOG = LogFactory.getLog(ProfileTool.class);
   private static final String NONE = "none";
   private static final String UNIVERSITY_PHOTO = "universityId";
   private static final String PICTURE_URL = "pictureUrl";
-
-  private Logger logger;
+  
   private ProfileManager profileService;
   private Profile profile;
-
-  private boolean showTool = false;
-  private String title;
+ 
   private boolean loadingFirstTime = true;
 
   private String pictureIdPreference = NONE;
-
   private boolean displayPicture = false;
   private boolean displayNoProfileMsg = false;
   private boolean displayEvilTagMsg = false;
@@ -70,14 +67,14 @@ public class ProfileTool
    */
   public String processActionEditSave()
   {
-    logger.debug(this + "processActionEditSave()");
+    LOG.debug("processActionEditSave()");
     displayEvilTagMsg = false;
     displayEmptyFirstNameMsg = false;
     displayEmptyLastNameMsg = false;
     displayMalformedUrlError = false;
     if ((profile != null) && (profile.getUserId() == null))
     {
-      logger.error(this + "processActionEditSave :" + "No User Found");
+      LOG.error("processActionEditSave :" + "No User Found");
 
       return "permissionException";
     }
@@ -110,7 +107,7 @@ public class ProfileTool
       }
       catch (Exception e)
       {
-        logger.warn(this + " " + errorMsg, e);
+        LOG.error(" " + errorMsg, e);
       }
     }
 
@@ -119,7 +116,7 @@ public class ProfileTool
     {
       profile.setInstitutionalPictureIdPreferred(new Boolean(true));
       profile.setPictureUrl(null);
-      this.displayPicture = true;
+      displayPicture = true;
       this.pictureIdPreference = UNIVERSITY_PHOTO;
     }
     else
@@ -127,7 +124,7 @@ public class ProfileTool
           && (getPictureIdPreference().equals(PICTURE_URL)))
       {
         profile.setInstitutionalPictureIdPreferred(new Boolean(false));
-        this.displayPicture = true;
+        displayPicture = true;
         this.pictureIdPreference = PICTURE_URL;
         if (profile.getPictureUrl() != null
             && profile.getPictureUrl().trim().length() > 0)
@@ -150,7 +147,7 @@ public class ProfileTool
         //    returns null or none
         profile.setInstitutionalPictureIdPreferred(new Boolean(false));
         profile.setPictureUrl(null);
-        this.displayPicture = false;
+        displayPicture = false;
         this.pictureIdPreference = NONE;
       }
 
@@ -171,15 +168,14 @@ public class ProfileTool
     try
     {
       profileService.save(profile);
-      logger
-          .debug(this + "User record updated for Id :-" + profile.getUserId());
+      LOG.debug("User record updated for Id :-" + profile.getUserId());
 
       return "main";
     }
 
     catch (Exception e)
     {
-      logger.debug(e.getMessage(), e);
+      LOG.debug(e.getMessage(), e);
     }
 
     return "main";
@@ -192,25 +188,20 @@ public class ProfileTool
    */
   public String processActionEdit()
   {
-    logger.debug(this + "processActionEdit()");
-
+    LOG.debug("processActionEdit()");
     try
     {
       if ((profile != null) && (profile.getUserId() == null))
       {
-        logger.equals(this + "processActionEdit : " + "No User Found");
-
+        LOG.equals("processActionEdit : " + "No User Found");
         return "PermissionException";
       }
-
       setPictureIdPreference(profile);
-
       return "edit";
     }
     catch (Exception e)
     {
-      logger.debug(e.getMessage(), e);
-
+      LOG.error(e.getMessage(), e);
       return null;
     }
   }
@@ -220,6 +211,7 @@ public class ProfileTool
    */
   public String processCancel()
   {
+    LOG.debug("processCancel()");
     profile = profileService.getProfile();
     return "main";
   }
@@ -231,8 +223,7 @@ public class ProfileTool
    */
   public Profile getProfile()
   {
-    logger.debug("getProfile()");
-
+    LOG.debug("getProfile()");
     if (loadingFirstTime)
     {
       profile = profileService.getProfile();
@@ -260,7 +251,6 @@ public class ProfileTool
             displayNoProfileMsg = false;
         }
       }
-
     }
     return profile;
   }
@@ -272,6 +262,7 @@ public class ProfileTool
    */
   public ProfileManager getProfileService()
   {
+    LOG.debug("getProfileService()");
     return profileService;
   }
 
@@ -282,31 +273,20 @@ public class ProfileTool
    */
   public void setProfileService(ProfileManager profileService)
   {
+    if (LOG.isDebugEnabled())
+    {
+      LOG.debug("setProfileService(ProfileManager" + profileService + ")()");
+    }
     this.profileService = profileService;
+
   }
 
   /**
-   * Getter for Logger
-   *
-   * @return instance of Logger
+   * @return
    */
-  public Logger getLogger()
-  {
-    return logger;
-  }
-
-  /**
-   * Setter for Logger Service
-   *
-   * @param logger
-   */
-  public void setLogger(Logger logger)
-  {
-    this.logger = logger;
-  }
-
   public boolean isDisplayNoProfileMsg()
   {
+    LOG.debug("isDisplayNoProfileMsg()");
     return displayNoProfileMsg;
   }
 
@@ -317,8 +297,7 @@ public class ProfileTool
    */
   public boolean isLoadingFirstTime()
   {
-    logger.debug(this + "isLoadingFirstTime()");
-
+    LOG.debug("isLoadingFirstTime()");
     return loadingFirstTime;
   }
 
@@ -329,8 +308,7 @@ public class ProfileTool
    */
   public String getPictureIdPreference()
   {
-    logger.debug(this + "getPictureIdPreference()");
-
+    LOG.debug("getPictureIdPreference()");
     return pictureIdPreference;
   }
 
@@ -341,23 +319,17 @@ public class ProfileTool
    */
   public void setPictureIdPreference(String pictureIdPreference)
   {
-    logger.debug(this + "setPictureIDPreference(" + pictureIdPreference + ")");
+    if (LOG.isDebugEnabled())
+    {
+      LOG.debug("setPictureIDPreference(String" + pictureIdPreference + ")");
+    }
     this.pictureIdPreference = pictureIdPreference;
   }
 
   public boolean isShowTool()
   {
-    //implement isAnonymous later on.
-    if (getProfile().getUserId() != ANONYMOUS)
-    {
-      this.showTool = true;
-    }
-    else
-    {
-      this.showTool = false;
-    }
-
-    return showTool;
+    LOG.debug("isShowTool()");
+    return profileService.isShowTool();
   }
 
   /**
@@ -365,6 +337,7 @@ public class ProfileTool
    */
   public String getTitle()
   {
+    LOG.debug("getTitle()");
     return SiteService.findTool(PortalService.getCurrentToolId()).getTitle();
   }
 
@@ -373,6 +346,7 @@ public class ProfileTool
    */
   public String getEvilTagMsg()
   {
+    LOG.debug("getEvilTagMsg()");
     return evilTagMsg;
   }
 
@@ -381,6 +355,7 @@ public class ProfileTool
    */
   public boolean isDisplayEvilTagMsg()
   {
+    LOG.debug("isDisplayEvilTagMsg()");
     return displayEvilTagMsg;
   }
 
@@ -389,6 +364,7 @@ public class ProfileTool
    */
   public boolean isDisplayEmptyFirstNameMsg()
   {
+    LOG.debug("isDisplayEmptyFirstNameMsg()");
     return displayEmptyFirstNameMsg;
   }
 
@@ -397,6 +373,7 @@ public class ProfileTool
    */
   public boolean isDisplayEmptyLastNameMsg()
   {
+    LOG.debug("isDisplayEmptyLastNameMsg()");
     return displayEmptyLastNameMsg;
   }
 
@@ -405,7 +382,8 @@ public class ProfileTool
    */
   public boolean isDisplayPicture()
   {
-    return !(getPictureIdPreference() == NONE);
+    LOG.debug("isDisplayPicture()");
+    return profileService.isDisplayAnyPhoto(profile);
   }
 
   /**
@@ -413,6 +391,10 @@ public class ProfileTool
    */
   public void setProfile(Profile profile)
   {
+    if (LOG.isDebugEnabled())
+    {
+      LOG.debug("setProfile(Profile" + profile + ")");
+    }
     this.profile = profile;
   }
 
@@ -421,12 +403,8 @@ public class ProfileTool
    */
   public boolean isDisplayPictureURL()
   {
-    if (getPictureIdPreference() == PICTURE_URL
-        && profile.getPictureUrl() != null
-        && profile.getPictureUrl().trim().length() > 0)
-      return true;
-    else
-      return false;
+    LOG.debug("isDisplayPictureURL()");
+    return profileService.isDisplayPictureURL(profile);
   }
 
   /**
@@ -434,25 +412,17 @@ public class ProfileTool
    */
   public boolean isDisplayUniversityPhoto()
   {
-    if (getPictureIdPreference() == UNIVERSITY_PHOTO
-        && profile.isInstitutionalPictureIdPreferred() != null
-        && profile.isInstitutionalPictureIdPreferred().booleanValue()
-        && profileService.getInstitutionalPhotoByUserId(profile.getUserId()) != null)
-      return true;
-    else
-      return false;
+    LOG.debug("isDisplayUniversityPhoto()");
+    return profileService.isDisplayUniversityPhoto(profile);
   }
 
+  /**
+   * @return
+   */
   public boolean isDisplayUniversityPhotoUnavailable()
   {
-    if (getPictureIdPreference() == UNIVERSITY_PHOTO
-        && profile.isInstitutionalPictureIdPreferred() != null
-        && profile.isInstitutionalPictureIdPreferred().booleanValue()
-        && (profileService.getInstitutionalPhotoByUserId(profile.getUserId()) == null || profileService
-            .getInstitutionalPhotoByUserId(profile.getUserId()).length < 1))
-      return true;
-    else
-      return false;
+    LOG.debug("isDisplayUniversityPhotoUnavailable()");
+    return profileService.isDisplayUniversityPhotoUnavailable(profile);
   }
 
   /**
@@ -460,6 +430,10 @@ public class ProfileTool
    */
   private void setPictureIdPreference(Profile profile)
   {
+    if (LOG.isDebugEnabled())
+    {
+      LOG.debug("setPictureIdPreference(Profile" + profile + ")");
+    }
     if (profile.isInstitutionalPictureIdPreferred() != null
         && profile.isInstitutionalPictureIdPreferred().booleanValue() == true)
     {
@@ -481,13 +455,21 @@ public class ProfileTool
 
   }
 
+  /**
+   * @return
+   */
   public boolean isDisplayMalformedUrlError()
   {
+    LOG.debug("isDisplayMalformedUrlError()");
     return displayMalformedUrlError;
   }
 
+  /**
+   * @return
+   */
   public String getMalformedUrlError()
   {
+    LOG.debug("getMalformedUrlError()");
     return malformedUrlError;
   }
 
