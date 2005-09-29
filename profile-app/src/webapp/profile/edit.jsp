@@ -169,8 +169,8 @@
 			 	    <tr>
 			 			<td colspan="2">
 			 				<h:outputText style="font-weight: bold; font-size: 11;" value="#{msgs.profile_other_information}"/> 
-			 			<br/>	
-			 				<sakai:rich_text_area value="#{ProfileTool.profile.otherInformation}" rows="10" columns="65" javascriptLibrary="/library/htmlarea"/> <br/>
+				 			<br/>	
+							<sakai:rich_text_area value="#{ProfileTool.profile.otherInformation}" rows="17" columns="70"/> <br/>
 			 	 		</td>
 			 		</tr>
 			 		 <tr>
