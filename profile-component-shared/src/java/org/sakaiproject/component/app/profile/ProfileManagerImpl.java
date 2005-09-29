@@ -123,22 +123,22 @@ public class ProfileManagerImpl implements ProfileManager
             searchResults.add(profile);
           }
           else
-          if ((profile.getHidePublicInfo() != null)
-              && (profile.getHidePublicInfo().booleanValue() != true))
-          {
-            if (profile.getHidePrivateInfo() != null
-                && profile.getHidePrivateInfo().booleanValue() != true)
+            if ((profile.getHidePublicInfo() != null)
+                && (profile.getHidePublicInfo().booleanValue() != true))
             {
-              searchResults.add(profile);
-            }
-            else
-            {
-              searchResults.add(getOnlyPublicProfile(profile));
-            }
+              if (profile.getHidePrivateInfo() != null
+                  && profile.getHidePrivateInfo().booleanValue() != true)
+              {
+                searchResults.add(profile);
+              }
+              else
+              {
+                searchResults.add(getOnlyPublicProfile(profile));
+              }
 
-          }
+            }
         }
-        
+
       }
     }
 
@@ -215,25 +215,66 @@ public class ProfileManagerImpl implements ProfileManager
   /* (non-Javadoc)
    * @see org.sakaiproject.api.app.profile.ProfileManager#getUserProfileById(java.lang.String)
    */
-  public Profile getUserProfileById(String id)
+public Profile getUserProfileById(String id)
   {
     if (LOG.isDebugEnabled())
     {
       LOG.debug("getUserProfileById(String" + id + ")");
     }
-    List profiles = findProfiles(id);
-    if (profiles != null && profiles.size() > 0)
+    SakaiPerson sakaiPerson=sakaiPersonManager.getSakaiPerson(getAgentUuidByEnterpriseId(id),sakaiPersonManager.getUserMutableType());
+    if (sakaiPerson==null)
     {
-      Iterator iter = profiles.iterator();
-      while (iter.hasNext())
-      {
-        Profile searchProfile = (Profile) iter.next();
-        //Assuming that there is only one user mutable profile per user. 
-        if (searchProfile.getUserId().equals(id)) return searchProfile;
-      }
+      return null;
     }
-    return null;
+    return new ProfileImpl(sakaiPerson);
   }
+
+  public String getAgentUuidByEnterpriseId(String uid)
+  {
+    if (LOG.isDebugEnabled())
+    {
+      LOG.debug(" getAgentUuidByEnterpriseId(String " + uid + ")");
+    }
+    if (uid == null || (uid != null && uid.trim().length() < 0))
+    {
+      return null;
+    }
+
+    Agent agent = agentGroupManager.getAgentByEnterpriseId(uid);
+    if(agent==null)
+    {
+      return null;
+    }
+    //Do not try to create an agent.
+    return agent.getUuid();
+  }
+  
+  /**
+   * @param agentUuid
+   * @return
+   */
+  public String getEnterpriseIdByAgentUuid(String agentUuid)
+  {
+    if (LOG.isDebugEnabled())
+    {
+      LOG.debug(" getEnterpriseIdByAgentUuid(String " + agentUuid + ")");
+    }
+    if (agentUuid == null
+        || (agentUuid != null && agentUuid.trim().length() < 0))
+    {
+      return null;
+    }
+
+    Agent agent = agentGroupManager.getAgentByUuid(agentUuid);
+    if (agent == null)
+    {
+      LOG.debug("No agent found for Uuid" + agentUuid);
+      return null;
+    }
+    return agent.getEnterpriseId();
+  }
+
+  
 
   public boolean displayCompleteProfile(Profile profile)
   {
@@ -392,6 +433,7 @@ public class ProfileManagerImpl implements ProfileManager
           || SecurityService.isSuperUser()
           || (siteMaintainer && doesCurrentUserHaveUpdateAccessToSite() && isSiteMember(uid)))
       {
+        LOG.info("Official Photo fetched for userId " + uid);
         return systemProfile.getInstitutionalPicture();
       }
 
@@ -406,6 +448,7 @@ public class ProfileManagerImpl implements ProfileManager
             && profile.getHidePrivateInfo().booleanValue() == false
             && profile.isInstitutionalPictureIdPreferred().booleanValue() == true)
         {
+          LOG.info("Official Photo fetched for userId " + uid);
           return systemProfile.getInstitutionalPicture();
         }
 

@@ -121,4 +121,16 @@ public interface ProfileManager
    * @return
    */
   public Profile getUserProfileById(String id);
+
+  /**
+   * @param userId
+   * @return
+   */
+  public String getAgentUuidByEnterpriseId(String userId);
+
+  /**
+   * @param agentUuid
+   * @return
+   */
+  public String getEnterpriseIdByAgentUuid(String agentUuid);
 }
