@@ -39,8 +39,8 @@ import org.sakaiproject.api.kernel.session.cover.SessionManager;
 import org.sakaiproject.api.kernel.tool.Placement;
 import org.sakaiproject.api.kernel.tool.cover.ToolManager;
 import org.sakaiproject.exception.IdUnusedException;
-import org.sakaiproject.service.legacy.realm.Realm;
-import org.sakaiproject.service.legacy.realm.cover.RealmService;
+import org.sakaiproject.service.legacy.authzGroup.AuthzGroup;
+import org.sakaiproject.service.legacy.authzGroup.cover.RealmService;
 import org.sakaiproject.service.legacy.security.cover.SecurityService;
 import org.sakaiproject.service.legacy.site.cover.SiteService;
 
@@ -467,10 +467,10 @@ public Profile getUserProfileById(String id)
     {
       LOG.debug("isSiteMember(String" + uid + ")");
     }
-    Realm realm;
+    AuthzGroup realm;
     try
     {
-      realm = RealmService.getRealm("/site/" + getCurrentSiteId());
+      realm = RealmService.getAuthzGroup("/site/" + getCurrentSiteId());
       return realm.getUsers().contains(uid);
     }
     catch (IdUnusedException e)
