@@ -40,7 +40,7 @@ import org.sakaiproject.api.kernel.tool.Placement;
 import org.sakaiproject.api.kernel.tool.cover.ToolManager;
 import org.sakaiproject.exception.IdUnusedException;
 import org.sakaiproject.service.legacy.authzGroup.AuthzGroup;
-import org.sakaiproject.service.legacy.authzGroup.cover.RealmService;
+import org.sakaiproject.service.legacy.authzGroup.cover.AuthzGroupService;
 import org.sakaiproject.service.legacy.security.cover.SecurityService;
 import org.sakaiproject.service.legacy.site.cover.SiteService;
 
@@ -470,7 +470,7 @@ public Profile getUserProfileById(String id)
     AuthzGroup realm;
     try
     {
-      realm = RealmService.getAuthzGroup("/site/" + getCurrentSiteId());
+      realm = AuthzGroupService.getAuthzGroup("/site/" + getCurrentSiteId());
       return realm.getUsers().contains(uid);
     }
     catch (IdUnusedException e)
