@@ -283,15 +283,25 @@ public Profile getUserProfileById(String id)
       LOG.debug("displayCompleteProfile(Profile" + profile + ")");
     }
     //  complete profile visble to Owner and superUser 
-    if ((profile != null)
-        && (isCurrentUserProfile(profile) || SecurityService.isSuperUser()))
+    if(profile ==null)
+    {
+      return false;
+    }
+    if ((isCurrentUserProfile(profile) || SecurityService.isSuperUser()))
     {
       return true;
     }
     else
-      if ((profile != null)
-          && (profile.getHidePrivateInfo().booleanValue() != true)
-          && (profile.getHidePublicInfo().booleanValue() != true))
+      if(profile.getHidePrivateInfo()==null )
+      {
+        return false;
+      }
+    if(profile.getHidePublicInfo()==null )
+    {
+      return false;
+    }
+     if (profile.getHidePrivateInfo().booleanValue() != true
+         && profile.getHidePublicInfo().booleanValue() != true)
       {
         return true;
       }
@@ -445,6 +455,7 @@ public Profile getUserProfileById(String id)
             && (profile.getHidePublicInfo().booleanValue() == false)
             && profile.getHidePrivateInfo() != null
             && profile.getHidePrivateInfo().booleanValue() == false
+            && profile.isInstitutionalPictureIdPreferred()!= null
             && profile.isInstitutionalPictureIdPreferred().booleanValue() == true)
         {
           LOG.info("Official Photo fetched for userId " + uid);
