@@ -108,7 +108,7 @@ public interface ProfileManager
    * @param profile
    * @return
    */
-  public boolean isDisplayAnyPhoto(Profile profile);
+  public boolean isDisplayNoPhoto(Profile profile);
 
   /**
    * @param profile

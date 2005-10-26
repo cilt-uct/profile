@@ -56,7 +56,7 @@ public class ProfileTool
   private boolean displayEmptyFirstNameMsg = false;
   private boolean displayEmptyLastNameMsg = false;
   private boolean displayMalformedUrlError = false;
-
+  
   private String malformedUrlError = null;
   private String evilTagMsg = null;
 
@@ -177,7 +177,6 @@ public class ProfileTool
     {
       LOG.debug(e.getMessage(), e);
     }
-
     return "main";
   }
 
@@ -380,10 +379,10 @@ public class ProfileTool
   /**
    * @return
    */
-  public boolean isDisplayPicture()
+  public boolean isDisplayNoPicture()
   {
     LOG.debug("isDisplayPicture()");
-    return profileService.isDisplayAnyPhoto(profile);
+    return profileService.isDisplayNoPhoto(profile);
   }
 
   /**

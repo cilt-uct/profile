@@ -301,6 +301,11 @@ public class SearchTool
     {
       this.reset(searchKeyword);
       // Find User mutable profiles only
+      if(searchKeyword==null || searchKeyword.trim().length()<1)
+      {
+        this.showNoMatchFound = true;
+        return "main";
+      }
       List profiles = profileService.findProfiles(searchKeyword);
       searchResults = new ArrayList();
 
@@ -311,7 +316,7 @@ public class SearchTool
         while (profileIterator.hasNext())
         {
           profile = new DecoratedProfile((Profile) profileIterator.next());
-          searchResults.add(profile);
+          searchResults.add(profile);          
         }
 
         return processActionDisplayFirst();
@@ -574,10 +579,10 @@ public class SearchTool
       return profileService.isDisplayUniversityPhotoUnavailable(inProfile);
     }
 
-    public boolean isDisplayPhoto()
+    public boolean isDisplayNoPicture()
     {
       LOG.debug("isDisplayPhoto()");
-      return profileService.isDisplayAnyPhoto(inProfile);
+      return profileService.isDisplayNoPhoto(inProfile);
     }
 
   }

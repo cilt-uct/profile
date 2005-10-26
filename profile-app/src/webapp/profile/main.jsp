@@ -4,38 +4,40 @@
 <%@ taglib uri="http://sakaiproject.org/jsf/profile" prefix="profile" %> 
  
 <% response.setContentType("text/html; charset=UTF-8"); %>
+<link href='/sakai-profile-tool/css/profile.css' rel='stylesheet' type='text/css' /> 
 <f:loadBundle basename="org.sakaiproject.tool.profile.bundle.Messages" var="msgs"/>
 <f:view>
-	<sakai:view_container title="Profile">
-	<sakai:view_content>
-		<h:panelGrid rendered="#{ProfileTool.showTool}" > 
-	 		<jsp:include page="profileCommonToolBar.jsp"/>
-	 		<h:outputText value="#{msgs.no_profile_msg}" rendered="#{ProfileTool.displayNoProfileMsg}" style="color:red;"/>
-	 	 	<h:panelGrid  columns="2"  border ="1" style="valign:top;">
-		  		<h:outputText  value="Profile" style="font-weight: bold;"/> 
-		  		<h:outputText   value="Search for Profile" style="font-weight: bold;"/>  
-		 		<h:panelGrid columns="2" border="0" > 			 
-					<h:panelGrid columns="1" border="0" style="valign:top;" rendered="#{ProfileTool.displayPicture}">
-					 <h:graphicImage value="ProfileImageServlet.prf?photo=#{ProfileTool.profile.userId}" height="75" width="75"  rendered="#{ProfileTool.displayUniversityPhoto}"/> 
-					 <h:graphicImage value="#{ProfileTool.profile.pictureUrl}" height="75" width="75"  rendered="#{ProfileTool.displayPictureURL}"/>
-					 <h:graphicImage id="image"  alt="No Official ID photo is Available" url="/images/officialPhotoUnavailable.jpg" width="75"  rendered="#{ProfileTool.displayUniversityPhotoUnavailable}" />	
-					</h:panelGrid>	 
-						<h:panelGrid  width="150"  style="valign:top;">
-							<h:outputText  value="#{ProfileTool.profile.firstName} #{ProfileTool.profile.lastName}" style="font-weight: bold; text-align: right"/>
-							<h:outputText value="#{ProfileTool.profile.position}"/> 
-							<h:outputText value="#{ProfileTool.profile.department}"/> 
-							<h:outputText value="#{ProfileTool.profile.school}"/> 
-							<h:outputText value="#{ProfileTool.profile.room}"/>							
-							<h:outputText value="#{ProfileTool.profile.email}" />
-							<h:outputText value="#{ProfileTool.profile.homepage}" />
-							<h:outputText value="#{ProfileTool.profile.workPhone}"/>
-							<h:outputText value="#{ProfileTool.profile.homePhone}"/>
-							<profile:profile_display_HTML value="#{ProfileTool.profile.otherInformation}"/>
-					 	</h:panelGrid>	 			
-				</h:panelGrid>	
-				<jsp:include page="searchModule.jsp"/>
-		 </h:panelGrid>	
-	  </h:panelGrid>	
-	</sakai:view_content>	
-	</sakai:view_container>
+<h:form>	 	
+<sakai:view title="Profile" rendered="#{ProfileTool.showTool}">
+	 <%@include file="profileCommonToolBar.jsp"%>		 
+		<div class="base-div">
+		        <div class="left-section">
+		     		<sakai:view_title value="Profile" /> 
+		   		<h:outputText id="warning" value="#{msgs.no_profile_msg}" rendered="#{ProfileTool.displayNoProfileMsg}" style="color:red;"/>
+	 			<h4><h:outputText  id="Name" value="#{ProfileTool.profile.firstName} #{ProfileTool.profile.lastName}"/></h4>
+		   	 <div class="layer1">	
+				<h:graphicImage id="image1" value="ProfileImageServlet.prf?photo=#{ProfileTool.profile.userId}" alt="Official ID Photo" height="75" width="75"  rendered="#{ProfileTool.displayUniversityPhoto}"/> 
+		   		<h:graphicImage id="image2" value="#{ProfileTool.profile.pictureUrl}" height="75" width="75"  alt="User selected picture" rendered="#{ProfileTool.displayPictureURL}"/>
+		   		<h:graphicImage id="image3" url="/images/pictureUnavailable.jpg" width="75"  alt="No photo available" rendered="#{ProfileTool.displayNoPicture}"/>
+		   		<h:graphicImage id="image4" alt="No Official ID photo is Available" url="/images/officialPhotoUnavailable.jpg" width="75"  rendered="#{ProfileTool.displayUniversityPhotoUnavailable}" />	
+			 </div>
+    			 <div class="layer3">
+				<h:outputText id="position" value="#{ProfileTool.profile.position}"/> <br/>
+				<h:outputText id="department" value="#{ProfileTool.profile.department}"/> <br/>
+				<h:outputText id="school" value="#{ProfileTool.profile.school}"/> <br/>
+				<h:outputText id="room" value="#{ProfileTool.profile.room}"/><br/>							
+				<h:outputText id="email" value="#{ProfileTool.profile.email}" /><br/>
+				<h:outputText id="homepage" value="#{ProfileTool.profile.homepage}" /><br/>
+				<h:outputText id="workphone" value="#{ProfileTool.profile.workPhone}"/><br/>
+				<h:outputText id="homephone" value="#{ProfileTool.profile.homePhone}"/><br/>
+				<profile:profile_display_HTML value="#{ProfileTool.profile.otherInformation}"/>	
+		   	</div>
+		   	</div>
+		        <div class="right-section">
+				<sakai:view_title value="Search for Profile"/> 
+		   		<%@include file="searchModule.jsp"%>
+		        </div>
+		</div>  
+	</sakai:view>
+     </h:form>
 </f:view> 

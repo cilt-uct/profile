@@ -358,24 +358,23 @@ public Profile getUserProfileById(String id)
     return (profile != null && displayCompleteProfile(profile)
         && profile.isInstitutionalPictureIdPreferred() != null
         && profile.isInstitutionalPictureIdPreferred().booleanValue() == true
-        && getInstitutionalPhotoByUserId(profile.getUserId()) != null && (getInstitutionalPhotoByUserId(profile
+        && getInstitutionalPhotoByUserId(profile.getUserId()) == null && (getInstitutionalPhotoByUserId(profile
         .getUserId()) == null || getInstitutionalPhotoByUserId(profile
         .getUserId()).length < 1));
   }
 
   /* (non-Javadoc)
-   * @see org.sakaiproject.api.app.profile.ProfileManager#isDisplayAnyPhoto(org.sakaiproject.api.app.profile.Profile)
+   * @see org.sakaiproject.api.app.profile.ProfileManager#isDisplayNoPhoto(org.sakaiproject.api.app.profile.Profile)
    */
-  public boolean isDisplayAnyPhoto(Profile profile)
+  public boolean isDisplayNoPhoto(Profile profile)
   {
     if (LOG.isDebugEnabled())
     {
-      LOG.debug("isDisplayAnyPhoto(Profile" + profile + ")");
+      LOG.debug("isDisplayNoPhoto(Profile" + profile + ")");
     }
-    return (profile != null && displayCompleteProfile(profile) && ((profile
-        .isInstitutionalPictureIdPreferred() != null && profile
-        .isInstitutionalPictureIdPreferred().booleanValue() == true) || profile
-        .getPictureUrl() != null));
+    return (profile == null || !displayCompleteProfile(profile) ||(profile.isInstitutionalPictureIdPreferred()== null || (
+        profile.isInstitutionalPictureIdPreferred().booleanValue() != true &&(profile.getPictureUrl()
+        == null || profile.getPictureUrl().trim().length()<1))));
   }
 
   /* (non-Javadoc)
