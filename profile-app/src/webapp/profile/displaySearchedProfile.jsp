@@ -7,7 +7,7 @@
 <link href='/sakai-profile-tool/css/profile.css' rel='stylesheet' type='text/css' /> 
 <f:loadBundle basename="org.sakaiproject.tool.profile.bundle.Messages" var="msgs"/>
 <f:view>
-<h:form>	 	
+<h:form id="displayProfileForm">	 	
 <sakai:view title="Profile" rendered="#{ProfileTool.showTool}">
 	 <%@include file="profileCommonToolBar.jsp"%>
 		<div class="base-div">

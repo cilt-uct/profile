@@ -5,9 +5,9 @@
 <f:loadBundle basename="org.sakaiproject.tool.profile.bundle.Messages" var="msgs"/>
 <link href='/sakai-profile-tool/css/profile.css' rel='stylesheet' type='text/css' />
 <f:view>
-<h:form> 
+<h:form id="editProfileForm"> 
 	<sakai:view title="My Profile" rendered="#{ProfileTool.showTool}">
-		<div class="chefToolBarWrap">
+		<div class="navIntraTool">
 		 	<h:outputText id="editprofile" value="#{msgs.profile_edit}" styleClass="currentView" />
 			<h:outputText id="seperaror" value=" | "/>
 			<h:commandLink id="cancel" immediate="true" action="#{SearchTool.processCancel}"  value="#{msgs.profile_show}" />
@@ -73,7 +73,7 @@
 			</p>
 
 		    <h4><h:outputText id="personal" value="#{msgs.title_personal_info}" /></h4>
-			<h:selectBooleanCheckbox  title= "Hide my Personal Information"   value="#{ProfileTool.profile.hidePrivateInfo}" />
+			<h:selectBooleanCheckbox  id="hideMyPersonalInfo" title= "Hide my Personal Information"   value="#{ProfileTool.profile.hidePrivateInfo}" />
 			<h:outputText id="id5"  value="Hide only my Personal Information" />
 
 			<p class="shorttext">
@@ -85,7 +85,7 @@
 							<f:selectItem itemLabel="Use University Id Picture" itemValue="universityId"/>
 							<f:selectItem itemLabel="Use Picture URL :" itemValue="pictureUrl"/>
 						</h:selectOneRadio>
-		  				<h:inputText size="50" value="#{ProfileTool.profile.pictureUrl}"/>
+		  				<h:inputText size="50" id="inputPictureUrl" value="#{ProfileTool.profile.pictureUrl}"/>
 					</h:panelGroup>
 
 					<h:panelGroup/>
@@ -117,8 +117,8 @@
 			</p>
 
 			<p class="act">
-				<h:commandButton action="#{ProfileTool.processActionEditSave}" onkeypress="document.forms[0].submit;" value="#{msgs.bar_save}" />
-				<h:commandButton action="#{ProfileTool.processCancel}" onkeypress="document.forms[0].cancel;"	immediate="true" value="#{msgs.bar_cancel}" />
+				<h:commandButton id="editSaveButton" action="#{ProfileTool.processActionEditSave}" onkeypress="document.forms[0].submit;" value="#{msgs.bar_save}" />
+				<h:commandButton id="editCancelButton" action="#{ProfileTool.processCancel}" onkeypress="document.forms[0].cancel;"	immediate="true" value="#{msgs.bar_cancel}" />
 			<p> 
 	</sakai:view>
 	</h:form>
