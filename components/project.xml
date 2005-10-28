@@ -18,18 +18,12 @@
         <dependency>
             <groupId>sakaiproject</groupId>
             <artifactId>sakai-profile-api</artifactId>
-            <version>${sakai.version}</version>
-            <properties>
-                <deploy.target>shared</deploy.target>
-            </properties>
+            <version>${sakai.version}</version>       
         </dependency>
         <dependency>
             <groupId>sakaiproject</groupId>
             <artifactId>sakai-profile-component-shared</artifactId>
-            <version>${sakai.version}</version>
-            <properties>
-                <deploy.target>shared</deploy.target>
-            </properties>
+            <version>${sakai.version}</version>          
         </dependency>
         <dependency>
             <groupId>commons-dbcp</groupId>
