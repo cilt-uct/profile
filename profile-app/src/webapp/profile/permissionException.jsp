@@ -4,6 +4,6 @@
 <f:loadBundle basename="org.sakaiproject.tool.profile.bundle.Messages" var="msgs"/>
 <f:view>
  <sakai:view title="User not logged in"> 
-  		<h:outputText id="error" style="font-weight: bold; color:red;" value="Please login to view your profile" />	 	
+  		<h:outputText id="error" style="font-weight: bold; color:red;" value="#{msgs.permission_exception}" />	 	
  </sakai:view>  
 </f:view>

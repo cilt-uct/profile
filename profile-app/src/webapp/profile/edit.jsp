@@ -14,12 +14,12 @@
 		</div>
 		<sakai:tool_bar_message value="#{msgs.profile_edit_title}" />
  			 <div class="instruction">
-  			    <h:outputText id="er1"  value="Complete form and then choose 'Save' at the bottom. #{msgs.info_A}"/>
+  			    <h:outputText id="er1"  value="#{msgs.info_A}"/>
 			 	<h:outputText id="er2" style="color: red" value="'#{msgs.info_required_sign}'"/>
 			    <h:outputText id="er3" value="#{msgs.info_required}"/>
 
-  			 </div> <h:selectBooleanCheckbox id="checkhide" title= "Hide my Profile" value="#{ProfileTool.profile.hidePublicInfo}" /> <h:outputText   value="Hide my
-				entire Profile" />
+  			 </div> <h:selectBooleanCheckbox id="checkhide" title= "#{msgs.profile_hide_entire}"  value="#{ProfileTool.profile.hidePublicInfo}" /> 
+  			 <h:outputText   value="#{msgs.profile_hide_entire}" />
 
 
   			<h4><h:outputText  value="#{msgs.title_public_info}"/></h4>
@@ -73,17 +73,17 @@
 			</p>
 
 		    <h4><h:outputText id="personal" value="#{msgs.title_personal_info}" /></h4>
-			<h:selectBooleanCheckbox  id="hideMyPersonalInfo" title= "Hide my Personal Information"   value="#{ProfileTool.profile.hidePrivateInfo}" />
-			<h:outputText id="id5"  value="Hide only my Personal Information" />
+			<h:selectBooleanCheckbox  id="hideMyPersonalInfo" title= "#{msgs.profile_hide_personal}"   value="#{ProfileTool.profile.hidePrivateInfo}" />
+			<h:outputText id="id5"  value="#{msgs.profile_hide_personal}" />
 
 			<p class="shorttext">
 				<h:panelGrid columns="2" columnClasses="editProfile">
 					<h:outputLabel id="outputLabel7" for="picture"  value="#{msgs.profile_picture}" />
 					<h:panelGroup>
-						<h:selectOneRadio id="picture" styleClass="shorttext" title="Choose picture id preference"  value="#{ProfileTool.pictureIdPreference}" layout="pageDirection">
-							<f:selectItem itemLabel="None" itemValue="none"/>
-							<f:selectItem itemLabel="Use University Id Picture" itemValue="universityId"/>
-							<f:selectItem itemLabel="Use Picture URL :" itemValue="pictureUrl"/>
+						<h:selectOneRadio id="picture" styleClass="shorttext" title="#{msgs.edit_pic_preference}"  value="#{ProfileTool.pictureIdPreference}" layout="pageDirection">
+							<f:selectItem itemLabel="#{msgs.edit_pic_preference_none}" itemValue="none"/>
+							<f:selectItem itemLabel="#{msgs.edit_pic_preference_univ}" itemValue="universityId"/>
+							<f:selectItem itemLabel="#{msgs.edit_pic_preference_url}" itemValue="pictureUrl"/>
 						</h:selectOneRadio>
 		  				<h:inputText size="50" id="inputPictureUrl" value="#{ProfileTool.profile.pictureUrl}"/>
 					</h:panelGroup>

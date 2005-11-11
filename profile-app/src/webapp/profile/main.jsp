@@ -12,7 +12,7 @@
 	 <%@include file="profileCommonToolBar.jsp"%>		 
 		<div class="base-div">
 		        <div class="left-section">
-		     		<sakai:view_title value="Profile" /> 
+		     		<sakai:view_title value="#{msgs.profile}" /> 
 		   		<h:outputText id="warning" value="#{msgs.no_profile_msg}" rendered="#{ProfileTool.displayNoProfileMsg}" style="color:red;"/>
 	 			<h4><h:outputText  id="Name" value="#{ProfileTool.profile.firstName} #{ProfileTool.profile.lastName}"/></h4>
 		   	 <div class="layer1">	
@@ -34,7 +34,7 @@
 		   	</div>
 		   	</div>
 		        <div class="right-section">
-				<sakai:view_title value="Search for Profile"/> 
+				<sakai:view_title value="#{msgs.search_for_profile}"/> 
 		   		<%@include file="searchModule.jsp"%>
 		        </div>
 		</div>  

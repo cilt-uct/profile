@@ -8,18 +8,17 @@
 <f:loadBundle basename="org.sakaiproject.tool.profile.bundle.Messages" var="msgs"/>
 <f:view>
 <h:form id="displayProfileForm">	 	
-<sakai:view title="Profile" rendered="#{ProfileTool.showTool}">
+<sakai:view title="#{msgs.profile}" rendered="#{ProfileTool.showTool}">
 	 <%@include file="profileCommonToolBar.jsp"%>
 		<div class="base-div">
-		        <div class="left-section">
-		       
-				<sakai:view_title  value="Profile" /> 
+		        <div class="left-section">		       
+				<sakai:view_title  value="#{msgs.profile}" /> 
 		   		<h4><h:outputText id="id0" value="#{SearchTool.profile.profile.firstName} #{SearchTool.profile.profile.lastName}"/></h4>
 		   	 <div class="layer1">	
-			 	<h:graphicImage id="image1" value="ProfileImageServlet.prf?photo=#{SearchTool.profile.profile.userId}" alt="Official ID Photo" height="75" width="75"  rendered="#{SearchTool.profile.displayUniversityPhoto}"/> 
-		   		<h:graphicImage id="image2" value="#{SearchTool.profile.profile.pictureUrl}" height="75" width="75"  alt="User selected picture url" rendered="#{SearchTool.profile.displayPictureURL}"/>
-		   		<h:graphicImage id="image3" url="/images/pictureUnavailable.jpg" width="75"  alt="No photo available" rendered="#{SearchTool.profile.displayNoPicture}"/>
-		   		<h:graphicImage id="image4" alt="No Official ID photo is Available" url="/images/officialPhotoUnavailable.jpg" width="75"  rendered="#{SearchTool.profile.displayUniversityPhotoUnavailable}" />			
+			 	<h:graphicImage id="image1" value="ProfileImageServlet.prf?photo=#{SearchTool.profile.profile.userId}" alt="#{msgs.alt_official_id_photo}" height="75" width="75"  rendered="#{SearchTool.profile.displayUniversityPhoto}"/> 
+		   		<h:graphicImage id="image2" value="#{SearchTool.profile.profile.pictureUrl}" height="75" width="75"  alt="#{msgs.alt_picture}" rendered="#{SearchTool.profile.displayPictureURL}"/>
+		   		<h:graphicImage id="image3" url="/images/pictureUnavailable.jpg" width="75"  alt="#{msgs.alt_picture_unavailable}" rendered="#{SearchTool.profile.displayNoPicture}"/>
+		   		<h:graphicImage id="image4" alt="#{msgs.alt_official_id_photo_unavailable}" url="/images/officialPhotoUnavailable.jpg" width="75"  rendered="#{SearchTool.profile.displayUniversityPhotoUnavailable}" />			
 			 </div>
     			 <div class="layer3">
 				<h:outputText id="id1" value="#{SearchTool.profile.profile.position}"/> <br/>
@@ -35,7 +34,7 @@
 		   	</div>
 		   	</div>
 		        <div class="right-section">
-				<sakai:view_title value="Search for Profile"/> 
+				<sakai:view_title value="#{msgs.search_for_profile}"/> 
 		   		<%@include file="searchModule.jsp"%>
 		        </div>
 		</div> 
