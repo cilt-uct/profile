@@ -118,7 +118,7 @@
 
 			<p class="act">
 				<h:commandButton id="editSaveButton" action="#{ProfileTool.processActionEditSave}" onkeypress="document.forms[0].submit;" value="#{msgs.bar_save}" />
-				<h:commandButton id="editCancelButton" action="#{ProfileTool.processCancel}" onkeypress="document.forms[0].cancel;"	immediate="true" value="#{msgs.bar_cancel}" />
+				<h:commandButton id="editCancelButton" action="#{ProfileTool.processCancel}" onkeypress="document.forms[0].cancel;"	 value="#{msgs.bar_cancel}" />
 			<p> 
 	</sakai:view>
 	</h:form>
