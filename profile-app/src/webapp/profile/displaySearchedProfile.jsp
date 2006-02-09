@@ -5,7 +5,6 @@
  
 <% response.setContentType("text/html; charset=UTF-8"); %>
 <link href='/sakai-profile-tool/css/profile.css' rel='stylesheet' type='text/css' /> 
-<f:loadBundle basename="org.sakaiproject.tool.profile.bundle.Messages" var="msgs"/>
 <f:view>
 <h:form id="displayProfileForm">	 	
 <sakai:view title="#{msgs.profile}" rendered="#{ProfileTool.showTool}">

@@ -73,6 +73,19 @@
             <value>#{Components["org.sakaiproject.api.app.profile.ProfileManager"]}</value>
         </managed-property>
     </managed-bean>
+    <managed-bean>
+            <description>
+                    Dynamic Resource Bundle Loader
+            </description>
+            <managed-bean-name>msgs</managed-bean-name>
+            <managed-bean-class>org.sakaiproject.util.java.ResourceLoader</managed-bean-class>
+            <managed-bean-scope>session</managed-bean-scope>
+            <managed-property>
+                    <description>Bundle baseName</description>
+                    <property-name>baseName</property-name>
+                    <value>org.sakaiproject.tool.profile.bundle.Messages</value>
+            </managed-property>
+    </managed-bean>
     <component>
         <component-type>ProfileDisplayHTML</component-type>
         <component-class>org.sakaiproject.jsf.profile.ProfileDisplayHTMLComponent</component-class>

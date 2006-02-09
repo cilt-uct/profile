@@ -32,6 +32,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sakaiproject.api.app.profile.Profile;
 import org.sakaiproject.api.app.profile.ProfileManager;
+import org.sakaiproject.util.java.ResourceLoader;
 
 /**
  * @author rshastri <a href="mailto:rshastri@iupui.edu ">Rashmi Shastri</a>
@@ -40,8 +41,8 @@ import org.sakaiproject.api.app.profile.ProfileManager;
  */
 public class SearchTool
 {
+  private ResourceLoader msgs = new ResourceLoader("org.sakaiproject.tool.profile.bundle.Messages");
   private static final Log LOG = LogFactory.getLog(SearchTool.class);
-  private static final String SEARCH_KEYWORD = "Search Keyword";
   private DecoratedProfile profile;
   private String searchKeyword;
   private List searchResults;
@@ -59,7 +60,7 @@ public class SearchTool
 
   public SearchTool()
   {
-    this.reset(SEARCH_KEYWORD);
+    this.reset(msgs.getString("java.search_keyword"));
   }
 
   public String getDisplayPage()

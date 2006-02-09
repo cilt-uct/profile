@@ -2,7 +2,6 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <% response.setContentType("text/html; charset=UTF-8"); %>
-<f:loadBundle basename="org.sakaiproject.tool.profile.bundle.Messages" var="msgs"/>
 <link href='/sakai-profile-tool/css/profile.css' rel='stylesheet' type='text/css' />
 <f:view>
 <h:form id="editProfileForm"> 
