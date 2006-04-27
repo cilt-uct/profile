@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project>
+  <pomVersion>3</pomVersion>
+  <extend>../../master/project.xml</extend>
+  <name>Sakai Common Type API</name>
+  <groupId>sakaiproject</groupId>
+  <id>sakai-common-type-api</id>
+  <currentVersion>${sakai.version}</currentVersion>
+  <organization>
+    <name>Sakai Project</name>
+    <url>http://sakaiproject.org/</url>
+  </organization>
+  <inceptionYear>2004</inceptionYear>
+
+  <properties>
+    <!-- deploy as a jar -->
+    <deploy.type>jar</deploy.type>
+    <!-- deploy to "shared", "common" or "server" -->
+    <deploy.target>shared</deploy.target>
+  </properties>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>sakaiproject</groupId>
+      <artifactId>sakai-common-manager-api</artifactId>
+      <version>${sakai.version}</version>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+
+    <!-- java source -->
+    <sourceDirectory>src/java</sourceDirectory>
+
+  </build>
+
+</project>
