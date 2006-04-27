@@ -5,8 +5,8 @@
         <property name="sakaiPersonManager">
             <ref bean="org.sakaiproject.api.common.edu.person.SakaiPersonManager"/>
         </property>
-        <property name="agentGroupManager">
-            <ref bean="org.sakaiproject.api.common.agent.AgentGroupManager"/>
+        <property name="userDirectoryService">
+            <ref bean="org.sakaiproject.user.api.UserDirectoryService"/>
         </property>
     </bean>
 </beans>

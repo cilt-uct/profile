@@ -21,11 +21,6 @@
             <artifactId>sakai-common-edu-person-api</artifactId>
             <version>${sakai.version}</version>
         </dependency>
-        <dependency>
-            <groupId>sakaiproject</groupId>
-            <artifactId>sakai-legacy-service</artifactId>
-            <version>${sakai.version}</version>
-        </dependency>
     </dependencies>
     <build>
         <sourceDirectory>src/java</sourceDirectory>

@@ -3,23 +3,22 @@
  * $Id$
  ***********************************************************************************
  *
- * Copyright (c) 2003, 2004, 2005 The Regents of the University of Michigan, Trustees of Indiana University,
- *                  Board of Trustees of the Leland Stanford, Jr., University, and The MIT Corporation
+ * Copyright (c) 2003, 2004, 2005, 2006 The Sakai Foundation.
  * 
- * Licensed under the Educational Community License Version 1.0 (the "License");
- * By obtaining, using and/or copying this Original Work, you agree that you have read,
- * understand, and will comply with the terms and conditions of the Educational Community License.
- * You may obtain a copy of the License at:
+ * Licensed under the Educational Community License, Version 1.0 (the "License"); 
+ * you may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at
  * 
- *      http://cvs.sakaiproject.org/licenses/license_1_0.html
+ *      http://www.opensource.org/licenses/ecl1.php
  * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
- * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * Unless required by applicable law or agreed to in writing, software 
+ * distributed under the License is distributed on an "AS IS" BASIS, 
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+ * See the License for the specific language governing permissions and 
+ * limitations under the License.
  *
  **********************************************************************************/
+
 package org.sakaiproject.tool.profile;
 
 import java.util.ArrayList;
@@ -32,559 +31,539 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sakaiproject.api.app.profile.Profile;
 import org.sakaiproject.api.app.profile.ProfileManager;
-import org.sakaiproject.util.java.ResourceLoader;
+import org.sakaiproject.util.ResourceLoader;
 
 /**
  * @author rshastri <a href="mailto:rshastri@iupui.edu ">Rashmi Shastri</a>
- * @version $Id$
- *  
  */
 public class SearchTool
 {
-  private ResourceLoader msgs = new ResourceLoader("org.sakaiproject.tool.profile.bundle.Messages");
-  private static final Log LOG = LogFactory.getLog(SearchTool.class);
-  private DecoratedProfile profile;
-  private String searchKeyword;
-  private List searchResults;
-  private List currentSearchResults;
-  private int noOfRecDisplayedFrom = 0;
-  private int noOfRecDisplayedTo = 0;
-  private int numberOfSearchedRecordsDisplayedPerPage = 10;
-  private String displayNoOfRec = "10";
-  private boolean showPrevious = false;
-  private boolean showNext = false;
-  private boolean showSearchResults = false;
-  private boolean showNoMatchFound = false;
-  private boolean redirectToSearchedProfile = false;
-  protected ProfileManager profileService;
+	private ResourceLoader msgs = new ResourceLoader("org.sakaiproject.tool.profile.bundle.Messages");
 
-  public SearchTool()
-  {
-    this.reset(msgs.getString("java.search_keyword"));
-  }
+	private static final Log LOG = LogFactory.getLog(SearchTool.class);
 
-  public String getDisplayPage()
-  {
-    LOG.debug("getDisplayPage()");
-    if (redirectToSearchedProfile)
-    {
-      return "displaySearchedProfile";
-    }
-    else
-    {
-      return "main";
-    }
-  }
+	private DecoratedProfile profile;
 
-  public void processValueChangeForDisplayNSearchResult(ValueChangeEvent vce)
-  {
-    if (LOG.isDebugEnabled())
-      LOG.debug("processValueChangeForDisplayNSearchResult(ValueChangeEvent "
-          + vce + ")");
-    setDisplayNoOfRec(((String) vce.getNewValue()));
-    LOG.debug("Show these many rec :" + (String) vce.getNewValue());
-    processActionDisplayFirst();
-  }
+	private String searchKeyword;
 
-  public String processActionDisplayFirst()
-  {
-    LOG.debug("processActionDisplayFirst()");
-    try
-    {
-      if ((searchResults != null) && (searchResults.size() > 1)
-          && (searchResults.size() <= numberOfSearchedRecordsDisplayedPerPage))
-      {
-        showPrevious = false;
-        showNext = false;
-        showSearchResults = true;
-        currentSearchResults = searchResults;
-        noOfRecDisplayedFrom = 1;
-        noOfRecDisplayedTo = searchResults.size();
+	private List searchResults;
 
-        return getDisplayPage();
-      }
-      else
-        if ((searchResults != null)
-            && (searchResults.size() > numberOfSearchedRecordsDisplayedPerPage))
-        {
-          currentSearchResults = searchResults.subList(0,
-              (numberOfSearchedRecordsDisplayedPerPage));
-          noOfRecDisplayedFrom = 1;
-          noOfRecDisplayedTo = numberOfSearchedRecordsDisplayedPerPage;
-          showPrevious = false;
-          showNext = true;
-          showSearchResults = true;
+	private List currentSearchResults;
 
-          return getDisplayPage();
-        }
-        else
-        {
-          return profile.processActionDisplayProfile();
-        }
-    }
-    catch (Exception e)
-    {
-      LOG.error(e.getMessage(), e);
+	private int noOfRecDisplayedFrom = 0;
 
-      return null;
-    }
-  }
+	private int noOfRecDisplayedTo = 0;
 
-  public String processActionDisplayNext()
-  {
-    LOG.debug("processActionDisplayNext()");
-    try
-    {
-      if ((searchResults != null)
-          && (searchResults.size() > (noOfRecDisplayedTo)))
-      {
-        this.showNoMatchFound = false;
-        this.showSearchResults = true;
-        this.showPrevious = true;
+	private int numberOfSearchedRecordsDisplayedPerPage = 10;
 
-        if (searchResults.size() > (noOfRecDisplayedTo + numberOfSearchedRecordsDisplayedPerPage))
-        {
-          currentSearchResults = searchResults.subList((noOfRecDisplayedTo),
-              (noOfRecDisplayedTo + numberOfSearchedRecordsDisplayedPerPage));
-          noOfRecDisplayedFrom = noOfRecDisplayedTo + 1;
-          noOfRecDisplayedTo = noOfRecDisplayedTo
-              + numberOfSearchedRecordsDisplayedPerPage;
-          showNext = true;
+	private String displayNoOfRec = "10";
 
-          return getDisplayPage();
-        }
+	private boolean showPrevious = false;
 
-        if (searchResults.size() == (noOfRecDisplayedTo + numberOfSearchedRecordsDisplayedPerPage))
-        {
-          currentSearchResults = searchResults.subList((noOfRecDisplayedTo),
-              (noOfRecDisplayedTo + numberOfSearchedRecordsDisplayedPerPage));
-          noOfRecDisplayedFrom = noOfRecDisplayedTo + 1;
-          noOfRecDisplayedTo = noOfRecDisplayedTo
-              + numberOfSearchedRecordsDisplayedPerPage;
-          showNext = false;
+	private boolean showNext = false;
 
-          return getDisplayPage();
-        }
+	private boolean showSearchResults = false;
 
-        if (searchResults.size() < (noOfRecDisplayedTo + numberOfSearchedRecordsDisplayedPerPage))
-        {
-          currentSearchResults = searchResults.subList((noOfRecDisplayedTo),
-              (searchResults.size()));
-          noOfRecDisplayedFrom = noOfRecDisplayedTo + 1;
-          noOfRecDisplayedTo = searchResults.size();
-          showNext = false;
+	private boolean showNoMatchFound = false;
 
-          return getDisplayPage();
-        }
-      }
+	private boolean redirectToSearchedProfile = false;
 
-      return getDisplayPage();
-    }
-    catch (Exception e)
-    {
-      LOG.error(e.getMessage(), e);
+	protected ProfileManager profileService;
 
-      return null;
-    }
-  }
+	public SearchTool()
+	{
+		this.reset(msgs.getString("java.search_keyword"));
+	}
 
-  public String processActionDisplayPrevious()
-  {
-    LOG.debug("processActionDisplayPrevious()");
-    try
-    {
-      if ((searchResults != null) && ((noOfRecDisplayedFrom) > 1)
-          && (noOfRecDisplayedFrom >= numberOfSearchedRecordsDisplayedPerPage))
-      {
-        this.showNext = true;
-        this.showNoMatchFound = false;
-        this.showSearchResults = true;
+	public String getDisplayPage()
+	{
+		LOG.debug("getDisplayPage()");
+		if (redirectToSearchedProfile)
+		{
+			return "displaySearchedProfile";
+		}
+		else
+		{
+			return "main";
+		}
+	}
 
-        if ((noOfRecDisplayedFrom - numberOfSearchedRecordsDisplayedPerPage) == 1)
-        {
-          showPrevious = false;
-          currentSearchResults = searchResults.subList(0,
-              (numberOfSearchedRecordsDisplayedPerPage));
-          noOfRecDisplayedFrom = 1;
-          noOfRecDisplayedTo = numberOfSearchedRecordsDisplayedPerPage;
-        }
-        else
-        {
-          showPrevious = true;
-          currentSearchResults = searchResults.subList((noOfRecDisplayedFrom
-              - numberOfSearchedRecordsDisplayedPerPage - 1),
-              (noOfRecDisplayedFrom - 1));
-          noOfRecDisplayedTo = noOfRecDisplayedFrom - 1;
-          noOfRecDisplayedFrom = noOfRecDisplayedFrom
-              - numberOfSearchedRecordsDisplayedPerPage;
-        }
-      }
-      else
-      {
-        showPrevious = false;
-      }
+	public void processValueChangeForDisplayNSearchResult(ValueChangeEvent vce)
+	{
+		if (LOG.isDebugEnabled()) LOG.debug("processValueChangeForDisplayNSearchResult(ValueChangeEvent " + vce + ")");
+		setDisplayNoOfRec(((String) vce.getNewValue()));
+		LOG.debug("Show these many rec :" + (String) vce.getNewValue());
+		processActionDisplayFirst();
+	}
 
-      return getDisplayPage();
-    }
-    catch (Exception e)
-    {
-      LOG.error(e.getMessage(), e);
+	public String processActionDisplayFirst()
+	{
+		LOG.debug("processActionDisplayFirst()");
+		try
+		{
+			if ((searchResults != null) && (searchResults.size() > 1)
+					&& (searchResults.size() <= numberOfSearchedRecordsDisplayedPerPage))
+			{
+				showPrevious = false;
+				showNext = false;
+				showSearchResults = true;
+				currentSearchResults = searchResults;
+				noOfRecDisplayedFrom = 1;
+				noOfRecDisplayedTo = searchResults.size();
 
-      return null;
-    }
-  }
+				return getDisplayPage();
+			}
+			else if ((searchResults != null) && (searchResults.size() > numberOfSearchedRecordsDisplayedPerPage))
+			{
+				currentSearchResults = searchResults.subList(0, (numberOfSearchedRecordsDisplayedPerPage));
+				noOfRecDisplayedFrom = 1;
+				noOfRecDisplayedTo = numberOfSearchedRecordsDisplayedPerPage;
+				showPrevious = false;
+				showNext = true;
+				showSearchResults = true;
 
-  public String processActionDisplayLast()
-  {
-    LOG.debug("processActionDisplayLast()");
-    try
-    {
-      //Single page display
-      if ((searchResults != null) && (searchResults.size() > 1)
-          && (searchResults.size() <= numberOfSearchedRecordsDisplayedPerPage))
-      {
-        showPrevious = false;
-        showNext = false;
-        currentSearchResults = searchResults;
+				return getDisplayPage();
+			}
+			else
+			{
+				return profile.processActionDisplayProfile();
+			}
+		}
+		catch (Exception e)
+		{
+			LOG.error(e.getMessage(), e);
 
-        return this.getDisplayPage();
-      }
-      else
-        if ((searchResults != null)
-            && (searchResults.size() > numberOfSearchedRecordsDisplayedPerPage))
-        {
-          int displayRecForLastPage = searchResults.size()
-              % numberOfSearchedRecordsDisplayedPerPage;
+			return null;
+		}
+	}
 
-          if (displayRecForLastPage == 0)
-          {
-            currentSearchResults = searchResults
-                .subList(
-                    (searchResults.size() - numberOfSearchedRecordsDisplayedPerPage),
-                    (searchResults.size()));
-            noOfRecDisplayedFrom = searchResults.size()
-                - numberOfSearchedRecordsDisplayedPerPage + 1;
-          }
-          else
-          {
-            //there is a remainder
-            currentSearchResults = searchResults.subList(
-                (searchResults.size() - displayRecForLastPage), (searchResults
-                    .size()));
-            noOfRecDisplayedFrom = searchResults.size() - displayRecForLastPage
-                + 1;
-          }
+	public String processActionDisplayNext()
+	{
+		LOG.debug("processActionDisplayNext()");
+		try
+		{
+			if ((searchResults != null) && (searchResults.size() > (noOfRecDisplayedTo)))
+			{
+				this.showNoMatchFound = false;
+				this.showSearchResults = true;
+				this.showPrevious = true;
 
-          noOfRecDisplayedTo = searchResults.size();
-          showPrevious = true;
-          showNext = false;
+				if (searchResults.size() > (noOfRecDisplayedTo + numberOfSearchedRecordsDisplayedPerPage))
+				{
+					currentSearchResults = searchResults.subList((noOfRecDisplayedTo),
+							(noOfRecDisplayedTo + numberOfSearchedRecordsDisplayedPerPage));
+					noOfRecDisplayedFrom = noOfRecDisplayedTo + 1;
+					noOfRecDisplayedTo = noOfRecDisplayedTo + numberOfSearchedRecordsDisplayedPerPage;
+					showNext = true;
 
-          return this.getDisplayPage();
-        }
-        else
-        // search result is exactly 1
-        {
-          return profile.processActionDisplayProfile();
-        }
-    }
-    catch (Exception e)
-    {
-      LOG.error(e.getMessage(), e);
+					return getDisplayPage();
+				}
 
-      return null;
-    }
-  }
+				if (searchResults.size() == (noOfRecDisplayedTo + numberOfSearchedRecordsDisplayedPerPage))
+				{
+					currentSearchResults = searchResults.subList((noOfRecDisplayedTo),
+							(noOfRecDisplayedTo + numberOfSearchedRecordsDisplayedPerPage));
+					noOfRecDisplayedFrom = noOfRecDisplayedTo + 1;
+					noOfRecDisplayedTo = noOfRecDisplayedTo + numberOfSearchedRecordsDisplayedPerPage;
+					showNext = false;
 
-  public String processActionSearch()
-  {
-    LOG.debug("processActionSearch()");
-    try
-    {
-      this.reset(searchKeyword);
-      // Find User mutable profiles only
-      if(searchKeyword==null || searchKeyword.trim().length()<1)
-      {
-        this.showNoMatchFound = true;
-        return "main";
-      }
-      List profiles = profileService.findProfiles(searchKeyword);
-      searchResults = new ArrayList();
+					return getDisplayPage();
+				}
 
-      if ((profiles != null) && (profiles.size() > 0))
-      {
-        Iterator profileIterator = profiles.iterator();
+				if (searchResults.size() < (noOfRecDisplayedTo + numberOfSearchedRecordsDisplayedPerPage))
+				{
+					currentSearchResults = searchResults.subList((noOfRecDisplayedTo), (searchResults.size()));
+					noOfRecDisplayedFrom = noOfRecDisplayedTo + 1;
+					noOfRecDisplayedTo = searchResults.size();
+					showNext = false;
 
-        while (profileIterator.hasNext())
-        {
-          profile = new DecoratedProfile((Profile) profileIterator.next());
-          searchResults.add(profile);          
-        }
+					return getDisplayPage();
+				}
+			}
 
-        return processActionDisplayFirst();
-      }
-      else
-      {
-        this.showNoMatchFound = true;
+			return getDisplayPage();
+		}
+		catch (Exception e)
+		{
+			LOG.error(e.getMessage(), e);
 
-        return "main";
-      }
-    }
-    catch (Exception e)
-    {
-      LOG.error(e.getMessage(), e);
+			return null;
+		}
+	}
 
-      return null;
-    }
-  }
+	public String processActionDisplayPrevious()
+	{
+		LOG.debug("processActionDisplayPrevious()");
+		try
+		{
+			if ((searchResults != null) && ((noOfRecDisplayedFrom) > 1)
+					&& (noOfRecDisplayedFrom >= numberOfSearchedRecordsDisplayedPerPage))
+			{
+				this.showNext = true;
+				this.showNoMatchFound = false;
+				this.showSearchResults = true;
 
-  public boolean isShowNext()
-  {
-    LOG.debug("isShowNext()");
-    return showNext;
-  }
+				if ((noOfRecDisplayedFrom - numberOfSearchedRecordsDisplayedPerPage) == 1)
+				{
+					showPrevious = false;
+					currentSearchResults = searchResults.subList(0, (numberOfSearchedRecordsDisplayedPerPage));
+					noOfRecDisplayedFrom = 1;
+					noOfRecDisplayedTo = numberOfSearchedRecordsDisplayedPerPage;
+				}
+				else
+				{
+					showPrevious = true;
+					currentSearchResults = searchResults.subList(
+							(noOfRecDisplayedFrom - numberOfSearchedRecordsDisplayedPerPage - 1), (noOfRecDisplayedFrom - 1));
+					noOfRecDisplayedTo = noOfRecDisplayedFrom - 1;
+					noOfRecDisplayedFrom = noOfRecDisplayedFrom - numberOfSearchedRecordsDisplayedPerPage;
+				}
+			}
+			else
+			{
+				showPrevious = false;
+			}
 
-  public boolean isShowPrevious()
-  {
-    LOG.debug("isShowPrevious()");
-    return showPrevious;
-  }
+			return getDisplayPage();
+		}
+		catch (Exception e)
+		{
+			LOG.error(e.getMessage(), e);
 
-  public List getCurrentSearchResults()
-  {
-    LOG.debug("getCurrentSearchResults()");
-    return currentSearchResults;
-  }
+			return null;
+		}
+	}
 
-  public void setCurrentSearchResults(List currentSearchResults)
-  {
-    if (LOG.isDebugEnabled())
-      LOG.debug("setCurrentSearchResults(List" + currentSearchResults + ")");
-    this.currentSearchResults = currentSearchResults;
-  }
+	public String processActionDisplayLast()
+	{
+		LOG.debug("processActionDisplayLast()");
+		try
+		{
+			// Single page display
+			if ((searchResults != null) && (searchResults.size() > 1)
+					&& (searchResults.size() <= numberOfSearchedRecordsDisplayedPerPage))
+			{
+				showPrevious = false;
+				showNext = false;
+				currentSearchResults = searchResults;
 
-  public boolean isShowNoMatchFound()
-  {
-    LOG.debug("isShowNoMatchFound()");
-    return showNoMatchFound;
-  }
+				return this.getDisplayPage();
+			}
+			else if ((searchResults != null) && (searchResults.size() > numberOfSearchedRecordsDisplayedPerPage))
+			{
+				int displayRecForLastPage = searchResults.size() % numberOfSearchedRecordsDisplayedPerPage;
 
-  public boolean isShowSearchResults()
-  {
-    LOG.debug("isShowSearchResults()");
-    return (showSearchResults);
-  }
+				if (displayRecForLastPage == 0)
+				{
+					currentSearchResults = searchResults.subList((searchResults.size() - numberOfSearchedRecordsDisplayedPerPage),
+							(searchResults.size()));
+					noOfRecDisplayedFrom = searchResults.size() - numberOfSearchedRecordsDisplayedPerPage + 1;
+				}
+				else
+				{
+					// there is a remainder
+					currentSearchResults = searchResults.subList((searchResults.size() - displayRecForLastPage), (searchResults
+							.size()));
+					noOfRecDisplayedFrom = searchResults.size() - displayRecForLastPage + 1;
+				}
 
-  public void reset(String searchKeyword)
-  {
-    if (LOG.isDebugEnabled()) LOG.debug("reset(String" + searchKeyword + ")");
-    this.searchKeyword = searchKeyword;
-    this.profile = null;
-    this.searchResults = null;
-    this.currentSearchResults = null;
-    this.noOfRecDisplayedFrom = 0;
-    this.noOfRecDisplayedTo = 0;
-    this.showPrevious = false;
-    this.showNext = false;
-    this.showSearchResults = false;
-    this.showNoMatchFound = false;
-    this.redirectToSearchedProfile = false;
-  }
+				noOfRecDisplayedTo = searchResults.size();
+				showPrevious = true;
+				showNext = false;
 
-  public String processCancel()
-  {
-    LOG.debug("processCancel()");
-    this.reset("Search Keyword");
-    return "main";
-  }
+				return this.getDisplayPage();
+			}
+			else
+			// search result is exactly 1
+			{
+				return profile.processActionDisplayProfile();
+			}
+		}
+		catch (Exception e)
+		{
+			LOG.error(e.getMessage(), e);
 
-  public String getDisplayNoOfRec()
-  {
-    LOG.debug("getDisplayNoOfRec()");
-    try
-    {
-      if ((this.displayNoOfRec != null)
-          && (Integer.parseInt(displayNoOfRec) != 0))
-      {
-        numberOfSearchedRecordsDisplayedPerPage = Integer
-            .parseInt(displayNoOfRec);
-      }
-    }
-    catch (NumberFormatException e)
-    {
-      LOG.error(e.getMessage(), e);
-    }
+			return null;
+		}
+	}
 
-    return displayNoOfRec;
-  }
+	public String processActionSearch()
+	{
+		LOG.debug("processActionSearch()");
+		try
+		{
+			this.reset(searchKeyword);
+			// Find User mutable profiles only
+			if (searchKeyword == null || searchKeyword.trim().length() < 1)
+			{
+				this.showNoMatchFound = true;
+				return "main";
+			}
+			List profiles = profileService.findProfiles(searchKeyword);
+			searchResults = new ArrayList();
 
-  public void setDisplayNoOfRec(String no_of_searched_rec_per_page)
-  {
-    if (LOG.isDebugEnabled())
-      LOG
-          .debug("setDisplayNoOfRec(String " + no_of_searched_rec_per_page
-              + ")");
-    displayNoOfRec = no_of_searched_rec_per_page;
+			if ((profiles != null) && (profiles.size() > 0))
+			{
+				Iterator profileIterator = profiles.iterator();
 
-    try
-    {
-      if ((this.displayNoOfRec != null)
-          && (Integer.parseInt(displayNoOfRec) != 0))
-      {
-        numberOfSearchedRecordsDisplayedPerPage = Integer
-            .parseInt(displayNoOfRec);
-      }
-    }
-    catch (NumberFormatException e)
-    {
-      LOG.error(e.getMessage(), e);
-    }
-  }
+				while (profileIterator.hasNext())
+				{
+					profile = new DecoratedProfile((Profile) profileIterator.next());
+					searchResults.add(profile);
+				}
 
-  public DecoratedProfile getProfile()
-  {
-    LOG.debug("getProfile()");
-    return profile;
-  }
+				return processActionDisplayFirst();
+			}
+			else
+			{
+				this.showNoMatchFound = true;
 
-  /**
-   * @return
-   */
-  public ProfileManager getProfileService()
-  {
-    LOG.debug("getProfileService()");
-    return profileService;
-  }
+				return "main";
+			}
+		}
+		catch (Exception e)
+		{
+			LOG.error(e.getMessage(), e);
 
-  /**
-   * @return
-   */
-  public String getSearchKeyword()
-  {
-    LOG.debug("getSearchKeyword()");
-    return searchKeyword;
-  }
+			return null;
+		}
+	}
 
-  /**
-   * @return
-   */
-  public List getSearchResults()
-  {
-    LOG.debug("getSearchResults()");
-    return searchResults;
-  }
+	public boolean isShowNext()
+	{
+		LOG.debug("isShowNext()");
+		return showNext;
+	}
 
-  /**
-   * @param profileService
-   */
-  public void setProfileService(ProfileManager profileService)
-  {
-    if (LOG.isDebugEnabled())
-      LOG.debug("setProfileService(ProfileManager " + profileService + ")");
-    this.profileService = profileService;
-  }
+	public boolean isShowPrevious()
+	{
+		LOG.debug("isShowPrevious()");
+		return showPrevious;
+	}
 
-  /**
-   * @param profile
-   */
-  public void setProfile(DecoratedProfile profile)
-  {
-    if (LOG.isDebugEnabled())
-      LOG.debug("setProfile(DecoratedProfile " + profile + ")");
-    this.profile = profile;
-  }
+	public List getCurrentSearchResults()
+	{
+		LOG.debug("getCurrentSearchResults()");
+		return currentSearchResults;
+	}
 
-  /**
-   * @param searchKeyword
-   */
-  public void setSearchKeyword(String searchKeyword)
-  {
-    if (LOG.isDebugEnabled())
-      LOG.debug("setSearchResults(String " + searchKeyword + ")");
+	public void setCurrentSearchResults(List currentSearchResults)
+	{
+		if (LOG.isDebugEnabled()) LOG.debug("setCurrentSearchResults(List" + currentSearchResults + ")");
+		this.currentSearchResults = currentSearchResults;
+	}
 
-    this.searchKeyword = searchKeyword;
-  }
+	public boolean isShowNoMatchFound()
+	{
+		LOG.debug("isShowNoMatchFound()");
+		return showNoMatchFound;
+	}
 
-  /**
-   * @param searchResults
-   */
-  public void setSearchResults(List searchResults)
-  {
-    if (LOG.isDebugEnabled())
-      LOG.debug("setSearchResults(List " + searchResults + ")");
-    this.searchResults = searchResults;
-  }
+	public boolean isShowSearchResults()
+	{
+		LOG.debug("isShowSearchResults()");
+		return (showSearchResults);
+	}
 
-  public class DecoratedProfile
-  {
-    protected Profile inProfile;
-   
-    /**
-     * @param newProfile
-     */
-    public DecoratedProfile(Profile newProfile)
-    {
-      if (LOG.isDebugEnabled())
-        LOG.debug("DecoratedProfile(Profile" + newProfile + ")");
-      inProfile = newProfile;
-    }
+	public void reset(String searchKeyword)
+	{
+		if (LOG.isDebugEnabled()) LOG.debug("reset(String" + searchKeyword + ")");
+		this.searchKeyword = searchKeyword;
+		this.profile = null;
+		this.searchResults = null;
+		this.currentSearchResults = null;
+		this.noOfRecDisplayedFrom = 0;
+		this.noOfRecDisplayedTo = 0;
+		this.showPrevious = false;
+		this.showNext = false;
+		this.showSearchResults = false;
+		this.showNoMatchFound = false;
+		this.redirectToSearchedProfile = false;
+	}
 
-    /**
-     * @return
-     */
-    public Profile getProfile()
-    {
-      LOG.debug("getProfile()");
-      return inProfile;
-    }
+	public String processCancel()
+	{
+		LOG.debug("processCancel()");
+		this.reset("Search Keyword");
+		return "main";
+	}
 
-    /**
-     * @return
-     */
-    public String processActionDisplayProfile()
-    {
-      LOG.debug("processActionDisplayProfile()");
-      try
-      {
-        profile = this;
-        redirectToSearchedProfile = true;
-        return "displaySearchedProfile";
-      }
-      catch (Exception e)
-      {
-        LOG.error(e.getMessage(), e);
-        return null;
-      }
-    }
+	public String getDisplayNoOfRec()
+	{
+		LOG.debug("getDisplayNoOfRec()");
+		try
+		{
+			if ((this.displayNoOfRec != null) && (Integer.parseInt(displayNoOfRec) != 0))
+			{
+				numberOfSearchedRecordsDisplayedPerPage = Integer.parseInt(displayNoOfRec);
+			}
+		}
+		catch (NumberFormatException e)
+		{
+			LOG.error(e.getMessage(), e);
+		}
 
-    public boolean isDisplayCompleteProfile()
-    {
-      LOG.debug("isDisplayCompleteProfile()");
-      return profileService.displayCompleteProfile(inProfile);
-    }
+		return displayNoOfRec;
+	}
 
-    public boolean isDisplayPictureURL()
-    {
-      LOG.debug("isDisplayPictureURL()");
-      return profileService.isDisplayPictureURL(inProfile);
-    }
+	public void setDisplayNoOfRec(String no_of_searched_rec_per_page)
+	{
+		if (LOG.isDebugEnabled()) LOG.debug("setDisplayNoOfRec(String " + no_of_searched_rec_per_page + ")");
+		displayNoOfRec = no_of_searched_rec_per_page;
 
-    public boolean isDisplayUniversityPhoto()
-    {
-      LOG.debug("isDisplayUniversityPhoto()");
-      return profileService.isDisplayUniversityPhoto(inProfile);
-    }
+		try
+		{
+			if ((this.displayNoOfRec != null) && (Integer.parseInt(displayNoOfRec) != 0))
+			{
+				numberOfSearchedRecordsDisplayedPerPage = Integer.parseInt(displayNoOfRec);
+			}
+		}
+		catch (NumberFormatException e)
+		{
+			LOG.error(e.getMessage(), e);
+		}
+	}
 
-    public boolean isDisplayUniversityPhotoUnavailable()
-    {
-      LOG.debug("isDisplayUniversityPhotoUnavailable()");
-      return profileService.isDisplayUniversityPhotoUnavailable(inProfile);
-    }
+	public DecoratedProfile getProfile()
+	{
+		LOG.debug("getProfile()");
+		return profile;
+	}
 
-    public boolean isDisplayNoPicture()
-    {
-      LOG.debug("isDisplayPhoto()");
-      return profileService.isDisplayNoPhoto(inProfile);
-    }
+	/**
+	 * @return
+	 */
+	public ProfileManager getProfileService()
+	{
+		LOG.debug("getProfileService()");
+		return profileService;
+	}
 
-  }
+	/**
+	 * @return
+	 */
+	public String getSearchKeyword()
+	{
+		LOG.debug("getSearchKeyword()");
+		return searchKeyword;
+	}
+
+	/**
+	 * @return
+	 */
+	public List getSearchResults()
+	{
+		LOG.debug("getSearchResults()");
+		return searchResults;
+	}
+
+	/**
+	 * @param profileService
+	 */
+	public void setProfileService(ProfileManager profileService)
+	{
+		if (LOG.isDebugEnabled()) LOG.debug("setProfileService(ProfileManager " + profileService + ")");
+		this.profileService = profileService;
+	}
+
+	/**
+	 * @param profile
+	 */
+	public void setProfile(DecoratedProfile profile)
+	{
+		if (LOG.isDebugEnabled()) LOG.debug("setProfile(DecoratedProfile " + profile + ")");
+		this.profile = profile;
+	}
+
+	/**
+	 * @param searchKeyword
+	 */
+	public void setSearchKeyword(String searchKeyword)
+	{
+		if (LOG.isDebugEnabled()) LOG.debug("setSearchResults(String " + searchKeyword + ")");
+
+		this.searchKeyword = searchKeyword;
+	}
+
+	/**
+	 * @param searchResults
+	 */
+	public void setSearchResults(List searchResults)
+	{
+		if (LOG.isDebugEnabled()) LOG.debug("setSearchResults(List " + searchResults + ")");
+		this.searchResults = searchResults;
+	}
+
+	public class DecoratedProfile
+	{
+		protected Profile inProfile;
+
+		/**
+		 * @param newProfile
+		 */
+		public DecoratedProfile(Profile newProfile)
+		{
+			if (LOG.isDebugEnabled()) LOG.debug("DecoratedProfile(Profile" + newProfile + ")");
+			inProfile = newProfile;
+		}
+
+		/**
+		 * @return
+		 */
+		public Profile getProfile()
+		{
+			LOG.debug("getProfile()");
+			return inProfile;
+		}
+
+		/**
+		 * @return
+		 */
+		public String processActionDisplayProfile()
+		{
+			LOG.debug("processActionDisplayProfile()");
+			try
+			{
+				profile = this;
+				redirectToSearchedProfile = true;
+				return "displaySearchedProfile";
+			}
+			catch (Exception e)
+			{
+				LOG.error(e.getMessage(), e);
+				return null;
+			}
+		}
+
+		public boolean isDisplayCompleteProfile()
+		{
+			LOG.debug("isDisplayCompleteProfile()");
+			return profileService.displayCompleteProfile(inProfile);
+		}
+
+		public boolean isDisplayPictureURL()
+		{
+			LOG.debug("isDisplayPictureURL()");
+			return profileService.isDisplayPictureURL(inProfile);
+		}
+
+		public boolean isDisplayUniversityPhoto()
+		{
+			LOG.debug("isDisplayUniversityPhoto()");
+			return profileService.isDisplayUniversityPhoto(inProfile);
+		}
+
+		public boolean isDisplayUniversityPhotoUnavailable()
+		{
+			LOG.debug("isDisplayUniversityPhotoUnavailable()");
+			return profileService.isDisplayUniversityPhotoUnavailable(inProfile);
+		}
+
+		public boolean isDisplayNoPicture()
+		{
+			LOG.debug("isDisplayPhoto()");
+			return profileService.isDisplayNoPhoto(inProfile);
+		}
+
+	}
 }
