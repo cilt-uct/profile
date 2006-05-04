@@ -25,14 +25,14 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 
-import net.sf.hibernate.Criteria;
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.expression.Example;
-import net.sf.hibernate.expression.Expression;
-import net.sf.hibernate.expression.Order;
+import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.criterion.Example;
+import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.Order;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -44,8 +44,8 @@ import org.sakaiproject.authz.cover.SecurityService;
 import org.sakaiproject.component.common.manager.PersistableHelper;
 import org.sakaiproject.id.cover.IdManager;
 import org.sakaiproject.tool.cover.SessionManager;
-import org.springframework.orm.hibernate.HibernateCallback;
-import org.springframework.orm.hibernate.support.HibernateDaoSupport;
+import org.springframework.orm.hibernate3.HibernateCallback;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
  * @author <a href="mailto:lance@indiana.edu">Lance Speelmon</a>

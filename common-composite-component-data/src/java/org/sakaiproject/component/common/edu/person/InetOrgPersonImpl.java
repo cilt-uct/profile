@@ -29,7 +29,7 @@ import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
 
-import net.sf.hibernate.Hibernate;
+import org.hibernate.Hibernate;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
