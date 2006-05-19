@@ -42,6 +42,7 @@ import org.sakaiproject.tool.cover.ToolManager;
 import org.sakaiproject.user.api.User;
 import org.sakaiproject.user.api.UserDirectoryService;
 import org.sakaiproject.user.api.UserNotDefinedException;
+import org.sakaiproject.component.cover.ServerConfigurationService;
 
 /**
  * @author rshastri
@@ -387,6 +388,11 @@ public class ProfileManagerImpl implements ProfileManager
 	{
 		LOG.debug("isShowTool()");
 		// implement isAnonymous later on.
+		if(ServerConfigurationService.getString
+				("separateIdEid@org.sakaiproject.user.api.UserDirectoryService").equalsIgnoreCase("true"))
+		{
+			return (getProfile().getUserId() != ANONYMOUS && isSiteMember(getProfile().getSakaiPerson().getAgentUuid()));
+		}
 		return (getProfile().getUserId() != ANONYMOUS && isSiteMember(getProfile().getUserId()));
 	}
 
