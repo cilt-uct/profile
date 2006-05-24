@@ -388,7 +388,7 @@ public class ProfileManagerImpl implements ProfileManager
 	{
 		LOG.debug("isShowTool()");
 		// implement isAnonymous later on.
-		if("true".equalsIgnoreCase(ServerConfigurationService.getString
+		if(!"false".equalsIgnoreCase(ServerConfigurationService.getString
 				("separateIdEid@org.sakaiproject.user.api.UserDirectoryService")))
 		{
 			return (getProfile().getUserId() != ANONYMOUS && isSiteMember(getProfile().getSakaiPerson().getAgentUuid()));
