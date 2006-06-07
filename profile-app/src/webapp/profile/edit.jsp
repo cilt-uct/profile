@@ -16,7 +16,7 @@
 		<sakai:tool_bar_message value="#{msgs.profile_edit_title}" />
  			 <div class="instruction">
   			    <h:outputText id="er1"  value="#{msgs.info_A}"/>
-			 	<h:outputText id="er2" styleClass="reqStar" value="'#{msgs.info_required_sign}'"/>
+			 	<h:outputText id="er2" styleClass="reqStarInline" value="'#{msgs.info_required_sign}'"/>
 			    <h:outputText id="er3" value="#{msgs.info_required}"/>
   			 </div>
   			
