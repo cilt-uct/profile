@@ -4,7 +4,5 @@
     	title="Profile" 
     	description="Profile Tool.">
     	
-    	<configuration name="help.id" value="profile_overview" />	
-    
     </tool>
 </registration>
