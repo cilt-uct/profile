@@ -114,6 +114,8 @@ public interface ProfileManager
 	 */
 	public boolean isShowTool();
 
+   public boolean isShowSearch();
+   
 	/**
 	 * @param id
 	 * @return

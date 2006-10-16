@@ -61,12 +61,12 @@ public class ProfileManagerImpl implements ProfileManager
 
 	public void init()
 	{
-		LOG.debug("init()");; // do nothing (for now)
+		LOG.debug("init()"); // do nothing (for now)
 	}
 
 	public void destroy()
 	{
-		LOG.debug("destroy()");; // do nothing (for now)
+		LOG.debug("destroy()"); // do nothing (for now)
 	}
 
 	/**
@@ -387,14 +387,24 @@ public class ProfileManagerImpl implements ProfileManager
 	public boolean isShowTool()
 	{
 		LOG.debug("isShowTool()");
+      Profile profile = getProfile();
 		// implement isAnonymous later on.
-		if(!"false".equalsIgnoreCase(ServerConfigurationService.getString
-				("separateIdEid@org.sakaiproject.user.api.UserDirectoryService")))
-		{
-			return (getProfile().getUserId() != ANONYMOUS && isSiteMember(getProfile().getSakaiPerson().getAgentUuid()));
-		}
-		return (getProfile().getUserId() != ANONYMOUS && isSiteMember(getProfile().getUserId()));
+		return (profile.getUserId() != ANONYMOUS && profile.getUserId().equalsIgnoreCase(getCurrentUser()));
 	}
+   
+
+   public boolean isShowSearch()
+   {
+      LOG.debug("isShowSearch()");
+      Profile profile = getProfile();
+      // implement isAnonymous later on.
+      if(!"false".equalsIgnoreCase(ServerConfigurationService.getString
+            ("separateIdEid@org.sakaiproject.user.api.UserDirectoryService")))
+      {
+         return (profile.getUserId() != ANONYMOUS && isSiteMember(profile.getSakaiPerson().getAgentUuid()));
+      }
+      return (profile.getUserId() != ANONYMOUS && isSiteMember(profile.getUserId()));
+   }
 
 	private Profile getOnlyPublicProfile(Profile profile)
 	{

@@ -14,7 +14,9 @@
 	 <table border="0" class="profileTable" cellspacing="0" cellpadding="0" summary="layout">
 			<tr>
 				<td colspan="2"><sakai:view_title value="#{msgs.profile}: #{ProfileTool.profile.firstName} #{ProfileTool.profile.lastName}" /></td>
+				<f:subview id="searchAreaHeader" rendered="#{ProfileTool.showSearch}">
 				<td class="profileSearch"><sakai:view_title value="#{msgs.search_for_profile}"/></td>
+				</f:subview>
 			</tr>	
   	 			<tr>
 				<td class="rosterImageCol">
@@ -36,10 +38,12 @@
 	    			 	<profile:profile_display_HTML value="#{ProfileTool.profile.otherInformation}" />
     			 	</span>	
 		   	</td>
+		   	<f:subview id="searchArea" rendered="#{ProfileTool.showSearch}">
 			<td class="profileSearch">
 				
 		   		<%@include file="searchModule.jsp"%>
 			</td>
+			</f:subview>
 		</tr>
 	</table>	
 		 

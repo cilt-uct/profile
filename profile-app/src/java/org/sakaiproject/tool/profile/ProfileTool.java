@@ -331,6 +331,12 @@ public class ProfileTool
 		return profileService.isShowTool();
 	}
 
+   public boolean isShowSearch()
+   {
+      LOG.debug("isShowSearch()");
+      return profileService.isShowSearch();
+   }
+   
 	/**
 	 * @return
 	 */
