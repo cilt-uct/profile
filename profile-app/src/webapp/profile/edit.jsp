@@ -82,7 +82,7 @@
 				
 				<h:panelGroup styleClass="shorttext">
 						<h:inputText size="30" id="inputPictureUrl" value="#{ProfileTool.profile.pictureUrl}" styleClass="labelindnt"/>
-						<h:outputText id="er7" value="#{msgs.error_msg} #{ProfileTool.malformedUrlError}" style="alertMessageInline"  rendered="#{ProfileTool.displayMalformedUrlError}"/>
+						<h:outputText id="er7" value="#{msgs.error_msg} #{ProfileTool.malformedUrlError}" styleClass="alertMessageInline"  rendered="#{ProfileTool.displayMalformedPictureUrlError}"/>
 				</h:panelGroup>
 				<h:panelGroup styleClass="shorttext">
 					<h:outputLabel id="outputLabel17" for="email"  value="#{msgs.profile_email}"/>	
@@ -91,6 +91,7 @@
 				<h:panelGroup styleClass="shorttext">
 					<h:outputLabel id="outputLabel8" for="homepage"  value="#{msgs.profile_homepage}"/>
 					<h:inputText id="homepage" size="30"  value="#{ProfileTool.profile.homepage}"/>
+					<h:outputText id="er8" value="#{msgs.error_msg} #{ProfileTool.malformedUrlError}" styleClass="alertMessageInline"  rendered="#{ProfileTool.displayMalformedHomepageUrlError}"/>
 				</h:panelGroup>
 				<h:panelGroup styleClass="shorttext">
 					<h:outputLabel id="outputLabel9" for="workphone"  value="#{msgs.profile_work_phone}"/>
