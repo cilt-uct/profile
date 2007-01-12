@@ -152,7 +152,7 @@ public class ProfileImpl implements Profile
 	{
 		// to account for the time when we weren't checking for valid urls
 		String homepage =  sakaiPerson.getLabeledURI();
-		if (homepage.equals (""))
+		if (homepage == null || homepage.equals (""))
 		{
 			// ignore the empty url field
 		}

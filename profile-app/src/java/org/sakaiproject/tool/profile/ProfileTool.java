@@ -505,7 +505,7 @@ public class ProfileTool
 	 */
 	private String validateURL(String url) throws MalformedURLException
 	{
-		if (url.equals (""))
+		if (url == null || url.equals (""))
 		{
 			// ignore the empty url field
 		}
@@ -515,7 +515,7 @@ public class ProfileTool
 			url = "http://" + url;
 		}
 
-		if(!url.equals(""))
+		if(url != null && !url.equals(""))
 		{
 			// valid protocol?
 			try
