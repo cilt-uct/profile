@@ -22,8 +22,13 @@
 package org.sakaiproject.component.app.profile;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -76,7 +81,13 @@ public class ProfileManagerImpl implements ProfileManager
 	{
 		LOG.debug("getProfile()");
 
-		return getProfileById(getCurrentUser(), SessionManager.getCurrentSession().getUserId());
+		return getProfileById(getCurrentUserId());
+	}
+
+	public Map<String, Profile> getProfiles(Set<String> userIds)
+	{
+		LOG.debug("getProfiles()");
+		return findProfiles(userIds);
 	}
 
 	/**
@@ -107,7 +118,7 @@ public class ProfileManagerImpl implements ProfileManager
 				if ((profile != null)
 						&& profile.getSakaiPerson().getTypeUuid().equals(sakaiPersonManager.getUserMutableType().getUuid()))
 				{
-					if ((getCurrentUser().equals(profile.getUserId()) || SecurityService.isSuperUser()))
+					if ((getCurrentUserId().equals(profile.getUserId()) || SecurityService.isSuperUser()))
 					{
 						// allow user to search and view own profile and superuser to view all profiles
 						searchResults.add(profile);
@@ -208,62 +219,13 @@ public class ProfileManagerImpl implements ProfileManager
 		{
 			LOG.debug("getUserProfileById(String" + id + ")");
 		}
-		SakaiPerson sakaiPerson = sakaiPersonManager.getSakaiPerson(getAgentUuidByEnterpriseId(id), sakaiPersonManager
+		SakaiPerson sakaiPerson = sakaiPersonManager.getSakaiPerson(id, sakaiPersonManager
 				.getUserMutableType());
 		if (sakaiPerson == null)
 		{
 			return null;
 		}
 		return new ProfileImpl(sakaiPerson);
-	}
-
-	public String getAgentUuidByEnterpriseId(String uid)
-	{
-		if (LOG.isDebugEnabled())
-		{
-			LOG.debug(" getAgentUuidByEnterpriseId(String " + uid + ")");
-		}
-		if (uid == null || (uid != null && uid.trim().length() < 0))
-		{
-			return null;
-		}
-
-		try
-		{
-			User user = userDirectoryService.getUserByEid(uid);
-			return user.getId();
-		}
-		catch (UserNotDefinedException e)
-		{
-			return null;
-		}
-	}
-
-	/**
-	 * @param userUuid
-	 * @return
-	 */
-	public String getEnterpriseIdByAgentUuid(String userUuid)
-	{
-		if (LOG.isDebugEnabled())
-		{
-			LOG.debug(" getEnterpriseIdByAgentUuid(String " + userUuid + ")");
-		}
-		if (userUuid == null || (userUuid != null && userUuid.trim().length() < 0))
-		{
-			return null;
-		}
-
-		try
-		{
-			User user = userDirectoryService.getUser(userUuid);
-			return user.getEid();
-		}
-		catch (UserNotDefinedException e)
-		{
-			LOG.debug("No user found for Uuid" + userUuid);
-			return null;
-		}
 	}
 
 	public boolean displayCompleteProfile(Profile profile)
@@ -310,7 +272,7 @@ public class ProfileManagerImpl implements ProfileManager
 		{
 			LOG.debug("isCurrentUserProfile(Profile" + profile + ")");
 		}
-		return ((profile != null) && profile.getUserId().equals(getCurrentUser()));
+		return ((profile != null) && profile.getUserId().equals(getCurrentUserId()));
 	}
 
 	/*
@@ -388,8 +350,9 @@ public class ProfileManagerImpl implements ProfileManager
 	{
 		LOG.debug("isShowTool()");
       Profile profile = getProfile();
+      
 		// implement isAnonymous later on.
-		return (profile.getUserId() != ANONYMOUS && profile.getUserId().equalsIgnoreCase(getCurrentUser()));
+		return (profile.getUserId() != ANONYMOUS && profile.getUserId().equalsIgnoreCase(getCurrentUserId()));
 	}
    
 
@@ -424,30 +387,30 @@ public class ProfileManagerImpl implements ProfileManager
 	/**
 	 * Get the id photo if the profile member is site member and the requestor is either site maintainter or user or superuser.
 	 * 
-	 * @param uid
+	 * @param userId
 	 * @param siteMaintainer
 	 * @return
 	 */
-	private byte[] getInstitutionalPhoto(String uid, boolean siteMaintainer)
+	private byte[] getInstitutionalPhoto(String userId, boolean siteMaintainer)
 	{
 		if (LOG.isDebugEnabled())
 		{
-			LOG.debug("getInstitutionalPhotoByUserId(" + uid + ")");
+			LOG.debug("getInstitutionalPhotoByUserId(" + userId + ")");
 		}
-		if (uid == null || uid.length() < 1) throw new IllegalArgumentException("Illegal userId argument passed!");
+		if (userId == null || userId.length() < 1) throw new IllegalArgumentException("Illegal userId argument passed!");
 
-		SakaiPerson sakaiSystemPerson = sakaiPersonManager.getSakaiPerson(uid, sakaiPersonManager.getSystemMutableType());
-		SakaiPerson sakaiPerson = sakaiPersonManager.getSakaiPerson(uid, sakaiPersonManager.getUserMutableType());
+		SakaiPerson sakaiSystemPerson = sakaiPersonManager.getSakaiPerson(userId, sakaiPersonManager.getSystemMutableType());
+		SakaiPerson sakaiPerson = sakaiPersonManager.getSakaiPerson(userId, sakaiPersonManager.getUserMutableType());
 		Profile profile = null;
 
 		if ((sakaiSystemPerson != null))
 		{
 			Profile systemProfile = new ProfileImpl(sakaiSystemPerson);
 			// Fetch current users institutional photo for either the user or super user
-			if (getCurrentUser().equals(uid) || SecurityService.isSuperUser()
-					|| (siteMaintainer && doesCurrentUserHaveUpdateAccessToSite() && isSiteMember(uid)))
+			if (getCurrentUserId().equals(userId) || SecurityService.isSuperUser()
+					|| (siteMaintainer && doesCurrentUserHaveUpdateAccessToSite() && isSiteMember(userId)))
 			{
-				LOG.info("Official Photo fetched for userId " + uid);
+				if(LOG.isDebugEnabled()) LOG.debug("Official Photo fetched for userId " + userId);
 				return systemProfile.getInstitutionalPicture();
 			}
 
@@ -461,7 +424,7 @@ public class ProfileManagerImpl implements ProfileManager
 						&& profile.isInstitutionalPictureIdPreferred() != null
 						&& profile.isInstitutionalPictureIdPreferred().booleanValue() == true)
 				{
-					LOG.info("Official Photo fetched for userId " + uid);
+					if(LOG.isDebugEnabled()) LOG.debug("Official Photo fetched for userId " + userId);
 					return systemProfile.getInstitutionalPicture();
 				}
 
@@ -524,52 +487,64 @@ public class ProfileManagerImpl implements ProfileManager
 	}
 
 	/**
-	 * @param uid
-	 * @param sessionManagerUserId
+	 * @param id
 	 * @return
 	 */
-	private Profile getProfileById(String uid, String sessionManagerUserId)
+	private Profile getProfileById(String id)
 	{
-		if (LOG.isDebugEnabled())
-		{
-			LOG.debug("getProfileById(" + uid + "," + sessionManagerUserId + ")");
-		}
-		if (uid == null || uid.length() < 1) throw new IllegalArgumentException("Illegal uid argument passed!");
-		if (sessionManagerUserId == null || sessionManagerUserId.length() < 1)
-			throw new IllegalArgumentException("Illegal sessionManagerUserId argument passed!");
-
-		SakaiPerson sakaiPerson = null;
-
-		if ((uid != null) && (uid.trim().length() > 0))
-		{
-			try
-			{
-				User user = userDirectoryService.getUser(sessionManagerUserId);
-
-				sakaiPerson = sakaiPersonManager.getSakaiPerson(user.getId(), sakaiPersonManager.getUserMutableType());
-
-				if (sakaiPerson == null)
-				{
-					sakaiPerson = sakaiPersonManager.create(user.getId(), uid, sakaiPersonManager.getUserMutableType());
-				}
-			}
-			catch (UserNotDefinedException e)
-			{
-				// TODO: how to handle this use case with UserDirectoryService? name? email? password? Why even do it? -ggolden
-				// User user = userDirectoryService.addUser(sessionManagerUserId, "", sessionManagerUserId, "", "", "", null);
-
-				sakaiPerson = sakaiPersonManager.create(sessionManagerUserId, uid, sakaiPersonManager.getUserMutableType());
-			}
-		}
-		return new ProfileImpl(sakaiPerson);
+		Set<String> userIds = new HashSet<String>();
+		userIds.add(id);
+		Map<String, Profile> profiles = findProfiles(userIds);
+		return profiles.get(id);
 	}
 
+	private Map<String, Profile> findProfiles(Set<String> userIds) {
+		Map<String, Profile> profiles = new HashMap<String, Profile>();
+		Map<String, SakaiPerson> sakaiPeople = sakaiPersonManager.getSakaiPersons(userIds, sakaiPersonManager.getUserMutableType());
+		
+		for(Iterator<String>iter = userIds.iterator(); iter.hasNext();)
+		{
+			String userId = iter.next();
+			if (userId == null || userId.length() < 1)
+			{
+				LOG.info("Illegal uid argument passed: userId=" + userId);
+				continue;
+			}
+			SakaiPerson sakaiPerson = sakaiPeople.get(userId);
+	
+			if ((userId != null) && (userId.trim().length() > 0))
+			{
+				try
+				{
+					User user = userDirectoryService.getUser(userId);
+	
+					if (sakaiPerson == null)
+					{
+						LOG.info("Could not find a sakaiPerson for id=" + user.getId() + ", eid=" + user.getEid());
+						sakaiPerson = sakaiPersonManager.create(user.getId(), sakaiPersonManager.getUserMutableType());
+						sakaiPeople.put(user.getId(), sakaiPerson);
+					}
+				}
+				catch (UserNotDefinedException e)
+				{
+					// TODO: how to handle this use case with UserDirectoryService? name? email? password? Why even do it? -ggolden
+					// User user = userDirectoryService.addUser(sessionManagerUserId, "", sessionManagerUserId, "", "", "", null);
+	
+					sakaiPerson = sakaiPersonManager.create( userId, sakaiPersonManager.getUserMutableType());
+				}
+			}
+			profiles.put(userId, new ProfileImpl(sakaiPerson));
+		}
+		
+		if(LOG.isDebugEnabled()) LOG.debug("Returning profiles for " + profiles.keySet().size() + " users");
+		return profiles;
+	}
 	/**
 	 * @return
 	 */
-	private String getCurrentUser()
+	private String getCurrentUserId()
 	{
 		LOG.debug("getCurrentUser()");
-		return SessionManager.getCurrentSession().getUserEid();
+		return SessionManager.getCurrentSession().getUserId();
 	}
 }

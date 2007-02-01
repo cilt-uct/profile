@@ -142,6 +142,10 @@
     <![CDATA[from org.sakaiproject.component.common.edu.person.PersonImpl as ep where ep.agentUuid = :agentUuid and ep.typeUuid = :typeUuid]]>
   </query>
 
+  <query name="findEduPersonsByAgentsAndType">
+    <![CDATA[from org.sakaiproject.component.common.edu.person.PersonImpl as ep where ep.agentUuid in (:agentUuidCollection) and ep.typeUuid = :typeUuid]]>
+  </query>
+
   <query name="findSakaiPersonByUid">
     <![CDATA[from org.sakaiproject.component.common.edu.person.InetOrgPersonImpl as iop where iop.uid = :uid]]>
   </query>

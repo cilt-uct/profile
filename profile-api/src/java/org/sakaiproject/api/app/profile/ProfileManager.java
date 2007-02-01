@@ -22,6 +22,8 @@
 package org.sakaiproject.api.app.profile;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author rshastri
@@ -46,6 +48,14 @@ public interface ProfileManager
 	 */
 	public Profile getProfile();
 
+	/**
+	 * Returns a map of user IDs to Profiles.
+	 * 
+	 * @param userIds A collection of user IDs
+	 * @return
+	 */
+	public Map<String, Profile> getProfiles(Set<String> userIds);
+	
 	/**
 	 * Searches the list of user profiles matching given search criteria
 	 * 
@@ -122,15 +132,4 @@ public interface ProfileManager
 	 */
 	public Profile getUserProfileById(String id);
 
-	/**
-	 * @param userId
-	 * @return
-	 */
-	public String getAgentUuidByEnterpriseId(String userId);
-
-	/**
-	 * @param agentUuid
-	 * @return
-	 */
-	public String getEnterpriseIdByAgentUuid(String agentUuid);
 }

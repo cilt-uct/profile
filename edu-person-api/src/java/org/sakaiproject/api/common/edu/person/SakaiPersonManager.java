@@ -23,6 +23,8 @@ package org.sakaiproject.api.common.edu.person;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.sakaiproject.api.common.type.Type;
 
@@ -40,18 +42,6 @@ public interface SakaiPersonManager
 	 * @return
 	 */
 	public SakaiPerson create(String agentUuid, Type recordType);
-
-	/**
-	 * Creates a persistent SakaiPerson record.
-	 * 
-	 * @param agentUuid
-	 * @param uid
-	 *        e.g. username
-	 * @param recordType
-	 *        {@link #getSystemMutableType()} or {@link #getUserMutableType()}
-	 * @return
-	 */
-	public SakaiPerson create(String agentUuid, String uid, Type recordType);
 
 	/**
 	 * Get a new instantiation of an empty SakaiPerson object (has no persistent state). For example, useful if you query-by-example finder method.
@@ -96,6 +86,16 @@ public interface SakaiPersonManager
 	 * @return
 	 */
 	public SakaiPerson getSakaiPerson(String agentUuid, Type recordType);
+
+	/**
+	 * Finds all SakaiPerson objects with the specified type, whos IDs are contained
+	 * in the userIds collection.
+	 * 
+	 * @param userIds
+	 * @param userMutableType
+	 * @return
+	 */
+	public Map<String, SakaiPerson> getSakaiPersons(Set<String> userIds, Type userMutableType);
 
 	/**
 	 * Returns the userMutableType constant. SakaiPerson's of this Type allow the user to modify all attributes.
