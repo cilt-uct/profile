@@ -306,13 +306,11 @@ public class SakaiPersonManagerImpl extends HibernateDaoSupport implements Sakai
 			List<String> userListChunk = new ArrayList<String>();
 			while(offset < collectionSize)
 			{
-				if((offset+1) % MAX_QUERY_COLLECTION_SIZE == 0) {
+				if(offset > 0 && offset % MAX_QUERY_COLLECTION_SIZE == 0) {
 					// Our chunk is full, so process the list, clear it, and continue
 					List<SakaiPerson> personListChunk = listSakaiPersons(userListChunk, recordType);
 					addSakaiPersonsToMap(personListChunk, map);
 					userListChunk.clear();
-					offset++;
-					continue;
 				}
 				userListChunk.add(userIdList.get(offset));
 				offset++;
