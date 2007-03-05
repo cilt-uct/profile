@@ -443,15 +443,13 @@ public class ProfileManagerImpl implements ProfileManager
 		{
 			LOG.debug("isSiteMember(String" + uid + ")");
 		}
-		AuthzGroup realm;
 		try
 		{
-			realm = AuthzGroupService.getAuthzGroup("/site/" + getCurrentSiteId());
-			return realm.getUsers().contains(uid);
+			AuthzGroupService.isAllowed(uid, "site.visit", getCurrentSiteId());
 		}
-		catch (GroupNotDefinedException e)
+		catch (Exception e)
 		{
-			LOG.error("IdUnusedException:", e);
+			LOG.error("Exception:", e);
 		}
 		return false;
 	}
