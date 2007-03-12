@@ -124,7 +124,7 @@
             <property name="campus" column="CAMPUS" />
             <property name="hidePrivateInfo" column="HIDE_PRIVATE_INFO" />
             <property name="hidePublicInfo" column="HIDE_PUBLIC_INFO" />
-            <property name="notes" column="NOTES" />
+            <property name="notes" column="NOTES" length="4000" />
             <property name="pictureUrl" column="PICTURE_URL" />
             <property name="systemPicturePreferred"
               column="SYSTEM_PICTURE_PREFERRED" />
