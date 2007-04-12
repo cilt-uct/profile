@@ -445,7 +445,7 @@ public class ProfileManagerImpl implements ProfileManager
 		}
 		try
 		{
-			AuthzGroupService.isAllowed(uid, "site.visit", getCurrentSiteId());
+			return AuthzGroupService.isAllowed(uid, "site.visit", getCurrentSiteId());
 		}
 		catch (Exception e)
 		{
