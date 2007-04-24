@@ -498,6 +498,10 @@ public class ProfileManagerImpl implements ProfileManager
 
 	private Map<String, Profile> findProfiles(Set<String> userIds) {
 		Map<String, Profile> profiles = new HashMap<String, Profile>();
+		if(userIds == null || userIds.isEmpty()) {
+			return profiles;
+		}
+
 		Map<String, SakaiPerson> sakaiPeople = sakaiPersonManager.getSakaiPersons(userIds, sakaiPersonManager.getUserMutableType());
 		
 		for(Iterator<String>iter = userIds.iterator(); iter.hasNext();)
