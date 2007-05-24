@@ -384,7 +384,7 @@ public class SearchTool
 	public String processCancel()
 	{
 		LOG.debug("processCancel()");
-		this.reset("Search Keyword");
+		this.reset(msgs.getString("java.search_keyword"));
 		return "main";
 	}
 
