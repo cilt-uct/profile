@@ -18,7 +18,7 @@
  * limitations under the License.
  *
  **********************************************************************************/
-
+/* This test class has not be used since sakai 2.1
 package org.sakaiproject.api.common.type;
 
 import org.sakaiproject.component.junit.spring.ApplicationContextBaseTest;
@@ -75,7 +75,7 @@ public class TypeManagerTest extends ApplicationContextBaseTest
 
   /*
    * Class under test for Type getType(String)
-   */
+   * /
   public void testGetTypeString()
   {
     final String authority = "authority2";
@@ -95,7 +95,7 @@ public class TypeManagerTest extends ApplicationContextBaseTest
 
   /*
    * Class under test for Type getType(String, String, String)
-   */
+   * /
   public void testGetTypeStringStringString()
   {
     final String authority = "authority3";
@@ -180,5 +180,5 @@ public class TypeManagerTest extends ApplicationContextBaseTest
 
 }
 
-
+*/
 

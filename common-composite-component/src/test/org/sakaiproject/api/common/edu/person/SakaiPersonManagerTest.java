@@ -18,10 +18,9 @@
  * limitations under the License.
  *
  **********************************************************************************/
-
+/* This test class has not be used since 2.1
 
 package org.sakaiproject.api.common.edu.person;
-
 import java.util.Iterator;
 import java.util.List;
 
@@ -32,9 +31,10 @@ import org.sakaiproject.component.junit.spring.ApplicationContextBaseTest;
 
 public class SakaiPersonManagerTest extends ApplicationContextBaseTest
 {
+	
   private SakaiPersonManager sakaiPersonManager; // dep inj
   private UuidManager uuidManager; //dep inj
-  private AgentGroupManager agentGroupManager; // dep inj
+private AgentGroupManager agentGroupManager; // dep inj
 
   public SakaiPersonManagerTest()
   {
@@ -58,17 +58,17 @@ public class SakaiPersonManagerTest extends ApplicationContextBaseTest
         AgentGroupManager.class.getName());
   }
 
-  /**
+  / **
    * @see org.sakaiproject.component.junit.spring.ApplicationContextBaseTest#setUp()
-   */
+   * /
   protected void setUp() throws Exception
   {
     super.setUp();
   }
 
-  /**
+  / **
    * @see org.sakaiproject.component.junit.spring.ApplicationContextBaseTest#tearDown()
-   */
+   * /
   protected void tearDown() throws Exception
   {
     super.tearDown();
@@ -117,28 +117,28 @@ public class SakaiPersonManagerTest extends ApplicationContextBaseTest
 
   /*
    * Class under test for List getSakaiPerson(String)
-   */
+   * /
   public void testGetSakaiPersonString()
   {
   }
 
   /*
    * Class under test for List findSakaiPerson(SakaiPerson)
-   */
+   * /
   public void testFindSakaiPersonSakaiPerson()
   {
   }
 
   /*
    * Class under test for SakaiPerson getSakaiPerson(Type)
-   */
+   * /
   public void testGetSakaiPersonType()
   {
   }
 
   /*
    * Class under test for SakaiPerson getSakaiPerson(String, Type)
-   */
+   * /
   public void testGetSakaiPersonStringType()
   {
   }
@@ -161,9 +161,10 @@ public class SakaiPersonManagerTest extends ApplicationContextBaseTest
 
   /*
    * Class under test for List findSakaiPerson(String)
-   */
+   * /
   public void testFindSakaiPersonString()
   {
   }
 
 }
+*/
