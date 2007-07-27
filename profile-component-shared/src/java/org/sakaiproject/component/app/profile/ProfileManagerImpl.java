@@ -541,8 +541,7 @@ public class ProfileManagerImpl implements ProfileManager
 				{
 					// TODO: how to handle this use case with UserDirectoryService? name? email? password? Why even do it? -ggolden
 					// User user = userDirectoryService.addUser(sessionManagerUserId, "", sessionManagerUserId, "", "", "", null);
-	
-					sakaiPerson = sakaiPersonManager.create( userId, sakaiPersonManager.getUserMutableType());
+					// sakaiPerson = sakaiPersonManager.create( userId, sakaiPersonManager.getUserMutableType());
 				}
 			}
 			profiles.put(userId, new ProfileImpl(sakaiPerson));
