@@ -44,6 +44,9 @@ public class ProfileTool
 	
 	/** Resource bundle using current language locale */
     private static ResourceLoader rb = new ResourceLoader("org.sakaiproject.tool.profile.bundle.Messages");
+    
+    /** Configuration bundle using current language locale */
+    private static ResourceLoader cb = new ResourceLoader("org.sakaiproject.tool.profile.config.Config");
 
 	private static final String NONE = "none";
 
@@ -51,6 +54,10 @@ public class ProfileTool
 
 	private static final String PICTURE_URL = "pictureUrl";
 
+	private static final String NO_PICTURE = "photoUnavialable";
+	
+	private static final String NO_UNIVERSITY_PHOTO_AVAILABLE = "officalPhotoUnavailable";
+	
 	private ProfileManager profileService;
 
 	private Profile profile;
@@ -550,4 +557,26 @@ public class ProfileTool
 		return url;
 	}
 
+	/**
+	 * Returns String for image. Uses the config bundle
+	 * to return paths to not available images.  
+	 */
+	public String getImageUrlToDisplay() {
+		String imageUrl = "";
+		
+		if (isDisplayUniversityPhoto()) {
+			imageUrl = "ProfileImageServlet.prf?photo=" + profile.getUserId();
+		}
+		else if (isDisplayPictureURL()) {
+			imageUrl = profile.getPictureUrl();
+		}
+		else if (isDisplayNoPicture()) {
+			imageUrl = cb.getString(NO_PICTURE);
+		}
+		else { //if (isDisplayUniversityPhotoUnavailable()){
+			imageUrl = cb.getString(NO_UNIVERSITY_PHOTO_AVAILABLE);			
+		}
+		
+		return imageUrl; 
+	}
 }

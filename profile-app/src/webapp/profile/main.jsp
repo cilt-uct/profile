@@ -20,11 +20,12 @@
 			</tr>	
   	 			<tr>
 				<td class="rosterImageCol">
-					<h:graphicImage id="image1" value="ProfileImageServlet.prf?photo=#{ProfileTool.profile.userId}" styleClass="rosterImage"  rendered="#{ProfileTool.displayUniversityPhoto}"  alt="#{msgs.profile_picture_alt}" /> 
-					<h:graphicImage id="image2" value="#{ProfileTool.profile.pictureUrl}" styleClass="rosterImage"  alt="#{msgs.alt_picture}" rendered="#{ProfileTool.displayPictureURL}" />
-					<h:graphicImage id="image3" url="/images/pictureUnavailable.jpg" styleClass="rosterImage"   alt="#{msgs.alt_picture_unavailable}" rendered="#{ProfileTool.displayNoPicture}"/>
-					<h:graphicImage id="image4" alt="#{msgs.alt_official_id_photo_unavailable}" url="/images/officialPhotoUnavailable.jpg" styleClass="rosterImage"   rendered="#{ProfileTool.displayUniversityPhotoUnavailable}" />	
-			 </td>
+					<h:graphicImage id="image1" value="#{ProfileTool.imageUrlToDisplay}"  alt="#{msgs.profile_picture_alt}" styleClass="rosterImage" /> 
+<%--					<h:graphicImage id="image1" value="ProfileImageServlet.prf?photo=#{ProfileTool.profile.userId}"  alt="#{msgs.profile_picture_alt}" styleClass="rosterImage"  rendered="#{ProfileTool.displayUniversityPhoto}" /> 
+					<h:graphicImage id="image2" value="#{ProfileTool.profile.pictureUrl}"  styleClass="rosterImage"  alt="#{msgs.alt_picture}" rendered="#{ProfileTool.displayPictureURL}" />
+					<h:graphicImage id="image3" url="/images/pictureUnavailable.jpg"       styleClass="rosterImage"  alt="#{msgs.alt_picture_unavailable}" rendered="#{ProfileTool.displayNoPicture}"/>
+					<h:graphicImage id="image4" url="/images/officialPhotoUnavailable.jpg" styleClass="rosterImage"  alt="#{msgs.alt_official_id_photo_unavailable}" rendered="#{ProfileTool.displayUniversityPhotoUnavailable}" />	
+--%>			 </td>
 			 <td class="profileData">
 				<h:outputText id="position" value="#{ProfileTool.profile.position}" />
     			 	<h:outputText id="department" value="#{ProfileTool.profile.department}" />
