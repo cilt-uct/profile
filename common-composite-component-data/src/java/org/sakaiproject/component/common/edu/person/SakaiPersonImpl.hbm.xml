@@ -55,7 +55,7 @@
     <property name="surname" column="SURNAME"
       index="SAKAI_PERSON_SURNAME_I" />
     <property name="telephoneNumber" column="TELEPHONE_NUMBER" />
-
+	
     <subclass
       name="org.sakaiproject.component.common.edu.person.OrganizationalPersonImpl"
       discriminator-value="OP">
@@ -132,6 +132,7 @@
               <column name="ferpaEnabled"
                 index="SAKAI_PERSON_ferpaEnabled_I" />
             </property>
+            <property name="dateOfBirth" column="dateOfBirth" type="date" />
           </subclass>
         </subclass>
       </subclass>

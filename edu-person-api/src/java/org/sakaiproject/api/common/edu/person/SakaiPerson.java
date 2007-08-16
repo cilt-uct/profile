@@ -24,6 +24,7 @@ package org.sakaiproject.api.common.edu.person;
 /**
  * @author <a href="mailto:lance@indiana.edu">Lance Speelmon </a>
  */
+import java.util.Date;
 
 public interface SakaiPerson extends EduPerson
 {
@@ -126,4 +127,17 @@ public interface SakaiPerson extends EduPerson
 	 *        TRUE if FERPA rights have been invoked. If FALSE or NULL no FERPA rights have been invoked.
 	 */
 	public void setFerpaEnabled(Boolean ferpaEnabled);
+	
+	/*
+	 * Set the users Date of birth
+	 * @param dateOfBirth Date of Birth
+	 * 
+	 */
+	public void setDateOfBirth(Date dateOfBirth);
+	
+	/*
+	 * get Date of Birth
+	 */
+	public Date getDateOfBirth();
+	
 }
