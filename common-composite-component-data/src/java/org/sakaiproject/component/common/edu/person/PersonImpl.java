@@ -31,7 +31,7 @@ public class PersonImpl extends PersistableImpl implements Person
 {
 	protected String businessKey()
 	{
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append(agentUuid);
 		sb.append(typeUuid);
 		return sb.toString();
@@ -61,7 +61,7 @@ public class PersonImpl extends PersistableImpl implements Person
 	 */
 	public String toString()
 	{
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("{id=");
 		sb.append(id);
 		sb.append(", uuid=");
