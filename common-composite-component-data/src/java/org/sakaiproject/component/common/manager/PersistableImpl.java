@@ -219,7 +219,7 @@ public abstract class PersistableImpl implements Persistable
 	{
 		LOG.trace("toString()");
 
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("{id=");
 		sb.append(id);
 		sb.append(", lastModifiedBy=");

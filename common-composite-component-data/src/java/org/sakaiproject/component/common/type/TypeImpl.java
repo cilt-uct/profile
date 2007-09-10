@@ -52,7 +52,7 @@ public class TypeImpl extends PersistableImpl implements Type
 	{
 		LOG.trace("getBusinessKey()");
 
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append(authority);
 		sb.append(domain);
 		sb.append(keyword);
@@ -110,7 +110,7 @@ public class TypeImpl extends PersistableImpl implements Type
 	{
 		LOG.trace("toString()");
 
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("{id=");
 		sb.append(super.id);
 		sb.append(", displayName=");

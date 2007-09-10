@@ -115,7 +115,7 @@ public class ProfileTool
 		}
 		if (profile.getOtherInformation() != null)
 		{
-			StringBuffer alertMsg = new StringBuffer();
+			StringBuilder alertMsg = new StringBuilder();
 			String errorMsg = null;
 			try
 			{

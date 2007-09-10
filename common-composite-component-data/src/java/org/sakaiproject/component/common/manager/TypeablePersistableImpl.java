@@ -70,7 +70,7 @@ public abstract class TypeablePersistableImpl extends PersistableImpl implements
 	{
 		LOG.trace("toString()");
 
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append(super.toString());
 		sb.append(", type=");
 		if (type != null)
