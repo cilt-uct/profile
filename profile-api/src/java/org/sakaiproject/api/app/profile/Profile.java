@@ -233,4 +233,6 @@ public interface Profile
 	 * @param hidePublicInfo
 	 */
 	public void setHidePublicInfo(Boolean hidePublicInfo);
+	
+	public Boolean getLocked();
 }

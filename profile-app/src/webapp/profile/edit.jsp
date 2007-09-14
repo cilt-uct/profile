@@ -85,8 +85,10 @@
 						<h:outputText id="er7" value="#{msgs.error_msg} #{ProfileTool.malformedUrlError}" styleClass="alertMessageInline"  rendered="#{ProfileTool.displayMalformedPictureUrlError}"/>
 				</h:panelGroup>
 				<h:panelGroup styleClass="shorttext">
+					<h:outputText id="inputid1"  value="#{msgs.info_required_sign}" styleClass="reqStar"/>
 					<h:outputLabel id="outputLabel17" for="email"  value="#{msgs.profile_email}"/>	
 					<h:inputText size="30" id="email"  value="#{ProfileTool.profile.email}"/>
+					<h:outputText id="er71" value="#{msgs.error_invalid_email}" styleClass="alertMessage labelindnt" rendered="#{ProfileTool.displayInvalidEmailMsg}"/>
 				</h:panelGroup>
 				<h:panelGroup styleClass="shorttext">
 					<h:outputLabel id="outputLabel8" for="homepage"  value="#{msgs.profile_homepage}"/>
@@ -100,7 +102,11 @@
 				<h:panelGroup styleClass="shorttext">
 						<h:outputLabel id="outputLabel10" for="homephone"  value="#{msgs.profile_home_phone}"/>
 						<h:inputText size="30" id="homephone" value="#{ProfileTool.profile.homePhone}"/>
-				</h:panelGroup>		
+				</h:panelGroup>	
+				<h:panelGroup styleClass="shorttext">
+                         <h:outputLabel id="outputLabel101" for="mobile"  value="#{msgs.profile_mobile}"/>
+                         <h:inputText size="30" id="mobile" value="#{ProfileTool.profile.mobile}"/>
+                 </h:panelGroup>	
 				<h:panelGroup styleClass="shorttext">
 					<h:panelGrid >
 						<h:panelGroup><h:outputLabel id="outputLabel11" for="otherInformation" value="#{msgs.profile_other_information}"/></h:panelGroup>

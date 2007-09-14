@@ -35,6 +35,13 @@ import org.sakaiproject.tool.cover.ToolManager;
 import org.sakaiproject.util.FormattedText;
 import org.sakaiproject.util.ResourceLoader;
 
+//to allow user edits
+import org.sakaiproject.component.cover.ServerConfigurationService;
+import org.sakaiproject.user.cover.UserDirectoryService;
+import org.sakaiproject.user.api.UserEdit;
+import org.sakaiproject.user.api.User;
+import org.sakaiproject.entity.api.Entity;
+
 /**
  * @author rshastri
  */
@@ -79,6 +86,8 @@ public class ProfileTool
 	private boolean displayMalformedPictureUrlError = false;
 	
 	private boolean displayMalformedHomepageUrlError = false;
+	
+	private boolean displayInvalidEmailError = false;
 
 	private String malformedUrlError = null;
 
@@ -97,6 +106,7 @@ public class ProfileTool
 		displayEmptyLastNameMsg = false;
 		displayMalformedPictureUrlError = false;
 		displayMalformedHomepageUrlError = false;
+		displayInvalidEmailError = false;
 		if ((profile != null) && (profile.getUserId() == null))
 		{
 			LOG.error("processActionEditSave :" + "No User Found");
@@ -112,6 +122,11 @@ public class ProfileTool
 		{
 			displayEmptyLastNameMsg = true;
 			return "edit";
+		}
+		if (profile.getEmail() == null ||  !isValidEmail(profile.getEmail())) {
+			displayInvalidEmailError = true;
+			return "edit";
+			
 		}
 		if (profile.getOtherInformation() != null)
 		{
@@ -188,14 +203,12 @@ public class ProfileTool
 		try
 		{
 			profileService.save(profile);
-			LOG.debug("User record updated for Id :-" + profile.getUserId());
 
-			return "main";
 		}
 
 		catch (Exception e)
 		{
-			LOG.debug(e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 		}
 		return "main";
 	}
@@ -299,6 +312,7 @@ public class ProfileTool
 
 	}
 
+	
 	/**
 	 * @return
 	 */
@@ -381,6 +395,10 @@ public class ProfileTool
 	{
 		LOG.debug("isDisplayEvilTagMsg()");
 		return displayEvilTagMsg;
+	}
+	
+	public boolean isDisplayInvalidEmailMsg() {
+		return displayInvalidEmailError;
 	}
 
 	/**
@@ -556,7 +574,34 @@ public class ProfileTool
 		}
 		return url;
 	}
-
+	
+	/**
+	 * Is this a valid email the service will recognize
+	 * @param email
+	 * @return
+	 */
+	private boolean isValidEmail(String email) {
+		
+		// TODO: Use a generic Sakai utility class (when a suitable one exists)
+		
+		if (email == null || email.equals(""))
+			return false;
+		
+		email = email.trim();
+		//must contain @
+		if (email.indexOf("@") == -1)
+			return false;
+		
+		//an email can't contain spaces
+		if (email.indexOf(" ") > 0)
+			return false;
+		
+		//"^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*$" 
+		if (email.matches("^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*$")) 
+			return true;
+	
+		return false;
+	}
 	/**
 	 * Returns String for image. Uses the config bundle
 	 * to return paths to not available images.  

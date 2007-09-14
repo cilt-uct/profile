@@ -189,5 +189,16 @@ public class SakaiPersonImpl extends EduPersonImpl implements Person, Organizati
 	public void setDateOfBirth(Date d){
 		dateOfBirth = d;
 	}
+
+	private Boolean locked = false;
+	public Boolean getLocked() {
+		// TODO Auto-generated method stub
+		return locked;
+	}
+
+	public void setLocked(Boolean ld) {
+		locked = ld ;
+		
+	}
 	
 }

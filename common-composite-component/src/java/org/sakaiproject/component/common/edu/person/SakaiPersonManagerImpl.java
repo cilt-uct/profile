@@ -21,6 +21,11 @@
 
 package org.sakaiproject.component.common.edu.person;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,17 +46,20 @@ import org.hibernate.criterion.Order;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.sakaiproject.api.common.edu.person.PhotoService;
 import org.sakaiproject.api.common.edu.person.SakaiPerson;
 import org.sakaiproject.api.common.edu.person.SakaiPersonManager;
 import org.sakaiproject.api.common.type.Type;
 import org.sakaiproject.api.common.type.TypeManager;
 import org.sakaiproject.authz.cover.SecurityService;
+import org.sakaiproject.component.api.ServerConfigurationService;
 import org.sakaiproject.component.common.manager.PersistableHelper;
 import org.sakaiproject.id.cover.IdManager;
 import org.sakaiproject.tool.cover.SessionManager;
 import org.sakaiproject.user.api.User;
+import org.sakaiproject.user.api.UserEdit;
 import org.sakaiproject.user.api.UserNotDefinedException;
-import org.sakaiproject.user.cover.UserDirectoryService;
+import org.sakaiproject.user.api.UserDirectoryService;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
@@ -107,6 +115,33 @@ public class SakaiPersonManagerImpl extends HibernateDaoSupport implements Sakai
 	private static final String[] USER_MUTBALE_PRIMITIVES = { "org.sakaiproject", "api.common.edu.person",
 			"SakaiPerson.recordType.userMutable", "User Mutable SakaiPerson", "User Mutable SakaiPerson", };
 
+	
+	
+	private ServerConfigurationService serverConfigurationService;
+	public void setServerConfigurationService(ServerConfigurationService scs) {
+		serverConfigurationService = scs;
+	}
+	
+	private UserDirectoryService userDirectoryService;
+	/**
+	 * @param userDirectoryService
+	 *        The userDirectoryService to set.
+	 */
+	public void setUserDirectoryService(UserDirectoryService userDirectoryService)
+	{
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug("setUserDirectoryService(userDirectoryService " + userDirectoryService + ")");
+		}
+
+		this.userDirectoryService = userDirectoryService;
+	}
+
+	private PhotoService photoService;
+	public void setPhotoService(PhotoService ps) {
+		this.photoService = ps;
+	}
+	
 	public void init()
 	{
 		LOG.debug("init()");
@@ -129,7 +164,9 @@ public class SakaiPersonManagerImpl extends HibernateDaoSupport implements Sakai
 					USER_MUTBALE_PRIMITIVES[2], USER_MUTBALE_PRIMITIVES[3], USER_MUTBALE_PRIMITIVES[4]);
 		}
 		if (userMutableType == null) throw new IllegalStateException("userMutableType == null");
-
+		
+		
+		
 		LOG.debug("init() has completed successfully");
 	}
 
@@ -151,8 +188,22 @@ public class SakaiPersonManagerImpl extends HibernateDaoSupport implements Sakai
 		spi.setAgentUuid(userId);
 		spi.setUid(userId);
 		spi.setTypeUuid(recordType.getUuid());
+		spi.setLocked(new Boolean(false));
 		this.getHibernateTemplate().save(spi);
-
+		
+		if (serverConfigurationService.getBoolean("profile.updateUser",false)) {
+			try {
+				User u = userDirectoryService.getUser(userId);
+				spi.setGivenName(u.getFirstName());
+				spi.setSurname(u.getLastName());
+				spi.setMail(u.getEmail());
+			}
+			catch (UserNotDefinedException uue) {
+				LOG.error("User " + userId + "doesn't exist");
+			}
+			
+		}
+		
 		LOG.debug("return spi;");
 		return spi;
 	}
@@ -204,7 +255,12 @@ public class SakaiPersonManagerImpl extends HibernateDaoSupport implements Sakai
 		};
 
 		LOG.debug("return getHibernateTemplate().executeFind(hcb);");
-		return getHibernateTemplate().executeFind(hcb);
+		List hb = getHibernateTemplate().executeFind(hcb);
+		if (photoService.overRidesDefault()) {
+			return this.getDiskPhotosForList(hb);
+		} else {
+			return hb;
+		}
 	}
 
 	/**
@@ -247,9 +303,36 @@ public class SakaiPersonManagerImpl extends HibernateDaoSupport implements Sakai
 			// update lastModifiedDate
 			SakaiPersonImpl spi = (SakaiPersonImpl) sakaiPerson;
 			persistableHelper.modifyPersistableFields(spi);
+			//if the repository path is set save if there
+			if (photoService.overRidesDefault()){
+				photoService.savePhoto(spi.getJpegPhoto(), spi.getAgentUuid());
+				spi.setJpegPhoto(null);
+			} 
+			
 			// use update(..) method to ensure someone does not try to insert a
 			// prototype.
 			getHibernateTemplate().update(spi);
+			
+			
+			LOG.debug("User record updated for Id :-" + spi.getAgentUuid());
+			//update the account too
+			if (serverConfigurationService.getBoolean("profile.updateUser",false)) {
+				try {
+					UserEdit userEdit = null;
+					userEdit = userDirectoryService.editUser(userDirectoryService.getCurrentUser().getId());
+					userEdit.setFirstName(spi.getGivenName());
+					userEdit.setLastName(spi.getSurname());
+					userEdit.setEmail(spi.getMail());
+					userDirectoryService.commitEdit(userEdit);
+					LOG.info("Saved user object");
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
+			
+			
 		}
 	}
 
@@ -279,7 +362,12 @@ public class SakaiPersonManagerImpl extends HibernateDaoSupport implements Sakai
 		};
 
 		LOG.debug("return (SakaiPerson) getHibernateTemplate().execute(hcb);");
-		return (SakaiPerson) getHibernateTemplate().execute(hcb);
+		SakaiPerson sp =  (SakaiPerson) getHibernateTemplate().execute(hcb);
+		if (photoService.overRidesDefault() && sp != null && sp.getTypeUuid().equals(this.getSystemMutableType().getUuid())) {
+			sp.setJpegPhoto(photoService.getPhotoAsByteArray(sp.getAgentUuid()));
+		} 
+		
+		return sp;
 	}
 
 	public Map<String, SakaiPerson> getSakaiPersons(final Set<String> userIds, final Type recordType)
@@ -350,7 +438,12 @@ public class SakaiPersonManagerImpl extends HibernateDaoSupport implements Sakai
 				return q.list();
 			}
 		};
-		return getHibernateTemplate().executeFind(hcb);
+		List hb =  getHibernateTemplate().executeFind(hcb);
+		if (photoService.overRidesDefault()) {
+			return getDiskPhotosForList(hb);
+		} else {
+			return hb;
+		}
 	}
 
 	/**
@@ -376,11 +469,17 @@ public class SakaiPersonManagerImpl extends HibernateDaoSupport implements Sakai
 				c.addOrder(Order.asc(SURNAME));
 				// c.setCacheable(cacheFindSakaiPersonString);
 				return c.list();
+				
 			}
 		};
 
 		LOG.debug("return getHibernateTemplate().executeFind(hcb);");
-		return getHibernateTemplate().executeFind(hcb);
+		List hb =  getHibernateTemplate().executeFind(hcb);
+		if (photoService.overRidesDefault()) {
+			return getDiskPhotosForList(hb);
+		} else {
+			return hb;
+		}
 	}
 
 	/**
@@ -440,7 +539,12 @@ public class SakaiPersonManagerImpl extends HibernateDaoSupport implements Sakai
 		};
 
 		LOG.debug("return getHibernateTemplate().executeFind(hcb);");
-		return getHibernateTemplate().executeFind(hcb);
+		List hb =  getHibernateTemplate().executeFind(hcb);
+		if (photoService.overRidesDefault()) {
+			return getDiskPhotosForList(hb);
+		} else {
+			return hb;
+		}
 	}
 
 	/**
@@ -566,5 +670,28 @@ public class SakaiPersonManagerImpl extends HibernateDaoSupport implements Sakai
 		};
 		return getHibernateTemplate().executeFind(hcb);
 	}
+	
+
+	
+	
+	
+	
+	private List getDiskPhotosForList(List listIn) {
+		
+		List listOut = new ArrayList();
+		
+		for (int i = 0; i < listIn.size(); i++) {
+			SakaiPerson sp = (SakaiPerson)listIn.get(i);
+			if (sp.getAgentUuid() != null && sp.getTypeUuid().equals(this.getSystemMutableType().getUuid())) {
+				sp.setJpegPhoto(photoService.getPhotoAsByteArray(sp.getAgentUuid()));
+			}
+			listOut.add(sp);
+			
+		}
+		
+		
+		return listOut;
+	}
+	
 
 }

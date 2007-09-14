@@ -21,6 +21,11 @@
 
 package org.sakaiproject.component.app.profile;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -47,7 +52,7 @@ import org.sakaiproject.tool.cover.ToolManager;
 import org.sakaiproject.user.api.User;
 import org.sakaiproject.user.api.UserDirectoryService;
 import org.sakaiproject.user.api.UserNotDefinedException;
-import org.sakaiproject.component.cover.ServerConfigurationService;
+import org.sakaiproject.component.api.ServerConfigurationService;
 
 /**
  * @author rshastri
@@ -61,12 +66,18 @@ public class ProfileManagerImpl implements ProfileManager
 
 	/** Dependency: userDirectoryService */
 	private UserDirectoryService userDirectoryService;
-
+	
 	private static final String ANONYMOUS = "Anonymous";
 
+	private ServerConfigurationService serverConfigurationService;
+	public void setServerConfigurationService(ServerConfigurationService scs) {
+		serverConfigurationService = scs;
+	}
+	
 	public void init()
 	{
-		LOG.debug("init()"); // do nothing (for now)
+		
+		LOG.info("init()");
 	}
 
 	public void destroy()
@@ -348,20 +359,19 @@ public class ProfileManagerImpl implements ProfileManager
 	 */
 	public boolean isShowTool()
 	{
-		LOG.debug("isShowTool()");
-      Profile profile = getProfile();
-      
-		// implement isAnonymous later on.
-		return (profile.getUserId() != ANONYMOUS && profile.getUserId().equalsIgnoreCase(getCurrentUserId()));
+		LOG.debug("isShowTool()");  
+	    Profile profile = getProfile();
+	    
+	    return (profile.getUserId() != ANONYMOUS && profile.getUserId().equalsIgnoreCase(getCurrentUserId()));	
 	}
-   
+  
 
    public boolean isShowSearch()
    {
       LOG.debug("isShowSearch()");
       Profile profile = getProfile();
       // implement isAnonymous later on.
-      if(!"false".equalsIgnoreCase(ServerConfigurationService.getString
+      if(!"false".equalsIgnoreCase(serverConfigurationService.getString
             ("separateIdEid@org.sakaiproject.user.api.UserDirectoryService")))
       {
          return (profile.getUserId() != ANONYMOUS && isSiteMember(profile.getSakaiPerson().getAgentUuid()));
@@ -395,7 +405,7 @@ public class ProfileManagerImpl implements ProfileManager
 	{
 		if (LOG.isDebugEnabled())
 		{
-			LOG.debug("getInstitutionalPhotoByUserId(" + userId + ")");
+			LOG.debug("getInstitutionalPhoto(" + userId + ")");
 		}
 		if (userId == null || userId.length() < 1) throw new IllegalArgumentException("Illegal userId argument passed!");
 
@@ -422,7 +432,10 @@ public class ProfileManagerImpl implements ProfileManager
 				|| (siteMaintainer && doesCurrentUserHaveUpdateAccessToSite() && isSiteMember(userId)))
 		{
 			if(LOG.isDebugEnabled()) LOG.debug("Official Photo fetched for userId " + userId);
-			return systemProfile.getInstitutionalPicture();
+			
+
+				return systemProfile.getInstitutionalPicture();
+			
 		}
 
 		// if the public information && private information is viewable and user uses to display institutional picture id.
@@ -436,7 +449,9 @@ public class ProfileManagerImpl implements ProfileManager
 					&& profile.isInstitutionalPictureIdPreferred().booleanValue() == true)
 			{
 				if(LOG.isDebugEnabled()) LOG.debug("Official Photo fetched for userId " + userId);
-				return systemProfile.getInstitutionalPicture();
+				
+					return systemProfile.getInstitutionalPicture();
+				
 			}
 
 		}
@@ -449,6 +464,7 @@ public class ProfileManagerImpl implements ProfileManager
 	 */
 	private boolean isSiteMember(String uid)
 	{
+		
 		if (LOG.isDebugEnabled())
 		{
 			LOG.debug("isSiteMember(String" + uid + ")");
@@ -539,9 +555,12 @@ public class ProfileManagerImpl implements ProfileManager
 				}
 				catch (UserNotDefinedException e)
 				{
+
+					if(LOG.isDebugEnabled()) LOG.debug("Profile requested for nonexistent userid: " + userId);
 					// TODO: how to handle this use case with UserDirectoryService? name? email? password? Why even do it? -ggolden
 					// User user = userDirectoryService.addUser(sessionManagerUserId, "", sessionManagerUserId, "", "", "", null);
 					// sakaiPerson = sakaiPersonManager.create( userId, sakaiPersonManager.getUserMutableType());
+
 				}
 			}
 			profiles.put(userId, new ProfileImpl(sakaiPerson));
@@ -558,4 +577,7 @@ public class ProfileManagerImpl implements ProfileManager
 		LOG.debug("getCurrentUser()");
 		return SessionManager.getCurrentSession().getUserId();
 	}
+	
+	
+
 }

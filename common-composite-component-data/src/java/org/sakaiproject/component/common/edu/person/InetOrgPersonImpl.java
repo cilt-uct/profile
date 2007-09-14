@@ -36,6 +36,7 @@ import org.apache.commons.logging.LogFactory;
 import org.sakaiproject.api.common.edu.person.InetOrgPerson;
 import org.sakaiproject.api.common.edu.person.OrganizationalPerson;
 import org.sakaiproject.api.common.edu.person.Person;
+import org.sakaiproject.component.cover.ServerConfigurationService;
 
 /**
  * @author <a href="mailto:lance@indiana.edu">Lance Speelmon </a>
@@ -540,7 +541,7 @@ public class InetOrgPersonImpl extends OrganizationalPersonImpl implements Perso
 
 	public Blob getBlobImage()
 	{
-		if (this.jpegPhoto == null || jpegPhoto.length < 1)
+		if (this.jpegPhoto == null || jpegPhoto.length < 1 || ServerConfigurationService.getString("profile.photoRepositoryPath", null) != null)
 		{
 			return null;
 		}
@@ -603,7 +604,7 @@ public class InetOrgPersonImpl extends OrganizationalPersonImpl implements Perso
 			LOG.debug("toByteArray(Blob " + fromBlob + ", ByteArrayOutputStream " + baos + ")");
 		}
 
-		if (fromBlob == null || fromBlob.length() < 1)
+		if (fromBlob == null || fromBlob.length() < 1 || ServerConfigurationService.getString("profile.photoRepositoryPath", null) != null)
 		{
 			return null;
 		}

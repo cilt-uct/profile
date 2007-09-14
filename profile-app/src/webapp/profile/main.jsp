@@ -35,6 +35,7 @@
     			 	<h:outputText id="homepage" value="#{ProfileTool.profile.homepage}"/>
     			 	<h:outputText id="workphone" value="#{ProfileTool.profile.workPhone}"/>
     			 	<h:outputText id="homephone" value="#{ProfileTool.profile.homePhone}"/>
+    			 	 <h:outputText id="mobile" value="#{ProfileTool.profile.mobile}"/>
     			 	<span>
 	    			 	<profile:profile_display_HTML value="#{ProfileTool.profile.otherInformation}" />
     			 	</span>	

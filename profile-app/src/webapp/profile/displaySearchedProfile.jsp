@@ -36,6 +36,7 @@
 						<h:outputText id="id6" value="#{SearchTool.profile.profile.homepage}" rendered="#{SearchTool.profile.displayCompleteProfile}"/>
 						<h:outputText id="id7" value="#{SearchTool.profile.profile.workPhone}" rendered="#{SearchTool.profile.displayCompleteProfile}"/>
 						<h:outputText id="id8" value="#{SearchTool.profile.profile.homePhone}" rendered="#{SearchTool.profile.displayCompleteProfile}"/>
+						<h:outputText id="id9" value="#{SearchTool.profile.profile.mobile}" rendered="#{SearchTool.profile.displayCompleteProfile}"/>
 						<profile:profile_display_HTML value="#{SearchTool.profile.profile.otherInformation}"  rendered="#{SearchTool.profile.displayCompleteProfile}"/>
 					</td>	
 					<td class="profileSearch">				
