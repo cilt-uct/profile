@@ -92,11 +92,11 @@
   </bean>
   
    
-  <!--   <bean id="org.sakaiproject.api.common.edu.person.PhotoService" 
+  <bean id="org.sakaiproject.api.common.edu.person.PhotoService" 
   	class="org.sakaiproject.component.common.edu.person.SakaiPersonPhotoService">
    </bean>
-   -->
-   <bean id="org.sakaiproject.api.common.edu.person.PhotoService" 
+   
+   <!-- <bean id="org.sakaiproject.api.common.edu.person.PhotoService" 
    	class="org.sakaiproject.component.common.edu.person.FileSystemPhotoService" init-method="init">
    		<property name="serverConfigurationService">
         	<ref bean="org.sakaiproject.component.api.ServerConfigurationService" />
@@ -104,7 +104,7 @@
         <property name="userDirectoryService">
 		   <ref bean="org.sakaiproject.user.api.UserDirectoryService"/>
 		</property>
-   	</bean>
+   	</bean>-->
    
    
   
