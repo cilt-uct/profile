@@ -191,6 +191,7 @@ public class SakaiPersonManagerImpl extends HibernateDaoSupport implements Sakai
 		spi.setLocked(new Boolean(false));
 		this.getHibernateTemplate().save(spi);
 		
+		//do not do this for system profiles 
 		if (serverConfigurationService.getBoolean("profile.updateUser",false)) {
 			try {
 				User u = userDirectoryService.getUser(userId);
@@ -315,11 +316,12 @@ public class SakaiPersonManagerImpl extends HibernateDaoSupport implements Sakai
 			
 			
 			LOG.debug("User record updated for Id :-" + spi.getAgentUuid());
-			//update the account too
-			if (serverConfigurationService.getBoolean("profile.updateUser",false)) {
+			//update the account too -only if not system profile 
+			if (serverConfigurationService.getBoolean("profile.updateUser",false) && spi.getTypeUuid().equals(this.userMutableType.getUuid()) )
+			{
 				try {
 					UserEdit userEdit = null;
-					userEdit = userDirectoryService.editUser(userDirectoryService.getCurrentUser().getId());
+					userEdit = userDirectoryService.editUser(spi.getAgentUuid());
 					userEdit.setFirstName(spi.getGivenName());
 					userEdit.setLastName(spi.getSurname());
 					userEdit.setEmail(spi.getMail());
