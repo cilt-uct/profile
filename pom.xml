@@ -11,6 +11,14 @@
   <groupId>org.sakaiproject</groupId>
   <artifactId>profile-base</artifactId>
   <packaging>pom</packaging>
+  
+  <scm>
+    <connection>scm:svn:https://source.sakaiproject.org/svn/profile/trunk</connection>
+    <developerConnection>scm:svn:https://source.sakaiproject.org/svn/profile/trunk</developerConnection>
+    <url>https://source.sakaiproject.org/svn/profile/trunk</url>
+  </scm>
+  
+
   <modules>
     <module>common-components</module>
     <module>common-composite-component</module>
