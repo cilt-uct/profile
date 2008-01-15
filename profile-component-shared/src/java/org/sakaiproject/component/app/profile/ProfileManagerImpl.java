@@ -21,11 +21,6 @@
 
 package org.sakaiproject.component.app.profile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,7 +28,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -41,9 +35,6 @@ import org.sakaiproject.api.app.profile.Profile;
 import org.sakaiproject.api.app.profile.ProfileManager;
 import org.sakaiproject.api.common.edu.person.SakaiPerson;
 import org.sakaiproject.api.common.edu.person.SakaiPersonManager;
-import org.sakaiproject.authz.api.AuthzGroup;
-import org.sakaiproject.authz.api.GroupNotDefinedException;
-import org.sakaiproject.authz.cover.AuthzGroupService;
 import org.sakaiproject.authz.cover.SecurityService;
 import org.sakaiproject.site.cover.SiteService;
 import org.sakaiproject.tool.api.Placement;
@@ -210,13 +201,13 @@ public class ProfileManagerImpl implements ProfileManager
 
 	}
 
-	public byte[] getInstitutionalPhotoByUserId(String uid, boolean siteMaintainer)
+	public byte[] getInstitutionalPhotoByUserId(String uid, boolean viewerHasPermission)
 	{
 		if (LOG.isDebugEnabled())
 		{
-			LOG.debug("getInstitutionalPhotoByUserId(String" + uid + ", boolean " + siteMaintainer + ")");
+			LOG.debug("getInstitutionalPhotoByUserId(String" + uid + ", boolean " + viewerHasPermission + ")");
 		}
-		return getInstitutionalPhoto(uid, true);
+		return getInstitutionalPhoto(uid, viewerHasPermission);
 	}
 
 	/*
@@ -401,7 +392,7 @@ public class ProfileManagerImpl implements ProfileManager
 	 * @param siteMaintainer
 	 * @return
 	 */
-	private byte[] getInstitutionalPhoto(String userId, boolean siteMaintainer)
+	private byte[] getInstitutionalPhoto(String userId, boolean viewerHasPermission)
 	{
 		if (LOG.isDebugEnabled())
 		{
@@ -427,15 +418,12 @@ public class ProfileManagerImpl implements ProfileManager
 			sakaiSystemPerson = sakaiPersonManager.create(userId, sakaiPersonManager.getSystemMutableType());
 		}
 		Profile systemProfile = new ProfileImpl(sakaiSystemPerson);
+		
 		// Fetch current users institutional photo for either the user or super user
-		if (getCurrentUserId().equals(userId) || SecurityService.isSuperUser()
-				|| (siteMaintainer && doesCurrentUserHaveUpdateAccessToSite() && isSiteMember(userId)))
+		if (getCurrentUserId().equals(userId) || SecurityService.isSuperUser() || viewerHasPermission)
 		{
 			if(LOG.isDebugEnabled()) LOG.debug("Official Photo fetched for userId " + userId);
-			
-
-				return systemProfile.getInstitutionalPicture();
-			
+			return systemProfile.getInstitutionalPicture();	
 		}
 
 		// if the public information && private information is viewable and user uses to display institutional picture id.
@@ -448,10 +436,8 @@ public class ProfileManagerImpl implements ProfileManager
 					&& profile.isInstitutionalPictureIdPreferred() != null
 					&& profile.isInstitutionalPictureIdPreferred().booleanValue() == true)
 			{
-				if(LOG.isDebugEnabled()) LOG.debug("Official Photo fetched for userId " + userId);
-				
-					return systemProfile.getInstitutionalPicture();
-				
+				if(LOG.isDebugEnabled()) LOG.debug("Official Photo fetched for userId " + userId);			
+				return systemProfile.getInstitutionalPicture();				
 			}
 
 		}
@@ -488,26 +474,6 @@ public class ProfileManagerImpl implements ProfileManager
 		LOG.debug("getCurrentSiteId()");
 		Placement placement = ToolManager.getCurrentPlacement();
 		return placement.getContext();
-	}
-
-	/**
-	 * @return
-	 */
-	private boolean doesCurrentUserHaveUpdateAccessToSite()
-	{
-		LOG.debug("doesCurrentUserHaveUpdateAccessToSite()");
-		try
-		{
-			// If the current site is not my workspace of the user and has update access to the site
-
-			return (SiteService.allowUpdateSite(getCurrentSiteId()) && !SiteService.isUserSite(getCurrentSiteId()));
-		}
-		catch (Exception e)
-		{
-			LOG.error(e.getMessage(), e);
-		}
-
-		return false;
 	}
 
 	/**
