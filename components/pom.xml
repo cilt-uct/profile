@@ -19,8 +19,7 @@
   <properties>
     <deploy.target>components</deploy.target>
   </properties>
-  <dependencies>
-  </dependencies>
+  <dependencies/>
   <build>
     <resources>
       <resource>
