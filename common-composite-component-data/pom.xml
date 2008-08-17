@@ -32,17 +32,14 @@
     <dependency>
       <groupId>org.sakaiproject</groupId>
       <artifactId>sakai-common-edu-person-api</artifactId>
-      <version>${sakai.version}</version>
     </dependency>
     <dependency>
       <groupId>org.sakaiproject</groupId>
       <artifactId>sakai-common-manager-api</artifactId>
-      <version>${sakai.version}</version>
     </dependency>
     <dependency>
       <groupId>org.sakaiproject</groupId>
       <artifactId>sakai-common-type-api</artifactId>
-      <version>${sakai.version}</version>
     </dependency>
 <!--org.sakaiprojectsakai-component-api${sakai.version}-->
     <dependency>
