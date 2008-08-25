@@ -1,30 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-  <classpathentry excluding="**/.DS_Store" kind="src" path="profile-app/src/java"/>
-  <classpathentry kind="src" path="common-composite-component-data/src/java"/>
-  <classpathentry kind="src" path="common-composite-component/src/java"/>
-  <classpathentry kind="src" path="type-api/src/java"/>
-  <classpathentry kind="src" path="manager-api/src/java"/>
-  <classpathentry kind="src" path="edu-person-api/src/java"/>
-  <classpathentry excluding="**/.DS_Store" kind="src" path="profile-component-shared/src/java"/>
-  <classpathentry excluding="**/.DS_Store" kind="src" path="profile-api/src/java"/>
-  <classpathentry excluding="**/.DS_Store" kind="src" path="profile-app/src/webapp/WEB-INF"/>
-  <classpathentry kind="var" path="M2_REPO/jsf/jsf-api/1.1.01/jsf-api-1.1.01.jar"/>
-  <classpathentry kind="var" path="M2_REPO/jsf/jsf-impl/1.1.01/jsf-impl-1.1.01.jar"/>
-  <classpathentry kind="var" path="M2_REPO/javax/servlet/jsp-api/2.0/jsp-api-2.0.jar"/>
-  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-  <classpathentry kind="var" path="M2_REPO/commons-logging/commons-logging/1.0.4/commons-logging-1.0.4.jar"/>
-  <classpathentry kind="var" path="M2_REPO/javax/servlet/servlet-api/2.4/servlet-api-2.4.jar"/>
-  <classpathentry combineaccessrules="false" kind="src" path="/component-api"/>
-  <classpathentry combineaccessrules="false" kind="src" path="/site-api"/>
-  <classpathentry combineaccessrules="false" kind="src" path="/tool-api"/>
-  <classpathentry combineaccessrules="false" kind="src" path="/authz-api"/>
-  <classpathentry combineaccessrules="false" kind="src" path="/user-api"/>
-  <classpathentry combineaccessrules="false" kind="src" path="/entity-api"/>
-  <classpathentry kind="var" path="M2_REPO/org/hibernate/hibernate/3.2.5.ga/hibernate-3.2.5.ga.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/springframework/spring/2.0.6/spring-2.0.6.jar"/>
-  <classpathentry kind="var" path="M2_REPO/commons-beanutils/commons-beanutils/1.7.0/commons-beanutils-1.7.0.jar"/>
-  <classpathentry combineaccessrules="false" kind="src" path="/util-api"/>
-  <classpathentry combineaccessrules="false" kind="src" path="/util-util"/>
-  <classpathentry kind="output" path="bin"/>
+	<classpathentry excluding="**/.DS_Store" kind="src" path="profile-app/src/java"/>
+	<classpathentry kind="src" path="common-composite-component-data/src/java"/>
+	<classpathentry kind="src" path="common-composite-component/src/java"/>
+	<classpathentry kind="src" path="type-api/src/java"/>
+	<classpathentry kind="src" path="manager-api/src/java"/>
+	<classpathentry kind="src" path="edu-person-api/src/java"/>
+	<classpathentry excluding="**/.DS_Store" kind="src" path="profile-component-shared/src/java"/>
+	<classpathentry excluding="**/.DS_Store" kind="src" path="profile-api/src/java"/>
+	<classpathentry excluding="**/.DS_Store" kind="src" path="profile-app/src/webapp/WEB-INF"/>
+	<classpathentry kind="var" path="M2_REPO/jsf/jsf-api/1.1.01/jsf-api-1.1.01.jar"/>
+	<classpathentry kind="var" path="M2_REPO/jsf/jsf-impl/1.1.01/jsf-impl-1.1.01.jar"/>
+	<classpathentry kind="var" path="M2_REPO/javax/servlet/jsp-api/2.0/jsp-api-2.0.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="M2_REPO/commons-logging/commons-logging/1.0.4/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="var" path="M2_REPO/javax/servlet/servlet-api/2.4/servlet-api-2.4.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/hibernate/hibernate/3.2.5.ga/hibernate-3.2.5.ga.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/springframework/spring/2.0.6/spring-2.0.6.jar"/>
+	<classpathentry kind="var" path="M2_REPO/commons-beanutils/commons-beanutils/1.7.0/commons-beanutils-1.7.0.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/sakaiproject/kernel/sakai-kernel-api/1.0RC2-SNAPSHOT/sakai-kernel-api-1.0RC2-SNAPSHOT.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/sakaiproject/kernel/sakai-kernel-util/1.0RC2-SNAPSHOT/sakai-kernel-util-1.0RC2-SNAPSHOT.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/sakaiproject/kernel/sakai-component-manager/1.0RC2-SNAPSHOT/sakai-component-manager-1.0RC2-SNAPSHOT.jar"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>
