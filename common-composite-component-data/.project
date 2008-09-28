@@ -1,0 +1,17 @@
+<projectDescription>
+  <name>sakai-common-composite-component-data</name>
+  <comment/>
+  <projects>
+    <project>sakai-common-edu-person-api</project>
+    <project>sakai-common-manager-api</project>
+    <project>sakai-common-type-api</project>
+  </projects>
+  <buildSpec>
+    <buildCommand>
+      <name>org.eclipse.jdt.core.javabuilder</name>
+    </buildCommand>
+  </buildSpec>
+  <natures>
+    <nature>org.eclipse.jdt.core.javanature</nature>
+  </natures>
+</projectDescription>
