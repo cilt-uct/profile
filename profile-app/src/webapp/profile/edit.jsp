@@ -84,7 +84,7 @@
 						<h:inputText size="30" id="inputPictureUrl" value="#{ProfileTool.profile.pictureUrl}" styleClass="labelindnt"/>
 						<h:outputText id="er7" value="#{msgs.error_msg} #{ProfileTool.malformedUrlError}" styleClass="alertMessageInline"  rendered="#{ProfileTool.displayMalformedPictureUrlError}"/>
 				</h:panelGroup>
-				<h:panelGroup styleClass="shorttext">
+				<h:panelGroup styleClass="shorttext required">
 					<h:outputText id="inputid1"  value="#{msgs.info_required_sign}" styleClass="reqStar"/>
 					<h:outputLabel id="outputLabel17" for="email"  value="#{msgs.profile_email}"/>	
 					<h:inputText size="30" id="email"  value="#{ProfileTool.profile.email}"/>
