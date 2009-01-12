@@ -361,13 +361,19 @@ public class ProfileManagerImpl implements ProfileManager
    {
       LOG.debug("isShowSearch()");
       Profile profile = getProfile();
-      // implement isAnonymous later on.
       if(!"false".equalsIgnoreCase(serverConfigurationService.getString
-            ("separateIdEid@org.sakaiproject.user.api.UserDirectoryService")))
+              ("profile.showSearch", "true")) 
+              || userDirectoryService.getCurrentUser().getId().equals(UserDirectoryService.ADMIN_ID))
       {
-         return (profile.getUserId() != ANONYMOUS && isSiteMember(profile.getSakaiPerson().getAgentUuid()));
+	      // implement isAnonymous later on.
+	      if(!"false".equalsIgnoreCase(serverConfigurationService.getString
+	            ("separateIdEid@org.sakaiproject.user.api.UserDirectoryService")))
+	      {
+	         return (profile.getUserId() != ANONYMOUS && isSiteMember(profile.getSakaiPerson().getAgentUuid()));
+	      }
+	      return (profile.getUserId() != ANONYMOUS && isSiteMember(profile.getUserId()));
       }
-      return (profile.getUserId() != ANONYMOUS && isSiteMember(profile.getUserId()));
+      return false;
    }
 
 	private Profile getOnlyPublicProfile(Profile profile)
