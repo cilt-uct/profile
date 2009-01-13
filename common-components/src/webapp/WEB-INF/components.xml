@@ -83,6 +83,10 @@
 					<ref
 						bean="org.sakaiproject.api.common.edu.person.PhotoService" />
 				</property>
+				<property name="eventTrackingService">
+					<ref
+						bean="org.sakaiproject.event.api.EventTrackingService"/>
+				</property>
 			</bean>
 		</property>
 
