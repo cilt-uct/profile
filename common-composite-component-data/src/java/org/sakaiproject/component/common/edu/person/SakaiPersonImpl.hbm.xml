@@ -36,7 +36,7 @@
 
     <!-- business key fields -->
     <property name="agentUuid">
-      <column name="AGENT_UUID" not-null="true" length="36"
+      <column name="AGENT_UUID" not-null="true" length="99"
         index="SAKAI_PERSON_AGENT_UUID_I"
         unique-key="SAKAI_PERSON_BUSINESS_KEY_I" />
     </property>
