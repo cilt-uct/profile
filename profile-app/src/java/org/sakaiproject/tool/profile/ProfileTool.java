@@ -225,7 +225,7 @@ public class ProfileTool
 		{
 			if ((profile != null) && (profile.getUserId() == null))
 			{
-				LOG.equals("processActionEdit : " + "No User Found");
+				LOG.error("processActionEdit : " + "No User Found");
 				return "PermissionException";
 			}
 			setPictureIdPreference(profile);
