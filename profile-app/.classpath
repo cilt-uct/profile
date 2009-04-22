@@ -11,13 +11,13 @@
   <classpathentry kind="var" path="M2_REPO/jsf/jsf-impl/1.1.01/jsf-impl-1.1.01.jar"/>
   <classpathentry kind="var" path="M2_REPO/javax/servlet/jsp-api/2.0/jsp-api-2.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/junit/junit/3.8.1/junit-3.8.1.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/sakaiproject/kernel/sakai-component-manager/1.0RC2-SNAPSHOT/sakai-component-manager-1.0RC2-SNAPSHOT.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/sakaiproject/kernel/sakai-component-manager/1.1-SNAPSHOT/sakai-component-manager-1.1-SNAPSHOT.jar"/>
   <classpathentry kind="src" path="/sakai-jsf-app"/>
   <classpathentry kind="src" path="/sakai-jsf-tool"/>
   <classpathentry kind="src" path="/sakai-jsf-widgets"/>
   <classpathentry kind="src" path="/sakai-jsf-widgets-sun"/>
-  <classpathentry kind="var" path="M2_REPO/org/sakaiproject/kernel/sakai-kernel-api/1.0RC2-SNAPSHOT/sakai-kernel-api-1.0RC2-SNAPSHOT.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/sakaiproject/kernel/sakai-kernel-util/1.0RC2-SNAPSHOT/sakai-kernel-util-1.0RC2-SNAPSHOT.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/sakaiproject/kernel/sakai-kernel-api/1.1-SNAPSHOT/sakai-kernel-api-1.1-SNAPSHOT.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/sakaiproject/kernel/sakai-kernel-util/1.1-SNAPSHOT/sakai-kernel-util-1.1-SNAPSHOT.jar"/>
   <classpathentry kind="src" path="/sakai-profile-api"/>
   <classpathentry kind="var" path="M2_REPO/javax/servlet/servlet-api/2.4/servlet-api-2.4.jar"/>
   <classpathentry kind="var" path="M2_REPO/taglibs/standard/1.0.4/standard-1.0.4.jar"/>
