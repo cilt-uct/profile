@@ -2,9 +2,6 @@
   <name>sakai-profile-component-shared</name>
   <comment/>
   <projects>
-    <project>sakai-common-edu-person-api</project>
-    <project>sakai-common-manager-api</project>
-    <project>sakai-common-type-api</project>
     <project>sakai-profile-api</project>
   </projects>
   <buildSpec>
