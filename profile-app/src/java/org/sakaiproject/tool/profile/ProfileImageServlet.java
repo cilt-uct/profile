@@ -127,7 +127,7 @@ public class ProfileImageServlet extends HttpServlet
 	{
 		if (profileManager == null)
 		{
-			return (ProfileManager) ComponentManager.get(ProfileManager.class.getName());
+			return (ProfileManager) ComponentManager.get("org.sakaiproject.api.app.profile.LegacyProfileManager");
 		}
 		return profileManager;
 	}

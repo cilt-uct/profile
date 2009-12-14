@@ -45,7 +45,7 @@
         <managed-property>
             <description>Bean Dependency: Profile Manager</description>
             <property-name>profileService</property-name>
-            <value> #{Components["org.sakaiproject.api.app.profile.ProfileManager"]} </value>
+            <value> #{Components["org.sakaiproject.api.app.profile.LegacyProfileManager"]} </value>
         </managed-property>
     </managed-bean>
     <!-- =================== Tool Beans ============== -->
@@ -58,7 +58,7 @@
         <managed-property>
             <description>Profile Service</description>
             <property-name>profileService</property-name>
-            <value>#{Components["org.sakaiproject.api.app.profile.ProfileManager"]}</value>
+            <value>#{Components["org.sakaiproject.api.app.profile.LegacyProfileManager"]}</value>
         </managed-property>
     </managed-bean>
     <managed-bean>
@@ -70,7 +70,7 @@
         <managed-property>
             <description>Profile Service</description>
             <property-name>profileService</property-name>
-            <value>#{Components["org.sakaiproject.api.app.profile.ProfileManager"]}</value>
+            <value>#{Components["org.sakaiproject.api.app.profile.LegacyProfileManager"]}</value>
         </managed-property>
     </managed-bean>
     <managed-bean>
