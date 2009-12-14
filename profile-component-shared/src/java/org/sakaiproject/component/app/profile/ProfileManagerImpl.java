@@ -43,7 +43,6 @@ public class ProfileManagerImpl implements ProfileManager
 
 	ProfileManager profileManagerImplementation;
 	
-	@Override
 	public void init() {
 		String classBean = ServerConfigurationService.getString("profile.manager.integration.bean", "org.sakaiproject.api.app.profile.LegacyProfileManager");
 		
@@ -53,84 +52,69 @@ public class ProfileManagerImpl implements ProfileManager
 		
 	}
 	
-	@Override
 	public void destroy() {
 		profileManagerImplementation = null;
 	}
 
-	@Override
 	public boolean displayCompleteProfile(Profile profile) {
 		return profileManagerImplementation.displayCompleteProfile(profile);
 	}
 
-	@Override
 	public List findProfiles(String searchString) {
 		return profileManagerImplementation.findProfiles(searchString);
 	}
 
-	@Override
 	public byte[] getInstitutionalPhotoByUserId(String uid) {
 		return profileManagerImplementation.getInstitutionalPhotoByUserId(uid);
 	}
 
-	@Override
+	
 	public byte[] getInstitutionalPhotoByUserId(String uid, boolean siteMaintainer) {
 		return profileManagerImplementation.getInstitutionalPhotoByUserId(uid, siteMaintainer);
 	}
 
-	@Override
 	public Profile getProfile() {
 		return profileManagerImplementation.getProfile();
 	}
 
-	@Override
 	public Map<String, Profile> getProfiles(Set<String> userIds) {
 		return profileManagerImplementation.getProfiles(userIds);
 	}
 
-	@Override
 	public Profile getUserProfileById(String id) {
 		return profileManagerImplementation.getUserProfileById(id);
 	}
 
 	
 
-	@Override
 	public boolean isCurrentUserProfile(Profile profile) {
 		return profileManagerImplementation.isCurrentUserProfile(profile);
 	}
 
-	@Override
 	public boolean isDisplayNoPhoto(Profile profile) {
 		return profileManagerImplementation.isDisplayNoPhoto(profile);
 	}
 
-	@Override
 	public boolean isDisplayPictureURL(Profile profile) {
 		return profileManagerImplementation.isDisplayPictureURL(profile);
 	}
 
-	@Override
 	public boolean isDisplayUniversityPhoto(Profile profile) {
 		return profileManagerImplementation.isDisplayUniversityPhoto(profile);
 	}
 
-	@Override
 	public boolean isDisplayUniversityPhotoUnavailable(Profile profile) {
 		return profileManagerImplementation.isDisplayUniversityPhotoUnavailable(profile);
 	}
 
-	@Override
 	public boolean isShowSearch() {
 		return profileManagerImplementation.isShowSearch();
 	}
 
-	@Override
 	public boolean isShowTool() {
 		return profileManagerImplementation.isShowTool();
 	}
 
-	@Override
 	public void save(Profile profile) {
 		profileManagerImplementation.save(profile);
 	}
