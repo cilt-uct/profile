@@ -18,6 +18,7 @@
     <modules>
         <module>profile-api</module>
         <module>profile-app</module>
+        <module>profile-help</module>
         <module>profile-assembly</module>
         <module>profile-component</module>
         <module>profile-component-shared</module>
