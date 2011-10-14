@@ -11,7 +11,7 @@
     <name>Sakai Profile Project</name>
     <groupId>org.sakaiproject.profile</groupId>
     <artifactId>profile</artifactId>
-    <version>2.9-SNAPSHOT</version>
+    <version>2.9.0-a01</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -87,9 +87,9 @@
     </repositories>
 
     <scm>
-        <connection>scm:svn:https://source.sakaiproject.org/svn/profile/trunk/</connection>
-        <developerConnection>scm:svn:https://source.sakaiproject.org/svn/profile/trunk</developerConnection>
-        <url>https://source.sakaiproject.org/svn/profile/trunk/</url>
+        <connection>scm:svn:https://source.sakaiproject.org/svn/profile/tags/profile-2.9.0-a01</connection>
+        <developerConnection>scm:svn:https://source.sakaiproject.org/svn/profile/tags/profile-2.9.0-a01</developerConnection>
+        <url>https://source.sakaiproject.org/svn/profile/tags/profile-2.9.0-a01</url>
     </scm>
 
     <dependencyManagement>
