@@ -22,6 +22,12 @@
         <module>profile-component</module>
         <module>profile-component-shared</module>
     </modules>
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> 
+        <sakai.jsf.version>2.9-SNAPSHOT</sakai.jsf.version>
+        <url.localsite>scp://source.sakaiproject.org/var/www/html/release/profile/${project.version}</url.localsite>
+    </properties>
 
     <pluginRepositories>
         <pluginRepository>
@@ -103,7 +109,7 @@
             <dependency>
                 <groupId>org.sakaiproject.jsf</groupId>
                 <artifactId>jsf-tool-sun</artifactId>
-                <version>2.9-SNAPSHOT</version>
+                <version>${sakai.jsf.version}</version>
                 <type>pom</type>
             </dependency>
         </dependencies>
