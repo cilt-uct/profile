@@ -26,7 +26,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> 
         <sakai.jsf.version>2.9-SNAPSHOT</sakai.jsf.version>
-        <url.localsite>scp://source.sakaiproject.org/var/www/html/release/profile/${project.version}</url.localsite>
     </properties>
 
     <pluginRepositories>
@@ -97,6 +96,14 @@
         <developerConnection>scm:svn:https://source.sakaiproject.org/svn/profile/trunk</developerConnection>
         <url>https://source.sakaiproject.org/svn/profile/trunk/</url>
     </scm>
+    
+    <distributionManagement>
+        <site>
+            <id>sakai-site</id>
+            <name>Sakai release Site</name>
+            <url>scpexe://source.sakaiproject.org/var/www/html/release/profile/${project.version}</url>
+        </site>
+    </distributionManagement>
 
     <dependencyManagement>
         <dependencies>
