@@ -24,9 +24,9 @@
     </modules>
     
     <scm>
-        <connection>scm:svn:https://source.sakaiproject.org/svn/profile/trunk/</connection>
-        <developerConnection>scm:svn:https://source.sakaiproject.org/svn/profile/trunk</developerConnection>
-        <url>https://source.sakaiproject.org/svn/profile/trunk/</url>
+        <connection>scm:svn:https://source.sakaiproject.org/svn/profile/branches/profile-2.9.x</connection>
+        <developerConnection>scm:svn:https://source.sakaiproject.org/svn/profile/branches/profile-2.9.x</developerConnection>
+        <url>https://source.sakaiproject.org/svn/profile/branches/profile-2.9.x</url>
     </scm>
     
     <distributionManagement>
