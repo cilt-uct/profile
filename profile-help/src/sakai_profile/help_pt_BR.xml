@@ -28,7 +28,7 @@
       <property name="categories">
          <list>
             <bean id="resourceCategory" class="org.sakaiproject.component.app.help.model.CategoryBean">
-               <property name="name"><value>Profile</value></property>
+               <property name="name"><value>Perfil</value></property>
                <property name="resources">
                   <list>
                      <ref bean="modifyProfile"/>
