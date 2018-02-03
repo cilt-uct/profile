@@ -62,7 +62,7 @@ public interface ProfileManager
 	 * @param searchString
 	 * @return
 	 */
-	public List findProfiles(String searchString);
+	public List<Profile> findProfiles(String searchString);
 
 	/**
 	 * Searches the university photo for given username

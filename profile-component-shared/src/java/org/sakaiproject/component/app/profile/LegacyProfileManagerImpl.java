@@ -108,7 +108,7 @@ public class LegacyProfileManagerImpl implements ProfileManager
 	/**
 	 * @see org.sakaiproject.api.app.profile.ProfileManager#findProfiles(java.lang.String) Returns userMutable profiles only
 	 */
-	public List findProfiles(String searchString)
+	public List<Profile> findProfiles(String searchString)
 	{
 		if (log.isDebugEnabled())
 		{
@@ -118,12 +118,12 @@ public class LegacyProfileManagerImpl implements ProfileManager
 			throw new IllegalArgumentException("Illegal searchString argument passed!");
 
 		List<SakaiPerson> profiles = sakaiPersonManager.findSakaiPerson(searchString);
-		List searchResults = new ArrayList();
+		List<Profile> searchResults = new ArrayList<Profile>();
 		Profile profile;
 
 		if ((profiles != null) && (profiles.size() > 0))
 		{
-			Iterator profileIterator = profiles.iterator();
+			Iterator<SakaiPerson> profileIterator = profiles.iterator();
 
 			while (profileIterator.hasNext())
 			{
