@@ -5,20 +5,17 @@
     <parent>
         <groupId>org.sakaiproject</groupId>
         <artifactId>master</artifactId>
-        <version>11-SNAPSHOT</version>
+        <version>12-SNAPSHOT</version>
 		<relativePath>../master/pom.xml</relativePath>
     </parent>
 
     <name>Sakai Profile Project</name>
     <groupId>org.sakaiproject.profile</groupId>
     <artifactId>profile</artifactId>
-    <version>11-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
         <module>profile-api</module>
-        <!--module>profile-app</module-->
-        <!--module>profile-help</module-->
         <module>profile-component</module>
         <module>profile-component-shared</module>
     </modules>
@@ -42,7 +39,7 @@
             <dependency>
                 <groupId>org.sakaiproject.profile</groupId>
                 <artifactId>profile-api</artifactId>
-                <version>11-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.sakaiproject.jsf</groupId>
