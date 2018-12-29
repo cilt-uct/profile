@@ -8,7 +8,7 @@
         <version>12-SNAPSHOT</version>
     </parent>
 
-    <name>Sakai Profile Components Shared (profile-component-shared)
+    <name>Sakai Profile Impl
     </name>
     <groupId>org.sakaiproject.profile</groupId>
     <artifactId>profile-impl</artifactId>
@@ -17,8 +17,8 @@
         <url>http://sakaiproject.org/</url>
     </organization>
     <inceptionYear>2003</inceptionYear>
-    <packaging>jar</packaging>
 
+    <packaging>sakai-component</packaging>
     <properties>
         <deploy.target>components</deploy.target>
     </properties>
@@ -42,23 +42,22 @@
         </dependency>
     </dependencies>
     
-        <build>
-        <resources>
-            <resource>
-                <directory>${basedir}/src/bundle</directory>
-                <includes>
-                    <include>**/*.properties</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>src/java</directory>
+	<build>
+		<resources>
+			<resource>
+				<directory>${basedir}/src/resources</directory>
+				<includes>
+					<include>**/*.properties</include>
+				</includes>
+			</resource>
+			<resource>
+                <directory>${basedir}/src/java</directory>
                 <includes>
                     <include>**/*.xml</include>
+                    <include>**/*.xslt</include>
                 </includes>
-                <excludes>
-                    <exclude>**/web.xml</exclude>
-                </excludes>
+                <filtering>false</filtering>
             </resource>
-        </resources>
-    </build>
+		</resources>
+	</build>
 </project>
