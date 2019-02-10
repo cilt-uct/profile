@@ -16,8 +16,7 @@
 
     <modules>
         <module>profile-api</module>
-        <module>profile-component</module>
-        <module>profile-component-shared</module>
+        <module>profile-impl</module>
     </modules>
     
     <scm>
