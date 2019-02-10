@@ -39,6 +39,7 @@
                 <groupId>org.sakaiproject.profile</groupId>
                 <artifactId>profile-api</artifactId>
                 <version>${project.version}</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.sakaiproject.jsf</groupId>

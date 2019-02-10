@@ -41,4 +41,21 @@
             <artifactId>sakai-common-api</artifactId>
         </dependency>
     </dependencies>
+      <build>
+    <resources />
+    <sourceDirectory>src/java</sourceDirectory>
+<!-- unit testing -->
+        <testSourceDirectory>src/test</testSourceDirectory>
+        <testResources>
+            <testResource>
+                <directory>${basedir}/src/webapp/WEB-INF</directory>
+                <includes>
+                    <include>spring-hibernate.xml</include>
+                    <include>logic-support.xml</include>
+                </includes>
+            </testResource>
+            <!--includes:  include: **/*Test.java -->
+        </testResources>
+
+  </build>
 </project>
