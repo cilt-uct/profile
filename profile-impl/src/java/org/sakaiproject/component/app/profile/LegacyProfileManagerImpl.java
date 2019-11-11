@@ -29,21 +29,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.sakaiproject.api.app.profile.Profile;
 import org.sakaiproject.api.app.profile.ProfileManager;
 import org.sakaiproject.api.common.edu.person.SakaiPerson;
 import org.sakaiproject.api.common.edu.person.SakaiPersonManager;
-import org.sakaiproject.authz.cover.SecurityService;
-import org.sakaiproject.site.cover.SiteService;
+import org.sakaiproject.authz.api.SecurityService;
+import org.sakaiproject.component.api.ServerConfigurationService;
+import org.sakaiproject.site.api.SiteService;
 import org.sakaiproject.tool.api.Placement;
-import org.sakaiproject.tool.cover.SessionManager;
-import org.sakaiproject.tool.cover.ToolManager;
+import org.sakaiproject.tool.api.SessionManager;
+import org.sakaiproject.tool.api.ToolManager;
 import org.sakaiproject.user.api.User;
 import org.sakaiproject.user.api.UserDirectoryService;
 import org.sakaiproject.user.api.UserNotDefinedException;
-import org.sakaiproject.component.api.ServerConfigurationService;
+
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * This is implementation of ProfileManager that is to be only used directly by the original Profile tool
@@ -52,32 +53,40 @@ import org.sakaiproject.component.api.ServerConfigurationService;
  * It may be that you end up getting this implementation via proxy depending on your config, but don't use it directly.
  *
  */
+@Slf4j
 public class LegacyProfileManagerImpl implements ProfileManager
 {
-	private static final Log LOG = LogFactory.getLog(LegacyProfileManagerImpl.class);
+	
 
 	/** Dependency: SakaiPersonManager */
 	private SakaiPersonManager sakaiPersonManager;
 
 	/** Dependency: userDirectoryService */
+	@Setter
 	private UserDirectoryService userDirectoryService;
+	@Setter
+	private SecurityService securityService;
+	@Setter
+	private ServerConfigurationService serverConfigurationService;
+	@Setter
+	private SiteService siteService;
+	@Setter
+	private SessionManager sessionManager;
+	@Setter
+	private ToolManager toolManager;
+	
 	
 	private static final String ANONYMOUS = "Anonymous";
-
-	private ServerConfigurationService serverConfigurationService;
-	public void setServerConfigurationService(ServerConfigurationService scs) {
-		serverConfigurationService = scs;
-	}
 	
 	public void init()
 	{
 		
-		LOG.info("init()");
+		log.info("init()");
 	}
 
 	public void destroy()
 	{
-		LOG.debug("destroy()"); // do nothing (for now)
+		log.debug("destroy()"); // do nothing (for now)
 	}
 
 	/**
@@ -85,36 +94,36 @@ public class LegacyProfileManagerImpl implements ProfileManager
 	 */
 	public Profile getProfile()
 	{
-		LOG.debug("getProfile()");
+		log.debug("getProfile()");
 		
 		return getProfileById(getCurrentUserId());
 	}
 
 	public Map<String, Profile> getProfiles(Set<String> userIds)
 	{
-		LOG.debug("getProfiles()");
+		log.debug("getProfiles()");
 		return findProfiles(userIds);
 	}
 
 	/**
 	 * @see org.sakaiproject.api.app.profile.ProfileManager#findProfiles(java.lang.String) Returns userMutable profiles only
 	 */
-	public List findProfiles(String searchString)
+	public List<Profile> findProfiles(String searchString)
 	{
-		if (LOG.isDebugEnabled())
+		if (log.isDebugEnabled())
 		{
-			LOG.debug("findProfiles(" + searchString + ")");
+			log.debug("findProfiles(" + searchString + ")");
 		}
 		if (searchString == null || searchString.length() < 1)
 			throw new IllegalArgumentException("Illegal searchString argument passed!");
 
-		List profiles = sakaiPersonManager.findSakaiPerson(searchString);
-		List searchResults = new ArrayList();
+		List<SakaiPerson> profiles = sakaiPersonManager.findSakaiPerson(searchString);
+		List<Profile> searchResults = new ArrayList<Profile>();
 		Profile profile;
 
 		if ((profiles != null) && (profiles.size() > 0))
 		{
-			Iterator profileIterator = profiles.iterator();
+			Iterator<SakaiPerson> profileIterator = profiles.iterator();
 
 			while (profileIterator.hasNext())
 			{
@@ -124,7 +133,7 @@ public class LegacyProfileManagerImpl implements ProfileManager
 				if ((profile != null)
 						&& profile.getSakaiPerson().getTypeUuid().equals(sakaiPersonManager.getUserMutableType().getUuid()))
 				{
-					if ((getCurrentUserId().equals(profile.getUserId()) || SecurityService.isSuperUser()))
+					if ((getCurrentUserId().equals(profile.getUserId()) || securityService.isSuperUser()))
 					{
 						// allow user to search and view own profile and superuser to view all profiles
 						searchResults.add(profile);
@@ -154,9 +163,9 @@ public class LegacyProfileManagerImpl implements ProfileManager
 	 */
 	public void save(Profile profile)
 	{
-		if (LOG.isDebugEnabled())
+		if (log.isDebugEnabled())
 		{
-			LOG.debug("save(" + profile + ")");
+			log.debug("save(" + profile + ")");
 		}
 		if (profile == null) throw new IllegalArgumentException("Illegal profile argument passed!");
 
@@ -168,27 +177,15 @@ public class LegacyProfileManagerImpl implements ProfileManager
 	 */
 	public void setSakaiPersonManager(SakaiPersonManager sakaiPersonManager)
 	{
-		if (LOG.isDebugEnabled())
+		if (log.isDebugEnabled())
 		{
-			LOG.debug("setSakaiPersonManager(SakaiPersonManager " + sakaiPersonManager + ")");
+			log.debug("setSakaiPersonManager(SakaiPersonManager " + sakaiPersonManager + ")");
 		}
 
 		this.sakaiPersonManager = sakaiPersonManager;
 	}
 
-	/**
-	 * @param userDirectoryService
-	 *        The userDirectoryService to set.
-	 */
-	public void setUserDirectoryService(UserDirectoryService userDirectoryService)
-	{
-		if (LOG.isDebugEnabled())
-		{
-			LOG.debug("setUserDirectoryService(userDirectoryService " + userDirectoryService + ")");
-		}
 
-		this.userDirectoryService = userDirectoryService;
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -197,9 +194,9 @@ public class LegacyProfileManagerImpl implements ProfileManager
 	 */
 	public byte[] getInstitutionalPhotoByUserId(String uid)
 	{
-		if (LOG.isDebugEnabled())
+		if (log.isDebugEnabled())
 		{
-			LOG.debug("getInstitutionalPhotoByUserId(String " + uid + ")");
+			log.debug("getInstitutionalPhotoByUserId(String " + uid + ")");
 		}
 		return getInstitutionalPhoto(uid, false);
 
@@ -207,9 +204,9 @@ public class LegacyProfileManagerImpl implements ProfileManager
 
 	public byte[] getInstitutionalPhotoByUserId(String uid, boolean viewerHasPermission)
 	{
-		if (LOG.isDebugEnabled())
+		if (log.isDebugEnabled())
 		{
-			LOG.debug("getInstitutionalPhotoByUserId(String" + uid + ", boolean " + viewerHasPermission + ")");
+			log.debug("getInstitutionalPhotoByUserId(String" + uid + ", boolean " + viewerHasPermission + ")");
 		}
 		return getInstitutionalPhoto(uid, viewerHasPermission);
 	}
@@ -221,9 +218,9 @@ public class LegacyProfileManagerImpl implements ProfileManager
 	 */
 	public Profile getUserProfileById(String id)
 	{
-		if (LOG.isDebugEnabled())
+		if (log.isDebugEnabled())
 		{
-			LOG.debug("getUserProfileById(String" + id + ")");
+			log.debug("getUserProfileById(String" + id + ")");
 		}
 		SakaiPerson sakaiPerson = sakaiPersonManager.getSakaiPerson(id, sakaiPersonManager
 				.getUserMutableType());
@@ -236,16 +233,16 @@ public class LegacyProfileManagerImpl implements ProfileManager
 
 	public boolean displayCompleteProfile(Profile profile)
 	{
-		if (LOG.isDebugEnabled())
+		if (log.isDebugEnabled())
 		{
-			LOG.debug("displayCompleteProfile(Profile" + profile + ")");
+			log.debug("displayCompleteProfile(Profile" + profile + ")");
 		}
 		// complete profile visble to Owner and superUser
 		if (profile == null)
 		{
 			return false;
 		}
-		if ((isCurrentUserProfile(profile) || SecurityService.isSuperUser()))
+		if ((isCurrentUserProfile(profile) || securityService.isSuperUser()))
 		{
 			return true;
 		}
@@ -274,9 +271,9 @@ public class LegacyProfileManagerImpl implements ProfileManager
 	 */
 	public boolean isCurrentUserProfile(Profile profile)
 	{
-		if (LOG.isDebugEnabled())
+		if (log.isDebugEnabled())
 		{
-			LOG.debug("isCurrentUserProfile(Profile" + profile + ")");
+			log.debug("isCurrentUserProfile(Profile" + profile + ")");
 		}
 		return ((profile != null) && profile.getUserId().equals(getCurrentUserId()));
 	}
@@ -288,9 +285,9 @@ public class LegacyProfileManagerImpl implements ProfileManager
 	 */
 	public boolean isDisplayPictureURL(Profile profile)
 	{
-		if (LOG.isDebugEnabled())
+		if (log.isDebugEnabled())
 		{
-			LOG.debug("isDisplayPictureURL(Profile" + profile + ")");
+			log.debug("isDisplayPictureURL(Profile" + profile + ")");
 		}
 		return (profile != null
 				&& displayCompleteProfile(profile)
@@ -305,9 +302,9 @@ public class LegacyProfileManagerImpl implements ProfileManager
 	 */
 	public boolean isDisplayUniversityPhoto(Profile profile)
 	{
-		if (LOG.isDebugEnabled())
+		if (log.isDebugEnabled())
 		{
-			LOG.debug("isDisplayUniversityPhoto(Profile" + profile + ")");
+			log.debug("isDisplayUniversityPhoto(Profile" + profile + ")");
 		}
 		return (profile != null && displayCompleteProfile(profile) && profile.isInstitutionalPictureIdPreferred() != null
 				&& profile.isInstitutionalPictureIdPreferred().booleanValue() == true
@@ -321,9 +318,9 @@ public class LegacyProfileManagerImpl implements ProfileManager
 	 */
 	public boolean isDisplayUniversityPhotoUnavailable(Profile profile)
 	{
-		if (LOG.isDebugEnabled())
+		if (log.isDebugEnabled())
 		{
-			LOG.debug("isDisplayUniversityPhotoUnavailable(Profile" + profile + ")");
+			log.debug("isDisplayUniversityPhotoUnavailable(Profile" + profile + ")");
 		}
 		return (profile != null && displayCompleteProfile(profile) && profile.isInstitutionalPictureIdPreferred() != null
 				&& profile.isInstitutionalPictureIdPreferred().booleanValue() == true
@@ -338,9 +335,9 @@ public class LegacyProfileManagerImpl implements ProfileManager
 	 */
 	public boolean isDisplayNoPhoto(Profile profile)
 	{
-		if (LOG.isDebugEnabled())
+		if (log.isDebugEnabled())
 		{
-			LOG.debug("isDisplayNoPhoto(Profile" + profile + ")");
+			log.debug("isDisplayNoPhoto(Profile" + profile + ")");
 		}
 		return (profile == null || !displayCompleteProfile(profile) || (profile.isInstitutionalPictureIdPreferred() == null || (profile
 				.isInstitutionalPictureIdPreferred().booleanValue() != true && (profile.getPictureUrl() == null || profile
@@ -354,7 +351,7 @@ public class LegacyProfileManagerImpl implements ProfileManager
 	 */
 	public boolean isShowTool()
 	{
-		LOG.debug("isShowTool()");  
+		log.debug("isShowTool()");  
 	    Profile profile = getProfile();
 	    
 	    return (profile.getUserId() != ANONYMOUS && profile.getUserId().equalsIgnoreCase(getCurrentUserId()));	
@@ -363,7 +360,7 @@ public class LegacyProfileManagerImpl implements ProfileManager
 
    public boolean isShowSearch()
    {
-      LOG.debug("isShowSearch()");
+      log.debug("isShowSearch()");
       Profile profile = getProfile();
       if(!"false".equalsIgnoreCase(serverConfigurationService.getString
               ("profile.showSearch", "true")) 
@@ -382,9 +379,9 @@ public class LegacyProfileManagerImpl implements ProfileManager
 
 	private Profile getOnlyPublicProfile(Profile profile)
 	{
-		if (LOG.isDebugEnabled())
+		if (log.isDebugEnabled())
 		{
-			LOG.debug("getOnlyPublicProfile(Profile" + profile + ")");
+			log.debug("getOnlyPublicProfile(Profile" + profile + ")");
 		}
 		profile.getSakaiPerson().setJpegPhoto(null);
 		profile.setPictureUrl(null);
@@ -404,9 +401,9 @@ public class LegacyProfileManagerImpl implements ProfileManager
 	 */
 	private byte[] getInstitutionalPhoto(String userId, boolean viewerHasPermission)
 	{
-		if (LOG.isDebugEnabled())
+		if (log.isDebugEnabled())
 		{
-			LOG.debug("getInstitutionalPhoto(" + userId + ")");
+			log.debug("getInstitutionalPhoto(" + userId + ")");
 		}
 		if (userId == null || userId.length() < 1) throw new IllegalArgumentException("Illegal userId argument passed!");
 
@@ -422,7 +419,7 @@ public class LegacyProfileManagerImpl implements ProfileManager
 			}
 			catch (UserNotDefinedException unde)
 			{
-				LOG.warn("User " + userId + " does not exist. ", unde);
+				log.warn("User " + userId + " does not exist. ", unde);
 				return null;
 			}
 			sakaiSystemPerson = sakaiPersonManager.create(userId, sakaiPersonManager.getSystemMutableType());
@@ -430,9 +427,9 @@ public class LegacyProfileManagerImpl implements ProfileManager
 		Profile systemProfile = new ProfileImpl(sakaiSystemPerson);
 		
 		// Fetch current users institutional photo for either the user or super user
-		if (getCurrentUserId().equals(userId) || SecurityService.isSuperUser() || viewerHasPermission)
+		if (getCurrentUserId().equals(userId) || securityService.isSuperUser() || viewerHasPermission)
 		{
-			if(LOG.isDebugEnabled()) LOG.debug("Official Photo fetched for userId " + userId);
+			if(log.isDebugEnabled()) log.debug("Official Photo fetched for userId " + userId);
 			return systemProfile.getInstitutionalPicture();	
 		}
 
@@ -446,7 +443,7 @@ public class LegacyProfileManagerImpl implements ProfileManager
 					&& profile.isInstitutionalPictureIdPreferred() != null
 					&& profile.isInstitutionalPictureIdPreferred().booleanValue() == true)
 			{
-				if(LOG.isDebugEnabled()) LOG.debug("Official Photo fetched for userId " + userId);			
+				if(log.isDebugEnabled()) log.debug("Official Photo fetched for userId " + userId);			
 				return systemProfile.getInstitutionalPicture();				
 			}
 
@@ -461,17 +458,17 @@ public class LegacyProfileManagerImpl implements ProfileManager
 	private boolean isSiteMember(String uid)
 	{
 		
-		if (LOG.isDebugEnabled())
+		if (log.isDebugEnabled())
 		{
-			LOG.debug("isSiteMember(String" + uid + ")");
+			log.debug("isSiteMember(String" + uid + ")");
 		}
 		try
 		{
-			return SecurityService.unlock(uid, SiteService.SITE_VISIT, SiteService.siteReference(getCurrentSiteId()));
+			return securityService.unlock(uid, siteService.SITE_VISIT, siteService.siteReference(getCurrentSiteId()));
 		}
 		catch (Exception e)
 		{
-			LOG.error("Exception:", e);
+			log.error("Exception:", e);
 		}
 		return false;
 	}
@@ -481,8 +478,8 @@ public class LegacyProfileManagerImpl implements ProfileManager
 	 */
 	private String getCurrentSiteId()
 	{
-		LOG.debug("getCurrentSiteId()");
-		Placement placement = ToolManager.getCurrentPlacement();
+		log.debug("getCurrentSiteId()");
+		Placement placement = toolManager.getCurrentPlacement();
 		return placement.getContext();
 	}
 
@@ -511,7 +508,7 @@ public class LegacyProfileManagerImpl implements ProfileManager
 			String userId = iter.next();
 			if (userId == null || userId.length() < 1)
 			{
-				LOG.info("Illegal uid argument passed: userId=" + userId);
+				log.info("Illegal uid argument passed: userId=" + userId);
 				continue;
 			}
 			SakaiPerson sakaiPerson = sakaiPeople.get(userId);
@@ -524,7 +521,7 @@ public class LegacyProfileManagerImpl implements ProfileManager
 	
 					if (sakaiPerson == null)
 					{
-						LOG.info("Could not find a sakaiPerson for id=" + user.getId() + ", eid=" + user.getEid());
+						log.info("Could not find a sakaiPerson for id=" + user.getId() + ", eid=" + user.getEid());
 						sakaiPerson = sakaiPersonManager.create(user.getId(), sakaiPersonManager.getUserMutableType());
 						sakaiPeople.put(user.getId(), sakaiPerson);
 					}
@@ -532,7 +529,7 @@ public class LegacyProfileManagerImpl implements ProfileManager
 				catch (UserNotDefinedException e)
 				{
 
-					if(LOG.isDebugEnabled()) LOG.debug("Profile requested for nonexistent userid: " + userId);
+					if(log.isDebugEnabled()) log.debug("Profile requested for nonexistent userid: " + userId);
 					// TODO: how to handle this use case with UserDirectoryService? name? email? password? Why even do it? -ggolden
 					// User user = userDirectoryService.addUser(sessionManagerUserId, "", sessionManagerUserId, "", "", "", null);
 					// sakaiPerson = sakaiPersonManager.create( userId, sakaiPersonManager.getUserMutableType());
@@ -542,7 +539,7 @@ public class LegacyProfileManagerImpl implements ProfileManager
 			profiles.put(userId, new ProfileImpl(sakaiPerson));
 		}
 		
-		if(LOG.isDebugEnabled()) LOG.debug("Returning profiles for " + profiles.keySet().size() + " users");
+		if(log.isDebugEnabled()) log.debug("Returning profiles for " + profiles.keySet().size() + " users");
 		return profiles;
 	}
 	/**
@@ -550,8 +547,8 @@ public class LegacyProfileManagerImpl implements ProfileManager
 	 */
 	private String getCurrentUserId()
 	{
-		LOG.debug("getCurrentUser()");
-		return SessionManager.getCurrentSession().getUserId();
+		log.debug("getCurrentUser()");
+		return sessionManager.getCurrentSession().getUserId();
 	}
 	
 	

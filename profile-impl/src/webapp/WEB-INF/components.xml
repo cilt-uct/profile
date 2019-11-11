@@ -25,7 +25,10 @@
 		        <property name="serverConfigurationService">
 		        	<ref bean="org.sakaiproject.component.api.ServerConfigurationService"/>
 		        </property>
-		        
+		        <property name="securityService" ref="org.sakaiproject.authz.api.SecurityService"/>
+		        <property name="siteService" ref="org.sakaiproject.site.api.SiteService"/>
+		        <property name="sessionManager" ref="org.sakaiproject.tool.api.SessionManager"/>
+		        <property name="toolManager" ref="org.sakaiproject.tool.api.ToolManager"/>
 	    	</bean>
 	    </property>
 	</bean>

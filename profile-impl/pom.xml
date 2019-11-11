@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.sakaiproject.profile</groupId>
         <artifactId>profile</artifactId>
-        <version>12-SNAPSHOT</version>
+        <version>19-SNAPSHOT</version>
     </parent>
 
     <name>Sakai Profile Components Shared (profile-component-shared)
@@ -17,10 +17,10 @@
         <url>http://sakaiproject.org/</url>
     </organization>
     <inceptionYear>2003</inceptionYear>
-    <packaging>jar</packaging>
+    <packaging>sakai-component</packaging>
 
     <properties>
-        <deploy.target>shared</deploy.target>
+        <deploy.target>components</deploy.target>
     </properties>
 
     <dependencies>
@@ -40,9 +40,22 @@
             <groupId>org.sakaiproject.common</groupId>
             <artifactId>sakai-common-api</artifactId>
         </dependency>
-        <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-        </dependency>
     </dependencies>
+      <build>
+    <resources />
+    <sourceDirectory>src/java</sourceDirectory>
+<!-- unit testing -->
+        <testSourceDirectory>src/test</testSourceDirectory>
+        <testResources>
+            <testResource>
+                <directory>${basedir}/src/webapp/WEB-INF</directory>
+                <includes>
+                    <include>spring-hibernate.xml</include>
+                    <include>logic-support.xml</include>
+                </includes>
+            </testResource>
+            <!--includes:  include: **/*Test.java -->
+        </testResources>
+
+  </build>
 </project>
